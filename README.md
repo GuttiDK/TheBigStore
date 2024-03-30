@@ -37,6 +37,11 @@ Last updated: 30-03-2024
 
 # Updates
 
+**Version 0.0.2** (30/03/2024 - Currenct version)
+- Added the structure of the application.
+- Added the repository and service pattern.
+- Added the database connection.
+
 **Version 0.0.1** (30/03/2024)
 - Initial pre-release of The Big Store Application.
 - Features include Backend templete.
@@ -45,6 +50,7 @@ Last updated: 30-03-2024
  - Stucture of the application.
 
 ## Tags
+- <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-0.0.2">Repo and service pattern - v0.0.2</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-0.0.1">Structure - v0.0.1</a>
 
 # Bugs & Known Bugs and Bug Reporting
