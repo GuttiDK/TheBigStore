@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DataTransferObjects\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
