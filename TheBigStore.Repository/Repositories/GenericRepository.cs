@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 using TheBigStore.Repository.Domain;
 using TheBigStore.Repository.Interfaces;
 
@@ -32,6 +33,13 @@ namespace TheBigStore.Repository.Repositories
         {
             ObservableCollection<E> temp = new(await _dbContext.Set<E>().AsNoTracking().ToListAsync());
             return temp;
+        }
+
+        public E? GetById(int? id)
+        {
+            return id != null
+                ? _dbContext.Set<E>().Find(id)
+                : throw new ArgumentNullException(nameof(id));
         }
     }
 }

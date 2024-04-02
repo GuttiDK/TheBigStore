@@ -30,5 +30,11 @@ namespace TheBigStore.Repository.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<ObservableCollection<E>> GetAllAsync();
+
+        /// <summary>
+        /// Find an entity by id
+        /// </summary>
+        /// <returns></returns>
+        E? GetById(int? id);
     }
 }

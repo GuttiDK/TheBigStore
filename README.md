@@ -7,7 +7,7 @@ TheBigStore is a web application that allows users to view, create, edit, and de
 ## The Maker
 Made by Christian C. Høttges
 
-Last updated: 30-03-2024
+Last updated: 02-04-2024
 
 # How to Use
 
@@ -36,8 +36,38 @@ Last updated: 30-03-2024
 - **Service pattern**: Allows users to use the service pattern to get data from the repository.
 
 # Updates
+**Version 1.0.0** (02/04/2024 - Current version)
+- Updated `TheBigStoreContext` class and various model classes.
+- Removed the `DbContextOptions<TheBigStoreContext>` parameter from the constructor.
+- Added new `DbSet` properties for entities to `TheBigStoreContext`.
+- Updated the `OnModelCreating` method to define relationships and seed data.
+- Updated model classes with new properties and navigation properties.
+- Updated `Program` and `UnitTheBigStoreContext` classes.
+- Removed the connection string for the SQL Server database from `UnitTheBigStoreContext`.
 
-**Version 0.0.2** (30/03/2024 - Currenct version)
+**Version 0.0.5** (02/04/2024)
+- Added new model classes for various entities.
+- Updated `TheBigStoreContext` with `DbSet` properties for the new models.
+- Overrode the `OnModelCreating` method in `TheBigStoreContext`.
+- Created a new instance of `TheBigStoreContext` in `Program.cs`.
+- Added a new enum for order statuses.
+- Removed the folder include for "Models" from `TheBigStore.Repository.csproj`.
+
+**Version 0.0.4** (01/04/2024)
+- Added `Microsoft.Extensions.DependencyInjection` and `Microsoft.Extensions.Logging` namespaces.
+- Modified the connection string and included `EnableSensitiveDataLogging` method in `TheBigStoreContext`.
+- Created a new `ILoggerFactory` instance in the `OnConfiguring` method.
+
+**Version 0.0.3** (01/04/2024)
+- Added a new unit testing project named `TheBigStore.UnitTesting`.
+- Included configurations for unit testing in the solution file.
+- Added package references for `coverlet.collector`, `Microsoft.NET.Test.Sdk`, `xunit`, and `xunit.runner.visualstudio`.
+- Added project references to `TheBigStore.Repository` and `TheBigStore.Service`.
+- Introduced five new unit test files.
+- Added a utility class for unit testing.
+- Implemented a new method in the `TheBigStoreContext` class.
+
+**Version 0.0.2** (30/03/2024)
 - Added the structure of the application.
 - Added the repository and service pattern.
 - Added the database connection.
@@ -50,6 +80,7 @@ Last updated: 30-03-2024
  - Stucture of the application.
 
 ## Tags
+- <a href="">Testing and Database Structure - v1.0.0</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-0.0.2">Repo and service pattern - v0.0.2</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-0.0.1">Structure - v0.0.1</a>
 

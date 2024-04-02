@@ -30,5 +30,11 @@ namespace TheBigStore.Service.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<ObservableCollection<Dto>> GetAllAsync();
+
+        /// <summary>
+        /// Get an entity by id
+        /// </summary>
+        /// <returns></returns>
+        Dto? GetById(int? id);
     }
 }
