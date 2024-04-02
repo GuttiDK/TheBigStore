@@ -13,11 +13,7 @@ namespace TheBigStore.UnitTesting.UnitTestConfig
     {
         public static TheBigStoreContext Create()
         {
-            DbContextOptionsBuilder<TheBigStoreContext> builder = new();
-
-            builder.UseSqlServer("Server=localhost;Database=CarDB;User Id=SA;Password=P@ssw0rd;TrustServerCertificate=True");
-
-            return new TheBigStoreContext(builder.Options);
+            return new TheBigStoreContext();
         }
 
         public static void RecreateDatabase()
