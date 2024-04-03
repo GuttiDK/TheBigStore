@@ -35,6 +35,6 @@ namespace TheBigStore.Service.Interfaces
         /// Get an entity by id
         /// </summary>
         /// <returns></returns>
-        Dto? GetById(int? id);
+        Task<Dto?> GetById(int? id);
     }
 }

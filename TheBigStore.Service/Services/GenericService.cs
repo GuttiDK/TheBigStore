@@ -30,9 +30,10 @@ namespace TheBigStore.Service.Services
             await _genericRepository.UpdateAsync(_mappingService._mapper.Map<Entity>(entity));
         }
 
-        public Dto? GetById(int? id)
+
+        public async Task<Dto?> GetById(int? id)
         {
-            return _mappingService._mapper.Map<Dto>(_genericRepository.GetById(id));
+            return _mappingService._mapper.Map<Dto?>(await _genericRepository.GetById(id));
         }
 
     }

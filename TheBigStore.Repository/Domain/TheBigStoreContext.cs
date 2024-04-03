@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TheBigStore.Repository.Enums;
 using TheBigStore.Repository.Models;
 
@@ -113,6 +114,20 @@ namespace TheBigStore.Repository.Domain
                 .WithOne(i => i.Category)
                 .HasForeignKey(i => i.CategoryId);
 
+        }
+
+        public static TheBigStoreContext Create()
+        {
+            DbContextOptionsBuilder<TheBigStoreContext> optionsBuilder = new();
+
+            optionsBuilder.UseSqlServer("Server=dESktoP-V8\\SQLEXPRESS; Database=TheBigStoreApp; Trusted_Connection=True; TrustServerCertificate=True;");
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.UseLoggerFactory(new ServiceCollection()
+                          .AddLogging(builder => builder.AddConsole()
+                                                        .AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information))
+                           .BuildServiceProvider().GetService<ILoggerFactory>());
+
+            return new TheBigStoreContext();
         }
 
     }

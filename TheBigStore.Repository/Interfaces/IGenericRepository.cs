@@ -35,6 +35,6 @@ namespace TheBigStore.Repository.Interfaces
         /// Find an entity by id
         /// </summary>
         /// <returns></returns>
-        E? GetById(int? id);
+        Task<E?> GetById(int? id);
     }
 }

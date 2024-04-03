@@ -35,10 +35,10 @@ namespace TheBigStore.Repository.Repositories
             return temp;
         }
 
-        public E? GetById(int? id)
+        public async Task<E?> GetById(int? id)
         {
             return id != null
-                ? _dbContext.Set<E>().Find(id)
+                ? await _dbContext.Set<E>().FindAsync(id)
                 : throw new ArgumentNullException(nameof(id));
         }
     }

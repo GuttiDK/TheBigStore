@@ -9,10 +9,7 @@ namespace TheBigStore.UnitTesting.Tests
         [Fact]
         public void TestDeleteCustomer()
         {
-            // Arrange
-            UnitTheBigStoreContext.RecreateDatabase();
-            TheBigStoreContext context = UnitTheBigStoreContext.Create();
-
+            
         }
     }
 }
