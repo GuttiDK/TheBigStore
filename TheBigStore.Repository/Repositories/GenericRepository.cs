@@ -10,23 +10,26 @@ namespace TheBigStore.Repository.Repositories
     {
         private readonly TheBigStoreContext _dbContext = dbContext;
 
-        public async Task CreateAsync(E entity)
+        public async Task<E> CreateAsync(E entity)
         {
             _dbContext.Add(entity);
             await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task UpdateAsync(E entity)
+        public async Task<E> UpdateAsync(E entity)
         {
             _dbContext.Set<E>().Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task DeleteAsync(E entity)
+        public async Task<E> DeleteAsync(E entity)
         {
             _dbContext.Remove(entity);
             await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
         public async Task<ObservableCollection<E>> GetAllAsync()
@@ -35,11 +38,9 @@ namespace TheBigStore.Repository.Repositories
             return temp;
         }
 
-        public async Task<E?> GetById(int? id)
+        public async Task<E> GetById(int id)
         {
-            return id != null
-                ? await _dbContext.Set<E>().FindAsync(id)
-                : throw new ArgumentNullException(nameof(id));
+            return await _dbContext.Set<E>().FindAsync(id);
         }
     }
 }

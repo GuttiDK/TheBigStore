@@ -9,21 +9,21 @@ namespace TheBigStore.Repository.Interfaces
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task CreateAsync(E entity);
+        Task<E> CreateAsync(E entity);
 
         /// <summary>
         /// Deletes an entity
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task DeleteAsync(E entity);
+        Task<E> DeleteAsync(E entity);
 
         /// <summary>
         /// Updates an entity
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task UpdateAsync(E entity);
+        Task<E> UpdateAsync(E entity);
 
         /// <summary>
         /// Get all entities
@@ -35,6 +35,6 @@ namespace TheBigStore.Repository.Interfaces
         /// Find an entity by id
         /// </summary>
         /// <returns></returns>
-        Task<E?> GetById(int? id);
+        Task<E> GetById(int id);
     }
 }

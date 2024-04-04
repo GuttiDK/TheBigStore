@@ -5,7 +5,7 @@ using TheBigStore.Repository.Domain;
 
 namespace TheBigStore.UnitTesting.Tests
 {
-    public class CreateCustomerServiceTest_SHOULD
+    public class UnitTestCustomerServiceTest
     {
         private static readonly MappingService _mappingService = new();
 
