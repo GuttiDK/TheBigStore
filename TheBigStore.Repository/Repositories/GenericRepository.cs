@@ -40,7 +40,8 @@ namespace TheBigStore.Repository.Repositories
 
         public async Task<E> GetById(int id)
         {
-            return await _dbContext.Set<E>().FindAsync(id);
+            E? e = await _dbContext.Set<E>().FindAsync(id);
+            return e ?? throw new Exception("Entity not found");
         }
     }
 }
