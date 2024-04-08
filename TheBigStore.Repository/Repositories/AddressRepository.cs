@@ -3,7 +3,7 @@ using TheBigStore.Repository.Models;
 
 namespace TheBigStore.Repository.Repositories
 {
-    public class RoleRepository(TheBigStoreContext dbContext) : GenericRepository<Role>(dbContext), IRoleRepository
+    public class AddressRepository(TheBigStoreContext dbContext) : GenericRepository<Address>(dbContext), IAddressRepository
     {
     }
 }

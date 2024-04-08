@@ -4,7 +4,7 @@ using TheBigStore.Repository.Models;
 
 namespace TheBigStore.Repository.Repositories
 {
-    public class CustomerRepository(TheBigStoreContext dbContext) : GenericRepository<Customer>(dbContext), ICustomerRepository
+    public class ItemRepository(TheBigStoreContext dbContext) : GenericRepository<Item>(dbContext), IItemRepository
     {
     }
 }

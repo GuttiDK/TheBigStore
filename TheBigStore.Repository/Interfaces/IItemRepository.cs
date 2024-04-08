@@ -2,7 +2,7 @@
 
 namespace TheBigStore.Repository.Interfaces
 {
-    public interface IProductRepository : IGenericRepository<Item>
+    public interface IItemRepository : IGenericRepository<Item>
     {
     }
 }

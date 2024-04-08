@@ -1,0 +1,24 @@
+﻿@page
+@model TheBigStore.Application.Pages.Login.LoginModel
+@{
+}
+
+@* Make a login form page here *@
+<h3>TheBigStore - Login</h3>
+<hr />
+<div>
+    Here can you login.
+    <hr />
+</div>
+
+<form method="post" asp-page-handler="Login">
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+        <input type="text" class="form-control" asp-for="Username" id="username" name="username">
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+        <input type="password" class="form-control" asp-for="Password" id="password" name="password">
+    </div>
+    <button class="btn btn-success" type="submit">Login</button>
+</form>

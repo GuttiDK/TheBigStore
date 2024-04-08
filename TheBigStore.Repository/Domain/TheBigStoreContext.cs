@@ -16,7 +16,7 @@ namespace TheBigStore.Repository.Domain
         public DbSet<Item> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ItemOrder> OrderItems { get; set; }
-        public DbSet<Category> Category { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         // how to add a new migration in PMC
         // Add-Migration InitialCreate
