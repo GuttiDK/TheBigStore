@@ -1,14 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Security.Cryptography;
 using TheBigStore.Repository.Domain;
 using TheBigStore.Repository.Interfaces;
 
 namespace TheBigStore.Repository.Repositories
 {
-    public class GenericRepository<E>(TheBigStoreContext dbContext) : IGenericRepository<E> where E : class
+    public class GenericRepository<E> : IGenericRepository<E> where E : class
     {
-        private readonly TheBigStoreContext _dbContext = dbContext;
+        private readonly TheBigStoreContext _dbContext;
+
+        public GenericRepository(TheBigStoreContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<E> CreateAsync(E entity)
         {
@@ -41,6 +45,7 @@ namespace TheBigStore.Repository.Repositories
         public async Task<E> GetById(int id)
         {
             E? e = await _dbContext.Set<E>().FindAsync(id);
+            _dbContext.Entry(e).State = EntityState.Detached;
             return e ?? throw new Exception("Entity not found");
         }
     }
