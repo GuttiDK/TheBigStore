@@ -18,5 +18,11 @@ namespace TheBigStore.Service.Services
         {
             return await _userRepository.CheckAdminAsync(userId);
         }
+
+        // Get user by username and password
+        public async Task<UserDto?> GetUserAsync(string username, string password)
+        {
+            return _mappingService._mapper.Map<UserDto?>(await _userRepository.GetUserAsync(username, password));
+        }
     }
 }

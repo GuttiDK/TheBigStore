@@ -1,0 +1,72 @@
+﻿﻿.input-group {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #8c8c8c;
+    border-radius: 2px;
+    box-sizing: border-box;
+    color: black;
+    display: block;
+    font-size: 16px;
+    height: 44px;
+    padding: 10px 11px;
+}
+
+.field-holder {
+    position: relative;
+    margin-bottom: .75em;
+}
+
+input {
+    border: 0;
+    border-bottom: 3px solid #dfdfdf;
+    outline: none;
+}
+
+label, i {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #424242;
+    display: flex;
+    align-items: center;
+    transition: .15s ease-in-out;
+}
+
+input, label {
+    font-size: 1em;
+    width: 300px;
+    height: 50px;
+}
+
+    input:focus + label,
+    input:valid + label {
+        color: #424242;
+        font-size: .75em;
+        top: -25px;
+        pointer-events: none;
+    }
+
+    input:focus {
+        transition: 0.25s;
+        border-bottom: 3px solid #000;
+    }
+
+.loginbutton {
+    margin-left: 485px;
+    width: 300px;
+    height: 50px;
+    background-color: red;
+    font-weight: 600;
+    margin-top: 15px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+}
+
+.createaccount {
+    color: white;
+    align-content: center;
+    width: 250px;
+    font-weight: 500;
+}

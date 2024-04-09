@@ -3,9 +3,64 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<link rel="stylesheet" href="path/to/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    <form asp-page-handler="login" method="post">
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="UserName">Username</label>
+                            <input type="text" asp-for="UserName" id="UserName" class="form-control" placeholder="Username" required />
+                        </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to TheBigStore</h1>
-    <p>Click to goto Products</p>
-    <p><a class="btn btn-primary" asp-page="/Products/">Products</a></p>
-</div>
+                        <!-- Password input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="Password">Password</label>
+                            <input class="form-control" type="password" asp-for="Password" id="Password" placeholder="Password" required />
+                            <i class="fa fa-eye-slash toggle-password" id="togglePassword" style="margin-left: 10px;"></i>
+                        </div>
+
+                        <!-- 2 column grid layout for inline styling -->
+                        <div class="row mb-4">
+                            <div class="col">
+                                <!-- Simple link -->
+                                <a href="#!">Forgot password?</a>
+                            </div>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary btn-block mb-4">Login</button>
+
+                        <!-- Register buttons -->
+                        <div class="text-center">
+                            <p>Not a member? <a href="#!">Register</a></p>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('Password');
+            const togglePassword = document.getElementById('togglePassword');
+
+            togglePassword.addEventListener('click', function () {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    togglePassword.classList.remove('fa-eye-slash');
+                    togglePassword.classList.add('fa-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    togglePassword.classList.remove('fa-eye');
+                    togglePassword.classList.add('fa-eye-slash');
+                }
+            });
+        });
+    </script>

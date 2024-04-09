@@ -49,10 +49,9 @@ builder.Services.AddScoped<IItemOrderRepository, ItemOrderRepository>();
 builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<TheBigStoreContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.EnableSensitiveDataLogging();
-});
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging())
+    .AddSession(option => { option.IdleTimeout = TimeSpan.FromMinutes(30); }).AddMemoryCache();
+
 
 
 var app = builder.Build();

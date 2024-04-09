@@ -25,5 +25,11 @@ namespace TheBigStore.Repository.Repositories
             User? user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId && u.RoleId == 1);
             return user != null;
         }
+
+        // Get user by username and password
+        public async Task<User?> GetUserAsync(string username, string password)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.UserName == username && u.Password == password);
+        }
     }
 }
