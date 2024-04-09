@@ -14,7 +14,7 @@ namespace TheBigStore.Application.Pages
             _userService = userService;
         }
 
-        string Successmessage = string.Empty;
+        readonly string Successmessage = string.Empty;
         string Errormessage = string.Empty;
         public string? Status { get; set; }
         [BindProperty]

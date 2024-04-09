@@ -12,7 +12,7 @@ namespace TheBigStore.Application.Pages.Roles
 
         public RolesModel(IRoleService roleService)
         {
-            _roleService=roleService;
+            _roleService = roleService;
         }
 
         [BindProperty]

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using TheBigStore.Repository.Domain;
 using TheBigStore.Repository.Interfaces.GenericInterfaces;
 
@@ -47,6 +48,19 @@ namespace TheBigStore.Repository.Repositories.GenericRepositories
             E? e = await _dbContext.Set<E>().FindAsync(id);
             _dbContext.Entry(e).State = EntityState.Detached;
             return e ?? throw new Exception("Entity not found");
+        }
+
+        public async Task<IEnumerable<E>> FindAsync(Expression<Func<E, bool>> predicate, Func<IQueryable<E>, IOrderedQueryable<E>> orderBy = null, int? pageNumber = null, int? pageSize = null)
+        {
+            IQueryable<E> query = _dbContext.Set<E>().Where(predicate);
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            if (pageNumber.HasValue && pageSize.HasValue)
+                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
+
+            return await query.ToListAsync();
         }
     }
 }

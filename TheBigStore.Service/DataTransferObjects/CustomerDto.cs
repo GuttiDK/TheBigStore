@@ -12,13 +12,13 @@
         public int AddressId { get; set; }
 
         // Add an address
-        public AddressDto Address { get; set; } = new AddressDto();
+        public AddressDto Address { get; set; }
 
         // Add a list of orders
         public List<OrderDto> Orders { get; set; } = [];
 
         // Add a user
-        public UserDto User { get; set; } = new UserDto();
+        public UserDto User { get; set; }
         public int UserId { get; set; }
     }
 }

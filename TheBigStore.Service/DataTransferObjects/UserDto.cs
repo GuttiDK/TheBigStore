@@ -12,11 +12,11 @@ namespace TheBigStore.Repository.Models
         public string Email { get; set; } = string.Empty;
 
         // Role
-        public int RoleId { get; set; }
+        public int RoleId { get; set; } = 0;
         public RoleDto Role { get; set; } = new RoleDto();
 
         // Customer
-        public int CustomerId { get; set; }
+        public int CustomerId { get; set; } = 0;
         public Customer Customer { get; set; } = new Customer();
     }
 }

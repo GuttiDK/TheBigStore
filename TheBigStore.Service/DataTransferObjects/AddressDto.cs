@@ -12,6 +12,6 @@ namespace TheBigStore.Repository.Models
         public string Country { get; set; } = string.Empty;
 
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; } = new Customer();
+        public Customer Customer { get; set; }
     }
 }

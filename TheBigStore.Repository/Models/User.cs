@@ -18,6 +18,6 @@ namespace TheBigStore.Repository.Models
 
         // Customer
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; } = new Customer();
+        public Customer Customer { get; set; }
     }
 }

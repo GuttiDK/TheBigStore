@@ -12,8 +12,8 @@ using TheBigStore.Repository.Domain;
 namespace TheBigStore.Repository.Migrations
 {
     [DbContext(typeof(TheBigStoreContext))]
-    [Migration("20240402193453_Initial")]
-    partial class Initial
+    [Migration("20240409115150_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,7 @@ namespace TheBigStore.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categori");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Customer", b =>

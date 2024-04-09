@@ -44,7 +44,7 @@ namespace TheBigStore.Application.Pages.Roles
                 {
                     roleDto.Id = Role.Id;
                     roleDto.RoleName = Role.RoleName;
-                    var test = await _roleService.UpdateAsync(roleDto);
+                    await _roleService.UpdateAsync(roleDto);
                 }
             }
 
