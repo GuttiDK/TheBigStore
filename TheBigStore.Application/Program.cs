@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using TheBigStore.Repository;
 using TheBigStore.Repository.Domain;
-using TheBigStore.Repository.Interfaces;
-using TheBigStore.Repository.Repositories;
-using TheBigStore.Service.Interfaces;
-using TheBigStore.Service.Services;
+using TheBigStore.Repository.Interfaces.OrderInterfaces;
+using TheBigStore.Repository.Interfaces.UserInterfaces;
+using TheBigStore.Repository.Repositories.OrderRepositories;
+using TheBigStore.Repository.Repositories.UserRepositories;
+using TheBigStore.Service.Interfaces.UserInterfaces;
+using TheBigStore.Service.Services.MappingServices;
+using TheBigStore.Service.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 

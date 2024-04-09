@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TheBigStore.Application.SessionHelper;
 using TheBigStore.Repository.Models;
-using TheBigStore.Service.Interfaces;
+using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.Application.Pages
 {
