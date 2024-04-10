@@ -22,12 +22,15 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Roles/Roles">Roles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Users/Users">Users</a>
-                        </li>
+                        @if (!string.IsNullOrWhiteSpace(Context.Session.GetString("username")))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/Roles/Roles">Roles</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/Users/Users">Users</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

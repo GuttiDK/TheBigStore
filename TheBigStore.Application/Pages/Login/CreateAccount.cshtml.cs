@@ -9,9 +9,11 @@ namespace TheBigStore.Application.Pages
     public class CreateAccountModel : PageModel
     {
         private readonly IUserService _userService;
-        public CreateAccountModel(IUserService userService)
+        private readonly IRoleService _roleService;
+        public CreateAccountModel(IUserService userService, IRoleService roleService)
         {
             _userService = userService;
+            _roleService = roleService;
         }
 
         string Successmessage = string.Empty;

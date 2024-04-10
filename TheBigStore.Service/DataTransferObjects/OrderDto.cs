@@ -7,7 +7,7 @@ namespace TheBigStore.Repository.Models
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; } = new Customer();
+        public CustomerDto Customer { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Now;
         public DateTime DeliveryDate { get; set; } = DateTime.Now.AddDays(7);
         public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Pending;

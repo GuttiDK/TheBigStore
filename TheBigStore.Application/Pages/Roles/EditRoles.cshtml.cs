@@ -12,6 +12,8 @@ namespace TheBigStore.Application.Pages.Roles
 
         [BindProperty]
         public RoleDto Role { get; set; }
+        public string SuccessMessage { get; set; }
+        public string ErrorMessage { get; set; }
 
         public EditRolesModel(IRoleService roleService)
         {
@@ -36,15 +38,21 @@ namespace TheBigStore.Application.Pages.Roles
         public async Task<IActionResult> OnPostUpdateRole()
         {
 
-            RoleDto roleDto = await _roleService.GetById(Role.Id);
+       
 
             if (ModelState.IsValid)
             {
+                RoleDto roleDto = await _roleService.GetById(Role.Id);
                 if (roleDto != null)
                 {
                     roleDto.Id = Role.Id;
                     roleDto.RoleName = Role.RoleName;
                     await _roleService.UpdateAsync(roleDto);
+                    SuccessMessage = "Role updated successfully";
+                }
+                else
+                {
+                    ErrorMessage = "Role not found";
                 }
             }
 

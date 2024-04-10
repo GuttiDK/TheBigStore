@@ -45,7 +45,18 @@ namespace TheBigStore.Application.Pages.Roles
                 }
             }
 
-            return RedirectToPage("/ToDoList/UnCompletedToDoList");
+            return RedirectToPage("/Roles/Roles");
+        }
+
+        public async Task<IActionResult> OnPostDeleteRole(int id)
+        {
+
+            var role = await _roleService.GetById(id);
+            if (role != null)
+            {
+                await _roleService.DeleteAsync(role);
+            }
+            return RedirectToPage("/Roles/Roles");
         }
     }
 }

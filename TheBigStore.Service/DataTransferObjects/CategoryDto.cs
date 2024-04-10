@@ -7,6 +7,6 @@ namespace TheBigStore.Repository.Models
         public int Id { get; set; }
         // CategoryName
         public string CategoryName { get; set; } = string.Empty;
-        public List<Item> Items { get; set; } = [];
+        public List<ItemDto> Items { get; set; } = [];
     }
 }

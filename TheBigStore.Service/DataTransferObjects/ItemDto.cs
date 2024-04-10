@@ -14,9 +14,9 @@ namespace TheBigStore.Repository.Models
 
         // ItemOrder
         public List<ItemOrderDto> ItemOrders { get; set; } = [];
-        
+
         // Category
-        public int CategoryId { get; set; }
-        public CategoryDto Category { get; set; } = new CategoryDto();
+        public int? CategoryId { get; set; }
+        public CategoryDto? Category { get; set; }
     }
 }

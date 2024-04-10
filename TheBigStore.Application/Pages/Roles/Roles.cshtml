@@ -18,11 +18,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (RoleDto item in Model.Roles)
+            @foreach (var item in Model.Roles)
             {
                 <tr>
+                    <form method="post" asp-page-handler="DeleteRole">
                     <td>@item.Id</td>
-                    <td><a style="color: black;" href="/Roles/EditRoles/@item.Id">@item.RoleName</a></td>
+                    <td>@item.RoleName</td>
+                    <td>
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <a class="btn btn-primary" href="/Roles/EditRoles/@item.Id">Edit</a>
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </td>
+                    </form>
                 </tr>
             }
         </tbody>

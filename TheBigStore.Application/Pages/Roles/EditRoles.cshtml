@@ -25,7 +25,17 @@
 
         <div class="mb-3">
             <button class="btn btn-primary" type="submit">Update</button>
-            <a class="btn btn-danger" href='javascript:history.go(-1)'>Cancel</a>
+            <a class="btn btn-danger" href='/Roles/Roles'>Cancel</a>
+            
+            @if (Model.SuccessMessage != null)
+            {
+                <div><span class="text-success">@Model.SuccessMessage</span></div>
+            }
+            else if (Model.ErrorMessage != null)
+            {
+                <div><span class="text-danger">@Model.ErrorMessage</span></div>
+            }
+
         </div>
 
     </form>

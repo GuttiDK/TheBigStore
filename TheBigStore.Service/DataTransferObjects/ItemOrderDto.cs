@@ -11,8 +11,8 @@ namespace TheBigStore.Repository.Models
         public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Pending;
 
         public int ItemId { get; set; }
-        public ItemDto Item { get; set; } = new ItemDto();
+        public ItemDto Item { get; set; }
         public int OrderId { get; set; }
-        public OrderDto Order { get; set; } = new OrderDto();
+        public OrderDto Order { get; set; }
     }
 }

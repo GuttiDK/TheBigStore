@@ -10,8 +10,5 @@ namespace TheBigStore.Repository.Models
         public string City { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
-
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
     }
 }
