@@ -1,7 +1,6 @@
 ﻿@page
-@model IndexModel
+@model TheBigStore.Application.Pages.Admin.AdminModel
 @{
-    ViewData["Title"] = "Home page";
 }
 
 <div class="container py-5 h-100">
@@ -16,10 +15,9 @@
                     @if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
                     {
                         <div class="row">
-                            <div class="col">
+                            <div class="col-md-6">
                                 <a class="btn btn-primary" href="/Admin/Roles/Roles">View</a>
                                 <a class="btn btn-primary" href="/Admin/Users/Users">View</a>
-
                             </div>
                         </div>
                     }

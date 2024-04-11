@@ -1,12 +1,15 @@
 ﻿@page
 @using TheBigStore.Repository.Models
-@model RolesModel
+@model UsersModel
 @{
-    ViewData["Title"] = "Roles";
+    ViewData["Title"] = "Users";
 }
 
 @if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
 {
+    <div class="alert alert-danger" role="alert">
+        You are not logged in or not authorized.
+    </div>
 }
 
 else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)

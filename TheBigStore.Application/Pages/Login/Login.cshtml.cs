@@ -36,17 +36,17 @@ namespace TheBigStore.Application.Pages.Login
                 }
                 else if (UserName == founduser.UserName && Password == founduser.Password)
                 {
-                    if (founduser.Id != null)
+                    if (founduser.Id != 0)
                     {
-                        HttpContext.Session.SetSessionString(founduser.Id.ToString(), "id");
+                        HttpContext.Session.SetInt32("id", founduser.Id);
                         if (founduser.RoleId == 1)
                         {
-                            HttpContext.Session.SetSessionString(founduser.RoleId.ToString(), "role");
+                            HttpContext.Session.SetInt32("role", founduser.RoleId);
                             return RedirectToPage("/Index");
                         }
                         else if (founduser.RoleId == 2)
                         {
-                            HttpContext.Session.SetSessionString(founduser.RoleId.ToString(), "role");
+                            HttpContext.Session.SetInt32("role", founduser.RoleId);
                             return RedirectToPage("/Index");
                         }
                     }

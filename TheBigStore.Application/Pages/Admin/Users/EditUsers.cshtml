@@ -1,5 +1,5 @@
 ﻿@page "{id:int}"
-@model EditRolesModel
+@model EditUsersModel
 @{
 }
 
@@ -11,10 +11,10 @@
 }
 else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
 {
-    <h3>Roles - Edit</h3>
+    <h3>Users - Edit</h3>
     <hr />
     <div>
-        Here can you edit a role.
+        Here can you edit a user.
         <hr />
     </div>
     @if (@Model.Role != null)
