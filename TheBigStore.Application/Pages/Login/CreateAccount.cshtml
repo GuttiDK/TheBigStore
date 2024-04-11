@@ -1,0 +1,47 @@
+﻿@page
+@model CreateAccountModel
+@{
+    ViewData["Title"] = "Create a Account";
+}
+
+<link rel="stylesheet" href="path/to/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    <form asp-page-handler="CreateAccount" method="post">
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="UserName">Username</label>
+                            <input type="text" asp-for="UserName" id="UserName" class="form-control" placeholder="Username" required />
+                            @if (Model.Usernamemessage != null)
+                            {
+                                <div><span class="text-danger">@Model.Usernamemessage</span></div>
+                            }
+                            <label class="form-label" for="Email">Email</label>
+                            <input type="email" asp-for="Email" id="Email" class="form-control" placeholder="Email" required />
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="Password">Password</label>
+                            <input class="form-control" type="password" asp-for="Password" id="Password" placeholder="Password" required />
+                            <label class="form-label" for="ConfirmPassword">Confirm Password</label>
+                            <input class="form-control" type="password" asp-for="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm Password" required />
+                            @if (Model.Passwordmessage != null)
+                            {
+                                <div><span class="text-danger">@Model.Passwordmessage</span></div>
+                            }
+                        </div>
+
+                        <!-- Submit button -->
+                        <a class="btn btn-danger btn-block mb-4" href='javascript:history.go(-1)'>Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-block mb-4">Create Account</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>

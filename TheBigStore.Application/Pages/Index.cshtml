@@ -1,0 +1,26 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1>Welcome to TheBigStore</h1>
+    <p>Here you can manage roles and users.</p>
+</div>
+@if (!string.IsNullOrWhiteSpace(HttpContext.Session.GetString("id")) && HttpContext.Session.GetString("role") == "1")
+{
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Roles</h4>
+            <a class="btn btn-primary" href="/Admin/Roles/Roles">View</a>
+        </div>
+        <div class="col-md-6">
+            <h4>Users</h4>
+            <a class="btn btn-primary" href="/Admin/Users/Users">View</a>
+        </div>
+    </div>
+}
+else
+{
+}

@@ -6,13 +6,10 @@ namespace TheBigStore.Repository.Models
     {
         [Key]
         public int Id { get; set; }
-        public string StreetName { get; set; } = string.Empty;
-        public string StreetNumber { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
-        public string ZipCode { get; set; } = string.Empty;
-        public string Country { get; set; } = string.Empty;
-
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; } = new Customer();
+        public string StreetName { get; set; }
+        public string StreetNumber { get; set; }
+        public string City { get; set; } 
+        public string ZipCode { get; set; }
+        public string Country { get; set; }
     }
 }

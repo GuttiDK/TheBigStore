@@ -1,0 +1,83 @@
+﻿@page
+@using TheBigStore.Repository.Models
+@model RolesModel
+@{
+    ViewData["Title"] = "Roles";
+}
+@if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString("id")) || HttpContext.Session.GetString("role") == "2")
+{
+    <div class="alert alert-danger" role="alert">
+        You are not logged in or not authorized.
+    </div>
+}
+else if (!string.IsNullOrWhiteSpace(HttpContext.Session.GetString("id")) && HttpContext.Session.GetString("role") == "1")
+{
+    <div class="">
+        <p>Roles</p><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+    </div>
+
+    <hr />
+
+    @if (Model.Roles != null && Model.Roles.Any())
+    {
+        <table class="table table-sm table-striped table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>RoleName</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Roles)
+                {
+                    <tr>
+
+                        <td>@item.Id</td>
+                        <td>@item.RoleName</td>
+                        <td>
+                            <form method="post" asp-page-handler="DeleteRole">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary" href="/Roles/EditRoles/@item.Id">Edit</a>
+                                    <button class="btn btn-danger" name="id" value="@item.Id" type="submit">Delete</button>
+                                </div>
+                            </form>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-primary" role="alert">
+            No roles items found.
+        </div>
+    }
+
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="CreateRole">
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">RoleName</span>
+                            <input type="text" class="form-control" asp-for="RoleName" id="rolename" name="rolename">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-success" type="submit">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
