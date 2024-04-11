@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBigStore.Service", "TheB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBigStore.UnitTesting", "TheBigStore.UnitTesting\TheBigStore.UnitTesting.csproj", "{82791630-69C5-465B-949F-FCB7BA8A4DB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheBigStore.Application", "TheBigStore.Application\TheBigStore.Application.csproj", "{93E1286B-EA04-49F7-93A1-ED47574A1555}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBigStore.Application", "TheBigStore.Application\TheBigStore.Application.csproj", "{93E1286B-EA04-49F7-93A1-ED47574A1555}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

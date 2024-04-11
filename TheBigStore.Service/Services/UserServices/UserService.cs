@@ -12,9 +12,9 @@ namespace TheBigStore.Service.Services.UserServices
         private readonly IUserRepository _userRepository = userRepository;
         private readonly MappingService _mappingService = mappingService;
 
-        public async Task<bool> CheckUserAsync(string username, string password)
+        public async Task<bool> CheckUserAsync(string username)
         {
-            return await _userRepository.CheckUserAsync(username, password);
+            return await _userRepository.CheckUserAsync(username);
         }
 
         public async Task<bool> CheckAdminAsync(int userId)

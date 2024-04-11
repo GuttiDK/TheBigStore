@@ -16,6 +16,10 @@
                         <div class="form-outline mb-4">
                             <label class="form-label" for="UserName">Username</label>
                             <input type="text" asp-for="UserName" id="UserName" class="form-control" placeholder="Username" required />
+                            @if (Model.Usernamemessage != null)
+                            {
+                                <div><span class="text-danger">@Model.Usernamemessage</span></div>
+                            }
                             <label class="form-label" for="Email">Email</label>
                             <input type="email" asp-for="Email" id="Email" class="form-control" placeholder="Email" required />
                         </div>
@@ -26,6 +30,10 @@
                             <input class="form-control" type="password" asp-for="Password" id="Password" placeholder="Password" required />
                             <label class="form-label" for="ConfirmPassword">Confirm Password</label>
                             <input class="form-control" type="password" asp-for="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm Password" required />
+                            @if (Model.Passwordmessage != null)
+                            {
+                                <div><span class="text-danger">@Model.Passwordmessage</span></div>
+                            }
                         </div>
 
                         <!-- Submit button -->

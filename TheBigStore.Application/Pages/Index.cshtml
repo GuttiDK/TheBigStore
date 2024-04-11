@@ -8,21 +8,19 @@
     <h1>Welcome to TheBigStore</h1>
     <p>Here you can manage roles and users.</p>
 </div>
-@if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString("username")))
+@if (!string.IsNullOrWhiteSpace(HttpContext.Session.GetString("id")) && HttpContext.Session.GetString("role") == "1")
 {
-    <p>@Model.HttpContext.Session.GetString("username")</p>
-}
-else
-{
-    <p>@Model.HttpContext.Session.GetString("username")</p>
     <div class="row">
         <div class="col-md-6">
             <h4>Roles</h4>
-            <a class="btn btn-primary" href="/Roles/Roles">View</a>
+            <a class="btn btn-primary" href="/Admin/Roles/Roles">View</a>
         </div>
         <div class="col-md-6">
             <h4>Users</h4>
-            <a class="btn btn-primary" href="/Users/Users">View</a>
+            <a class="btn btn-primary" href="/Admin/Users/Users">View</a>
         </div>
     </div>
+}
+else
+{
 }

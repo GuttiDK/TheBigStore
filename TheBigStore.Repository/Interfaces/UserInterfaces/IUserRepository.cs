@@ -6,12 +6,11 @@ namespace TheBigStore.Repository.Interfaces.UserInterfaces
     public interface IUserRepository : IGenericRepository<User>
     {
         /// <summary>
-        /// Checks for if the inputted username and password are correct
+        /// Checks for if the inputted username are correct or is used
         /// </summary>
         /// <param name="username"></param>
-        /// <param name="password"></param>
         /// <returns>Returns true if its correct else returns false</returns>
-        Task<bool> CheckUserAsync(string username, string password);
+        Task<bool> CheckUserAsync(string username);
 
         /// <summary>
         /// Checks for if the user is an admin

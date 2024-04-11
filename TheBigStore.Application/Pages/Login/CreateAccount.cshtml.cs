@@ -16,8 +16,8 @@ namespace TheBigStore.Application.Pages
             _roleService = roleService;
         }
 
-        string Successmessage = string.Empty;
-        string Errormessage = string.Empty;
+        public string Usernamemessage;
+        public string Passwordmessage;
         [BindProperty]
         public string UserName { get; set; } = string.Empty;
         [BindProperty]
@@ -33,14 +33,14 @@ namespace TheBigStore.Application.Pages
         {
             if (ModelState.IsValid)
             {
-                bool founduser = await _userService.CheckUserAsync(username, password);
+                bool founduser = await _userService.CheckUserAsync(username);
                 if (founduser != false)
                 {
-                    Errormessage = "Username already exists";
+                    Usernamemessage = "Username already exists";
                 }
                 else if (password != confirmpassword)
                 {
-                    Errormessage = "Passwords do not match";
+                    Usernamemessage = "Passwords do not match";
                 }
                 else
                 {
@@ -49,11 +49,10 @@ namespace TheBigStore.Application.Pages
                         UserName = username,
                         Password = password,
                         Email = email,
-                        RoleId = 1,
+                        RoleId = 2,
                     };
                     await _userService.CreateAsync(user);
-                    Successmessage = "Account created successfully";
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/Login/Login");
                 }
             }
             return Page();

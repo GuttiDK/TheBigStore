@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TheBigStore.Application.SessionHelper;
@@ -35,13 +36,21 @@ namespace TheBigStore.Application.Pages.Login
                 }
                 else if (UserName == founduser.UserName && Password == founduser.Password)
                 {
-                    HttpContext.Session.SetSessionString(founduser.UserName, "username");
-                    if (founduser.RoleId == 1)
+                    if (founduser.Id != null)
                     {
-                        HttpContext.Session.SetSessionString(founduser.RoleId.ToString(), "isadmin");
+                        HttpContext.Session.SetSessionString(founduser.Id.ToString(), "id");
+                        if (founduser.RoleId == 1)
+                        {
+                            HttpContext.Session.SetSessionString(founduser.RoleId.ToString(), "role");
+                            return RedirectToPage("/Index");
+                        }
+                        else if (founduser.RoleId == 2)
+                        {
+                            HttpContext.Session.SetSessionString(founduser.RoleId.ToString(), "role");
+                            return RedirectToPage("/Index");
+                        }
                     }
-
-                    return RedirectToPage("/TeacherSite");
+                    return RedirectToPage("/Index");
                 }
 
             }
@@ -50,7 +59,7 @@ namespace TheBigStore.Application.Pages.Login
 
         public IActionResult OnPostLogOut()
         {
-            HttpContext.Session.Remove("username");
+            HttpContext.Session.Remove("id");
             return Page();
         }
 

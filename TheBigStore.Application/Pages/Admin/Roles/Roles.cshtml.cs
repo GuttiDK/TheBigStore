@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using TheBigStore.Repository.Models;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
-namespace TheBigStore.Application.Pages.Roles
+namespace TheBigStore.Application.Pages.Admin.Roles
 {
     public class RolesModel : PageModel
     {

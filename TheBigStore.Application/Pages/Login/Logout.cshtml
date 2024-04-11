@@ -1,0 +1,10 @@
+﻿@page
+@model TheBigStore.Application.Pages.Login.LogoutModel
+@{
+}
+
+@{
+    HttpContext.Session.Remove("id");
+    HttpContext.Session.Remove("role");
+    Response.Redirect("/Login/Login");
+}
