@@ -7,7 +7,7 @@ TheBigStore is a web application that allows users to view, create, edit, and de
 ## The Maker
 Made by Christian C. Høttges
 
-Last updated: 02-04-2024
+Last updated: 11-04-2024
 
 # How to Use
 
@@ -30,13 +30,40 @@ Last updated: 02-04-2024
 
 
 # Features
-
+- **Front-end**: Allows users to view, create, edit, and delete products and use all the frontend features of the application thru it.
 - **Back-end**: Allows users can use all the features of the application thru the repository and services.
 - **Repository pattern**: Allows users to use the repository pattern to get data from the database.
 - **Service pattern**: Allows users to use the service pattern to get data from the repository.
 
 # Updates
-**Version 1.0.0** (02/04/2024 - Current version)
+**Version 2.0.0** (11/04/2024 - Current version)
+1. **Namespace Refactoring**:
+   - Organized namespaces for better code organization, enhancing readability and maintainability.
+2. **Dependency Injection and Logging**:
+   - Added the `Microsoft.Extensions.Options` namespace and a static `Create` method to `TheBigStoreContext.cs`, enabling configuration options and simplified context creation.
+   - Integrated `Autofac` for dependency injection and `AutoMapper` for object-object mapping, improving modularity and abstraction.
+3. **Asynchronous Operations**:
+   - Modified the `GetById` method in various interfaces and classes to be asynchronous, enhancing performance and responsiveness.
+4. **Database Structure**:
+   - Implemented significant changes to the database structure, including the addition of new models for entities and seed data, enhancing data integrity and consistency.
+4. **Unit Testing**:
+   - Added comprehensive unit testing, including creation of new unit test files and removal of redundant test classes, ensuring robustness and reliability.
+5. **DTO Integration**:
+   - Introduced DTO classes for multiple entities, facilitating data transfer and abstraction between layers.
+6. **Service Layer Enhancements**:
+   - Added new service classes and interfaces, improving encapsulation and separation of concerns.
+7. **Role Management**:
+   - Introduced role management features, enabling role-based access control and enhancing security.
+   - Updated user session management to store user ID and role, improving authentication and authorization mechanisms.
+8. **User Account Management**:
+    - Enhanced user account creation process, setting default roles and implementing error handling for user creation.
+9. **Removal of Redundant Code**:
+    - Removed unnecessary files, methods, and dependencies, streamlining the codebase and reducing complexity.
+10. **Database Migration**:
+    - Implemented a new database migration to establish the initial database schema, ensuring database consistency and compatibility.
+
+
+**Version 1.0.0** (02/04/2024)
 - Updated `TheBigStoreContext` class and various model classes.
 - Removed the `DbContextOptions<TheBigStoreContext>` parameter from the constructor.
 - Added new `DbSet` properties for entities to `TheBigStoreContext`.
@@ -80,7 +107,8 @@ Last updated: 02-04-2024
  - Stucture of the application.
 
 ## Tags
-- <a href="">Testing and Database Structure - v1.0.0</a>
+- <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-2.0.0">Comprehensive Update and Refinement - v2.0.0</a>
+- <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-1.0.0">Testing and Database Structure - v1.0.0</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-0.0.2">Repo and service pattern - v0.0.2</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-0.0.1">Structure - v0.0.1</a>
 
