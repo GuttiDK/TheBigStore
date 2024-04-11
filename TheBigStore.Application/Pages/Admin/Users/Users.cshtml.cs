@@ -8,55 +8,101 @@ namespace TheBigStore.Application.Pages.Admin.Users
 {
     public class UsersModel : PageModel
     {
+        private readonly IUserService _userService;
         private readonly IRoleService _roleService;
 
-        public UsersModel(IRoleService roleService)
+        public UsersModel(IUserService userService, IRoleService roleService)
         {
-            _roleService = roleService;
+            _userService = userService;
+            _roleService=roleService;
         }
 
         [BindProperty]
         public int Id { get; set; }
         [BindProperty]
-        public string RoleName { get; set; }
+        public string UserName { get; set; }
+        [BindProperty]
+        public string Password { get; set; }
+        [BindProperty]
+        public string ConfirmPassword { get; set; }
+        [BindProperty]
+        public string Email { get; set; }
+        [BindProperty]
+        public int RoleId { get; set; }
+
+        public string Usernamemessage;
+        public string Passwordmessage;
+        public string Rolemessage;
+
 
         [BindProperty]
+        public ObservableCollection<UserDto>? Users { get; set; }
         public ObservableCollection<RoleDto>? Roles { get; set; }
+
 
         public async Task<IActionResult> OnGet()
         {
+            Users = await _userService.GetAllAsync();
             Roles = await _roleService.GetAllAsync();
+            foreach (var user in Users)
+            {
+                if (user.RoleId != 0)
+                {
+                    user.Role = await _roleService.GetById(user.RoleId);
+                }
+            }
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostCreateRole()
+
+
+
+        public async Task<IActionResult> OnPostCreateAccount(string username, string email, string password, string confirmpassword, int roleid)
         {
             if (ModelState.IsValid)
             {
-                if (RoleName != null)
+                bool founduser = await _userService.CheckUserAsync(username);
+                if (founduser != false)
                 {
-                    RoleDto roleDto = new()
+                    Usernamemessage = "Username already exists";
+                }
+                else if (password != confirmpassword)
+                {
+                    Usernamemessage = "Passwords do not match";
+                }
+                else if (roleid == 0 || roleid == null)
+                {
+                    Rolemessage = "Please select a role";
+                }
+                else
+                {
+                    UserDto user = new()
                     {
-                        RoleName = RoleName,
+                        UserName = username,
+                        Password = password,
+                        Email = email,
+                        RoleId = roleid,
                     };
-
-                    await _roleService.CreateAsync(roleDto);
+                    await _userService.CreateAsync(user);
+                    return RedirectToPage("/Admin/Users/Users");
                 }
             }
-
-            return RedirectToPage("/Roles/Roles");
+            return Page();
         }
 
         public async Task<IActionResult> OnPostDeleteRole(int id)
         {
 
-            var role = await _roleService.GetById(id);
-            if (role != null)
+            var user = await _userService.GetById(id);
+            if (user != null)
             {
-                await _roleService.DeleteAsync(role);
+                if (user.CustomerId != null)
+                {
+                }
+                await _userService.DeleteAsync(user);
             }
-            return RedirectToPage("/Roles/Roles");
+            return RedirectToPage("/Admin/Users/Users");
         }
     }
 }

@@ -17,19 +17,49 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
         Here can you edit a user.
         <hr />
     </div>
-    @if (@Model.Role != null)
+    @if (@Model.User != null)
     {
-        <form method="post" asp-page-handler="UpdateRole">
-
+        <form method="post" asp-page-handler="UpdateUser">
             <div class="mb-3">
                 <label class="form-label">Id</label>
-                <input type="text" class="form-control" asp-for="Role.Id" readonly>
+                <input type="text" class="form-control" asp-for="User.Id" readonly>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Description</label>
-                <input type="text" class="form-control" asp-for="Role.RoleName">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" asp-for="User.UserName">
             </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" asp-for="User.Email">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Role</label>
+                <select class="form-select" asp-for="RoleId">
+                    @if (Model.User.RoleId != 0)
+                    {
+                        <option value="@Model.User.RoleId" selected>@Model.User.Role.RoleName</option>
+                    }
+                    else
+                    {
+                        <option selected>Select role</option>
+                    }
+                    @if (Model.Roles != null && Model.Roles.Any())
+                    {
+                        foreach (var role in Model.Roles)
+                        {
+                            <option value="@role.Id">@role.RoleName</option>
+                        }
+                    }
+                </select>
+                @if (Model.Rolemessage != null)
+                {
+                    <div><span class="text-danger">@Model.Rolemessage</span></div>
+                }
+            </div>
+
 
             <div class="mb-3">
                 <button class="btn btn-primary" type="submit">Update</button>
