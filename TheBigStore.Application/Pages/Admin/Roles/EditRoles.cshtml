@@ -1,6 +1,7 @@
 ﻿@page "{id:int}"
 @model EditRolesModel
 @{
+    ViewData["Title"] = "Edit Roles";
 }
 
 @if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
@@ -32,8 +33,20 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
             </div>
 
             <div class="mb-3">
+                <label class="form-check-label" for="flexCheckChecked">Is Admin</label>
+                @if (Model.Role.IsAdmin == true)
+                {
+                    <input class="form-check-input" type="checkbox" asp-for="Role.IsAdmin" id="flexCheckChecked" name="isadmin" checked>
+                }
+                else
+                {
+                    <input class="form-check-input" type="checkbox" asp-for="Role.IsAdmin" id="flexCheckChecked" name="isadmin">
+                }
+                </div>
+
+            <div class="mb-3">
                 <button class="btn btn-primary" type="submit">Update</button>
-                <a class="btn btn-danger" href='/Roles/Roles'>Cancel</a>
+                <a class="btn btn-danger" href='/Admin/Roles/Roles'>Cancel</a>
 
                 @if (Model.SuccessMessage != null)
                 {

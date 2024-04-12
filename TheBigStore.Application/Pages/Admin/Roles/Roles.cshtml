@@ -11,8 +11,9 @@
 
 else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
 {
-    <div class="">
-        <p>Roles</p><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+    <div>
+        <h1>Roles</h1>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
     </div>
 
     <hr />
@@ -24,6 +25,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                 <tr>
                     <th>Id</th>
                     <th>RoleName</th>
+                    <th>IsAdmin</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -34,10 +36,18 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
 
                         <td>@item.Id</td>
                         <td>@item.RoleName</td>
+                        @if (item.IsAdmin)
+                        {
+                            <td>Yes</td>
+                        }
+                        else if (!item.IsAdmin)
+                        {
+                            <td>No</td>
+                        }
                         <td>
                             <form method="post" asp-page-handler="DeleteRole">
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="/Roles/EditRoles/@item.Id">Edit</a>
+                                    <a class="btn btn-primary" href="/Admin/Roles/EditRoles/@item.Id">Edit</a>
                                     <button class="btn btn-danger" name="id" value="@item.Id" type="submit">Delete</button>
                                 </div>
                             </form>
@@ -70,10 +80,22 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                             <span class="input-group-text" id="inputGroup-sizing-default">RoleName</span>
                             <input type="text" class="form-control" asp-for="RoleName" id="rolename" name="rolename">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-success" type="submit">Create</button>
+                        <div class="form-check">
+                            @if (Model.IsAdmin == true)
+                            {
+                                <input class="form-check>input" type="checkbox" asp-for="IsAdmin" id="flexCheckChecked" name="isadmin" checked>
+                            }
+                            else
+                            {
+                                <input class="form-check-input" type="checkbox" asp-for="IsAdmin" id="flexCheckChecked" name="isadmin">
+                            }
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Is Admin
+                            </label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-success" type="submit">Create</button>
                 </form>
             </div>
         </div>

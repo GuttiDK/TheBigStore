@@ -42,18 +42,21 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                         <td>@item.Id</td>
                         <td>@item.UserName</td>
                         <td>@item.Email</td>
-                        <td>@item.Role.RoleName</td>
-                        @if (item.RoleId == 1)
+                        @if (item.Role.RoleName == null)
                         {
-                            <td>Yes</td>
-                        }
-                        else if (item.RoleId == 2)
-                        {
-                            <td>No</td>
+                            <td></td>
                         }
                         else
                         {
-                            <td></td>
+                            <td>@item.Role.RoleName</td>
+                        }
+                        @if (item.Role.IsAdmin)
+                        {
+                            <td>Yes</td>
+                        }
+                        else if (!item.Role.IsAdmin)
+                        {
+                            <td>No</td>
                         }
                         <td>
                             <form method="post" asp-page-handler="DeleteRole">
@@ -120,7 +123,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                                 {
                                     foreach (var role in Model.Roles)
                                     {
-                                        <option value="@role.Id">@role.RoleName</option>
+                                        <option value="@role.Id">@role.RoleName - @role.IsAdmin</option>
                                     }
                                 }
                             </select>

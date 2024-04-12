@@ -13,7 +13,10 @@ namespace TheBigStore.Application.Pages.Admin.Users
         private readonly IRoleService _roleService;
         private readonly IUserService _userService;
 
+        [BindProperty]
         public UserDto User { get; set; }
+        [BindProperty]
+        public RoleDto Role { get; set; }
         [BindProperty]
         public ObservableCollection<RoleDto> Roles { get; set; }
         public string SuccessMessage { get; set; }
@@ -32,21 +35,15 @@ namespace TheBigStore.Application.Pages.Admin.Users
         public async Task OnGetAsync(int id)
         {
             User = await _userService.GetById(id);
-           
-            Roles = await _roleService.GetAllAsync();
-            if (User.RoleId != 0)
-            {
-                User.Role = await _roleService.GetById(User.RoleId);
-                foreach(var role in Roles)
-                {
-                    if(role.Id==User.RoleId)
-                    {
-                        Roles.Remove(role);
-                    }
-                }
-            }
+            if (User.RoleId != null)
+                Role = await _roleService.GetById((int)User.RoleId);
 
-            // If the user already has a role
+            Roles = await _roleService.GetAllAsync();
+            var test = Roles.SingleOrDefault(x => x.Id == User.RoleId);
+            if (User.RoleId != null && test != null)
+            {
+                Roles.Remove(test);
+            }
         }
 
         public async Task<IActionResult> OnPostUpdateUser()
@@ -63,6 +60,7 @@ namespace TheBigStore.Application.Pages.Admin.Users
                     userDto.RoleId = User.RoleId;
                     await _userService.UpdateAsync(userDto);
                     SuccessMessage = "User updated successfully";
+                    return RedirectToPage($@"/Admin/Users/Users");
                 }
                 else
                 {

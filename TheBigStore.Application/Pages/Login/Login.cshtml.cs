@@ -11,9 +11,11 @@ namespace TheBigStore.Application.Pages.Login
     {
 
         private readonly IUserService _userService;
-        public LoginModel(IUserService userService)
+        private readonly IRoleService _roleService;
+        public LoginModel(IUserService userService, IRoleService roleService)
         {
             _userService = userService;
+            _roleService=roleService;
         }
 
         readonly string Successmessage = string.Empty;
@@ -39,15 +41,26 @@ namespace TheBigStore.Application.Pages.Login
                     if (founduser.Id != 0)
                     {
                         HttpContext.Session.SetInt32("id", founduser.Id);
-                        if (founduser.RoleId == 1)
+                        if (founduser.RoleId != null)
                         {
-                            HttpContext.Session.SetInt32("role", founduser.RoleId);
-                            return RedirectToPage("/Index");
-                        }
-                        else if (founduser.RoleId == 2)
-                        {
-                            HttpContext.Session.SetInt32("role", founduser.RoleId);
-                            return RedirectToPage("/Index");
+
+                            RoleDto role = await _roleService.GetById((int)founduser.RoleId);
+                            if (role == null)
+                            {
+                                HttpContext.Session.SetInt32("role", 2);
+                                return RedirectToPage("/Index");
+                            }
+                            if (role.IsAdmin == true)
+                            {
+                                HttpContext.Session.SetInt32("role", 1);
+
+                                return RedirectToPage("/Admin/Admin");
+                            }
+                            else if (role.IsAdmin == false)
+                            {
+                                HttpContext.Session.SetInt32("role", 2);
+                                return RedirectToPage("/Index");
+                            }
                         }
                     }
                     return RedirectToPage("/Index");

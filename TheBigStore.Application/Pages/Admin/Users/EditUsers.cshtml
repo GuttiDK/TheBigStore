@@ -1,6 +1,7 @@
 ﻿@page "{id:int}"
 @model EditUsersModel
 @{
+    ViewData["Title"] = "Edit Users";
 }
 
 @if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
@@ -37,20 +38,20 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
 
             <div class="mb-3">
                 <label class="form-label">Role</label>
-                <select class="form-select" asp-for="RoleId">
-                    @if (Model.User.RoleId != 0)
+                <select class="form-select" asp-for="User.RoleId">
+                    @if (Model.User.RoleId == null)
                     {
-                        <option value="@Model.User.RoleId" selected>@Model.User.Role.RoleName</option>
+                        <option selected>Select role</option>
                     }
                     else
                     {
-                        <option selected>Select role</option>
+                        <option value="@Model.User.RoleId" selected>@Model.Role.RoleName - @Model.Role.IsAdmin</option>
                     }
                     @if (Model.Roles != null && Model.Roles.Any())
                     {
                         foreach (var role in Model.Roles)
                         {
-                            <option value="@role.Id">@role.RoleName</option>
+                            <option value="@role.Id">@role.RoleName - @role.IsAdmin</option>
                         }
                     }
                 </select>
@@ -63,7 +64,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
 
             <div class="mb-3">
                 <button class="btn btn-primary" type="submit">Update</button>
-                <a class="btn btn-danger" href='/Roles/Roles'>Cancel</a>
+                <a class="btn btn-danger" href='/Admin/Users/Users'>Cancel</a>
 
                 @if (Model.SuccessMessage != null)
                 {

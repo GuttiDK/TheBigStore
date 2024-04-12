@@ -26,20 +26,12 @@ namespace TheBigStore.Application.Pages.Admin.Roles
 
             if (roleDto != null)
             {
-                Role = new()
-                {
-                    Id = roleDto.Id,
-                    RoleName = roleDto.RoleName
-                };
-
+                Role = roleDto;
             }
         }
 
         public async Task<IActionResult> OnPostUpdateRole()
         {
-
-       
-
             if (ModelState.IsValid)
             {
                 RoleDto roleDto = await _roleService.GetById(Role.Id);
@@ -47,6 +39,7 @@ namespace TheBigStore.Application.Pages.Admin.Roles
                 {
                     roleDto.Id = Role.Id;
                     roleDto.RoleName = Role.RoleName;
+                    roleDto.IsAdmin = Role.IsAdmin;
                     await _roleService.UpdateAsync(roleDto);
                     SuccessMessage = "Role updated successfully";
                 }

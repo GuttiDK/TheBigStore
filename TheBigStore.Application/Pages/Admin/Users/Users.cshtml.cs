@@ -46,9 +46,13 @@ namespace TheBigStore.Application.Pages.Admin.Users
             Roles = await _roleService.GetAllAsync();
             foreach (var user in Users)
             {
-                if (user.RoleId != 0)
+                if (user.RoleId != null)
                 {
-                    user.Role = await _roleService.GetById(user.RoleId);
+                    user.Role = await _roleService.GetById((int)user.RoleId);
+                }
+                if (user.Role == null)
+                {
+                    user.Role = new RoleDto();
                 }
             }
 
@@ -58,37 +62,31 @@ namespace TheBigStore.Application.Pages.Admin.Users
 
 
 
-        public async Task<IActionResult> OnPostCreateAccount(string username, string email, string password, string confirmpassword, int roleid)
+        public async Task<IActionResult> OnPostCreateAccount(string username, string email, string password, string confirmpassword, int? roleid)
         {
-            if (ModelState.IsValid)
+            bool founduser = await _userService.CheckUserAsync(username);
+            if (founduser != false)
             {
-                bool founduser = await _userService.CheckUserAsync(username);
-                if (founduser != false)
-                {
-                    Usernamemessage = "Username already exists";
-                }
-                else if (password != confirmpassword)
-                {
-                    Usernamemessage = "Passwords do not match";
-                }
-                else if (roleid == 0 || roleid == null)
-                {
-                    Rolemessage = "Please select a role";
-                }
-                else
-                {
-                    UserDto user = new()
-                    {
-                        UserName = username,
-                        Password = password,
-                        Email = email,
-                        RoleId = roleid,
-                    };
-                    await _userService.CreateAsync(user);
-                    return RedirectToPage("/Admin/Users/Users");
-                }
+                Usernamemessage = "Username already exists";
             }
-            return Page();
+            else if (password != confirmpassword)
+            {
+                Usernamemessage = "Passwords do not match";
+            }
+            else
+            {
+                UserDto user = new()
+                {
+                    UserName = username,
+                    Password = password,
+                    Email = email,
+                    RoleId = roleid,
+                };
+                await _userService.CreateAsync(user);
+                return RedirectToPage("/Admin/Users/Users");
+            }
+
+            return RedirectToPage("/Admin/Users/Users");
         }
 
         public async Task<IActionResult> OnPostDeleteRole(int id)
