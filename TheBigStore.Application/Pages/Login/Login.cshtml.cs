@@ -16,8 +16,8 @@ namespace TheBigStore.Application.Pages.Login
             _roleService=roleService;
         }
 
-        readonly string Successmessage = string.Empty;
-        string Errormessage = string.Empty;
+        public string Successmessage = string.Empty;
+        public string Errormessage = string.Empty;
         public string? Status { get; set; }
         [BindProperty]
         public string UserName { get; set; } = string.Empty;

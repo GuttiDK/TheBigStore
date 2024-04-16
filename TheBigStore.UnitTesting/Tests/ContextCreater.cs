@@ -8,7 +8,7 @@ namespace TheBigStore.UnitTesting.Tests
     {
         public static TheBigStoreContext CreateContext([CallerMemberName] string dbname = "")
         {
-            DbContextOptionsBuilder builder = new DbContextOptionsBuilder();
+            DbContextOptionsBuilder builder = new();
             builder.UseInMemoryDatabase(dbname);
             builder.EnableSensitiveDataLogging();
             var context = new TheBigStoreContext(builder.Options);
