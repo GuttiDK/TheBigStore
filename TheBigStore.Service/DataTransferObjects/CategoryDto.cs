@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TheBigStore.Repository.Models
+﻿namespace TheBigStore.Service.DataTransferObjects
 {
     public class CategoryDto
     {

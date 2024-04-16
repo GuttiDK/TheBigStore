@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.ObjectModel;
-using TheBigStore.Repository.Models;
+using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
-using TheBigStore.Service.Services.UserServices;
 
 namespace TheBigStore.Application.Pages.Admin.Users
 {
@@ -14,17 +13,17 @@ namespace TheBigStore.Application.Pages.Admin.Users
         private readonly IUserService _userService;
 
         [BindProperty]
-        public UserDto User { get; set; }
+        public new UserDto User { get; set; }
         [BindProperty]
         public RoleDto Role { get; set; }
         [BindProperty]
         public ObservableCollection<RoleDto> Roles { get; set; }
-        public string SuccessMessage { get; set; }
-        public string ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; } = string.Empty;
+        public string ErrorMessage { get; set; } = string.Empty;
 
-        public string Usernamemessage;
-        public string Passwordmessage;
-        public string Rolemessage;
+        public string Usernamemessage = string.Empty;
+        public string Passwordmessage = string.Empty;
+        public string Rolemessage = string.Empty;
 
         public EditUsersModel(IRoleService roleService, IUserService userService)
         {

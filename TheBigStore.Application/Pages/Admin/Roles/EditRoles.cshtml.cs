@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using TheBigStore.Repository.Models;
+using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.Application.Pages.Admin.Roles
@@ -12,8 +12,8 @@ namespace TheBigStore.Application.Pages.Admin.Roles
 
         [BindProperty]
         public RoleDto Role { get; set; }
-        public string SuccessMessage { get; set; }
-        public string ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; } = string.Empty;
+        public string ErrorMessage { get; set; } = string.Empty;
 
         public EditRolesModel(IRoleService roleService)
         {

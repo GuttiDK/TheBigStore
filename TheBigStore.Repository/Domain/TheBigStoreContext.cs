@@ -21,6 +21,7 @@ namespace TheBigStore.Repository.Domain
         public DbSet<Order> Orders { get; set; }
         public DbSet<ItemOrder> OrderItems { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         // how to add a new migration in PMC
         // Add-Migration InitialCreate
@@ -57,10 +58,20 @@ namespace TheBigStore.Repository.Domain
                 .HasForeignKey(io => io.OrderId);
 
             // Hard code roles Admin and User
-            modelBuilder.Entity<Role>().HasData(
-                               new Role { Id = 1, RoleName = "Admin", IsAdmin = true },
-                                              new Role { Id = 2, RoleName = "User", IsAdmin = false }
-                                                         );
+            modelBuilder.Entity<Role>().HasData
+                (
+                new Role { Id = 1, RoleName = "Admin", IsAdmin = true },
+                new Role { Id = 2, RoleName = "User", IsAdmin = false }
+                );
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                UserName = "admin",
+                Email = "admin@thebigstore.com",
+                Password = "admin",
+                RoleId = 1,
+            });
         }
 
     }

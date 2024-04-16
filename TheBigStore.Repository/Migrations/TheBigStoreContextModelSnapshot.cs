@@ -106,6 +106,27 @@ namespace TheBigStore.Repository.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("TheBigStore.Repository.Models.Image", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+
+                    b.Property<string>("DefaultText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("TheBigStore.Repository.Models.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -121,12 +142,15 @@ namespace TheBigStore.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
@@ -134,6 +158,10 @@ namespace TheBigStore.Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("Products");
                 });
@@ -207,6 +235,20 @@ namespace TheBigStore.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsAdmin = true,
+                            RoleName = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsAdmin = false,
+                            RoleName = "User"
+                        });
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.User", b =>
@@ -242,6 +284,16 @@ namespace TheBigStore.Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@thebigstore.com",
+                            Password = "admin",
+                            RoleId = 1,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Customer", b =>
@@ -259,7 +311,13 @@ namespace TheBigStore.Repository.Migrations
                         .WithMany("Items")
                         .HasForeignKey("CategoryId");
 
+                    b.HasOne("TheBigStore.Repository.Models.Image", "Image")
+                        .WithOne("Item")
+                        .HasForeignKey("TheBigStore.Repository.Models.Item", "ImageId");
+
                     b.Navigation("Category");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.ItemOrder", b =>
@@ -315,6 +373,12 @@ namespace TheBigStore.Repository.Migrations
             modelBuilder.Entity("TheBigStore.Repository.Models.Customer", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("TheBigStore.Repository.Models.Image", b =>
+                {
+                    b.Navigation("Item")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Item", b =>

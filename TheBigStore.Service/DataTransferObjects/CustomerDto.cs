@@ -1,4 +1,4 @@
-﻿namespace TheBigStore.Repository.Models
+﻿namespace TheBigStore.Service.DataTransferObjects
 {
     // Make a fully functional Customer domain class
     public class CustomerDto

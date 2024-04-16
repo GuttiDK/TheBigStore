@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.ObjectModel;
-using TheBigStore.Repository.Models;
+using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.Application.Pages.Admin.Users
@@ -30,9 +30,9 @@ namespace TheBigStore.Application.Pages.Admin.Users
         [BindProperty]
         public int RoleId { get; set; }
 
-        public string Usernamemessage;
-        public string Passwordmessage;
-        public string Rolemessage;
+        public string Usernamemessage = string.Empty;
+        public string Passwordmessage = string.Empty;
+        public string Rolemessage = string.Empty;
 
 
         [BindProperty]
