@@ -33,6 +33,9 @@ namespace TheBigStore.Service.Services.MappingServices
 
             cfg.CreateMap<Category, CategoryDto>();
             cfg.CreateMap<CategoryDto, Category>();
+
+            cfg.CreateMap<Image, ImageDto>();
+            cfg.CreateMap<ImageDto, Image>();
         });
 
         public MappingService()

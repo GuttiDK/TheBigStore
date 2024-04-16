@@ -7,9 +7,15 @@ using TheBigStore.Service.Services.MappingServices;
 
 namespace TheBigStore.Service.Services.UserServices
 {
-    public class RoleService(MappingService mappingService, IRoleRepository roleRepository) : GenericService<RoleDto, IRoleRepository, Role>(mappingService, roleRepository), IRoleService
+    public class RoleService : GenericService<RoleDto, IRoleRepository, Role>, IRoleService
     {
-        private readonly IRoleRepository _roleRepository = roleRepository;
-        private readonly MappingService _mappingService = mappingService;
+        private readonly IRoleRepository _roleRepository;
+        private readonly MappingService _mappingService;
+
+        public RoleService(IRoleRepository roleRepository, MappingService mappingService) : base(mappingService, roleRepository)
+        {
+            _roleRepository = roleRepository;
+            _mappingService = mappingService;
+        }
     }
 }

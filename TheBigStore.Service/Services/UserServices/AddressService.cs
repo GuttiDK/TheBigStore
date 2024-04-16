@@ -5,16 +5,16 @@ using TheBigStore.Service.Interfaces.UserInterfaces;
 using TheBigStore.Service.Services.GenericServices;
 using TheBigStore.Service.Services.MappingServices;
 
-namespace TheBigStore.Service.Services.UserServices
+namespace TheBigStore.Repository.Repositories.UserRepositories
 {
-    public class CustomerService : GenericService<CustomerDto, ICustomerRepository, Customer>, ICustomerService
+    public class AddressService : GenericService<AddressDto, IAddressRepository, Address>, IAddressService
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly IAddressRepository _addressRepository;
         private readonly MappingService _mappingService;
 
-        public CustomerService(MappingService mappingService, ICustomerRepository customerRepository) : base(mappingService, customerRepository)
+        public AddressService(MappingService mappingService, IAddressRepository addressRepository) : base(mappingService, addressRepository)
         {
-            _customerRepository = customerRepository;
+            _addressRepository = addressRepository;
             _mappingService = mappingService;
         }
     }
