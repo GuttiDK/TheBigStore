@@ -29,7 +29,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
 
             <div class="mb-3">
                 <label class="form-label">ProductName</label>
-                <input type="text" class="form-control" asp-for="Item.ProductName">
+                <input type="text" class="form-control" asp-for="Item.ItemName">
             </div>
 
             <div class="mb-3">
@@ -37,27 +37,35 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                 <input type="text" class="form-control" asp-for="Item.Description">
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Price</label>
-                <input type="text" class="form-control" asp-for="Item.Price">
-            </div>
-
             <div>
-                <label class="form-label">Role</label>
-                <select class="form-select" asp-for="RoleId">
-                    <option selected>Select a role</option>
-                    @if (Model.Roles != null && Model.Roles.Any())
+                <label class="form-label">Category</label>
+                <select class="form-select" asp-for="Item.CategoryId">
+                    @if (Model.Item.CategoryId == null)
                     {
-                        foreach (var role in Model.Roles)
+                        <option selected>Select a category</option>
+                    }
+                    else
+                    {
+                        <option value="@Model.Item.CategoryId" selected>@Model.Category.CategoryName</option>
+                    }
+                    @if (Model.Categories != null && Model.Categories.Any())
+                    {
+                        foreach (var role in Model.Categories)
                         {
-                            <option value="@role.Id">@role.RoleName - @role.IsAdmin</option>
+                            <option value="@role.Id">@role.CategoryName</option>
                         }
                     }
                 </select>
-                @if (Model.Rolemessage != null)
-                {
-                    <div><span class="text-danger">@Model.Rolemessage</span></div>
-                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Stock</label>
+                <input type="text" class="form-control" asp-for="Item.Stock">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control" asp-for="Item.Price">
             </div>
 
             <div class="mb-3">

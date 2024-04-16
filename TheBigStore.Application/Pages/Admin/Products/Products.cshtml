@@ -40,7 +40,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                         <td>@item.Id</td>
                         <td>@item.ItemName</td>
                         <td>@item.Description</td>
-                        <td>@item.Price</td>
+                        <td>@item.Price.ToString("C")</td>
                         @if (item.Category == null)
                         {
                             <td>None</td>
@@ -54,7 +54,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                         <td>
                             <form method="post" asp-page-handler="DeleteItem">
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="/Admin/Products/EditProducts/@item.Id">Edit</a>
+                                    <a class="btn btn-primary" href="/Admin/Products/EditProduct/@item.Id">Edit</a>
                                     <button class="btn btn-danger" name="id" value="@item.Id" type="submit">Delete</button>
                                 </div>
                             </form>
@@ -87,15 +87,14 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                             <span class="input-group-text" id="inputGroup-sizing-default">ItemName</span>
                             <input type="text" class="form-control" asp-for="Item.ItemName" id="itemName" name="itemName">
                         </div>
+                        @if (Model.ErrorMessage != null)
+                        {
+                            <div><span class="text-danger">@Model.ErrorMessage</span></div>
+                        }
 
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Description</span>
                             <input type="text" class="form-control" asp-for="Item.Description" id="description" name="description">
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
-                            <input type="text" class="form-control" asp-for="Item.Price" id="price" name="price">
                         </div>
 
                         <div class="input-group mb-3">
@@ -110,6 +109,11 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                                     }
                                 }
                             </select>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+                            <input type="number" class="form-control" asp-for="Item.Price" id="price" name="price">
                         </div>
 
                         <div class="input-group mb-3">

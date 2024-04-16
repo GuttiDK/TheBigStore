@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.ObjectModel;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 
@@ -26,6 +27,9 @@ namespace TheBigStore.Application.Pages.Products
         [BindProperty]
         public ItemDto Item { get; set; }
 
+        public string SuccessMessage { get; set; } = string.Empty;
+        public string ErrorMessage { get; set; } = string.Empty;
+
         public async Task<IActionResult> OnGetAsync()
         {
             Items = await _itemService.GetAllAsync();
@@ -37,28 +41,32 @@ namespace TheBigStore.Application.Pages.Products
                 item.ItemOrders = ItemOrders.Where(x => x.ItemId == item.Id).ToList();
             }
 
-            
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostCreateItem()
         {
-            if (ModelState.IsValid)
+            if (Item.ItemName != null)
             {
-                if (Item.ItemName != null)
+                ItemDto itemDto = new()
                 {
-                    ItemDto itemDto = new()
-                    {
-                        ItemName = Item.ItemName,
-                        Description = Item.Description,
-                        Price = Item.Price,
-                        Stock = Item.Stock,
-                        CategoryId = Item.CategoryId,
-                    };
+                    ItemName = Item.ItemName.FirstCharToUpper(),
+                    Description = Item.Description.FirstCharToUpper(),
+                    Price = Item.Price,
+                    Stock = Item.Stock,
+                    CategoryId = Item.CategoryId,
+                };
 
-                    await _itemService.CreateAsync(itemDto);
-                }
+                await _itemService.CreateAsync(itemDto);
             }
+            else
+            {
+                ErrorMessage = "Item name is required";
+                return Page();
+            }
+
+
 
             return RedirectToPage("/Admin/Products/Products");
         }

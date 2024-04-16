@@ -20,6 +20,7 @@ namespace TheBigStore.Application.Pages.Admin.Products
 
         [BindProperty]
         public ItemDto Item { get; set; }
+        public CategoryDto Category { get; set; }
         public ObservableCollection<CategoryDto>? Categories { get; set; }
         public string SuccessMessage { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
@@ -27,17 +28,44 @@ namespace TheBigStore.Application.Pages.Admin.Products
         public async Task OnGetAsync(int id)
         {
             Item = await _itemService.GetById(id);
-            Categories = await _categoryService.GetAllAsync();
-
             if (Item.CategoryId != null)
-                Item.Category = await _categoryService.GetById((int)Item.CategoryId);
+                Category = await _categoryService.GetById((int)Item.CategoryId);
 
             Categories = await _categoryService.GetAllAsync();
+
             var test = Categories.SingleOrDefault(x => x.Id == Item.CategoryId);
             if (Item.CategoryId != null && test != null)
             {
                 Categories.Remove(test);
             }
         }
+
+        public async Task<IActionResult> OnPostUpdateProduct()
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _itemService.GetById(Item.Id);
+                if (result != null)
+                {
+                    result.Id = Item.Id;
+                    result.ItemName = Item.ItemName;
+                    result.Description = Item.Description;
+                    result.Price = Item.Price;
+                    result.CategoryId = Item.CategoryId;
+                    result.Stock = Item.Stock;
+                    await _itemService.UpdateAsync(result);
+                    SuccessMessage = "Product updated successfully";
+                    return RedirectToPage($@"/Admin/Products/Products");
+                }
+                else
+                {
+                    ErrorMessage = "Product not found";
+                    return Page();
+                }
+            }
+
+            return Page();
+        }
+
     }
 }

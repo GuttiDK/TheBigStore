@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Repository.Models;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
@@ -37,7 +38,7 @@ namespace TheBigStore.Application.Pages.Admin.Products
                 if (dto != null)
                 {
                     dto.Id = Category.Id;
-                    dto.CategoryName = Category.CategoryName;
+                    dto.CategoryName = Category.CategoryName.FirstCharToUpper();
                     await _categoryService.UpdateAsync(dto);
                     SuccessMessage = "Category updated successfully";
                 }

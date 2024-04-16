@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
@@ -38,7 +39,7 @@ namespace TheBigStore.Application.Pages.Admin.Roles
                 if (roleDto != null)
                 {
                     roleDto.Id = Role.Id;
-                    roleDto.RoleName = Role.RoleName;
+                    roleDto.RoleName = Role.RoleName.FirstCharToUpper();
                     roleDto.IsAdmin = Role.IsAdmin;
                     await _roleService.UpdateAsync(roleDto);
                     SuccessMessage = "Role updated successfully";
