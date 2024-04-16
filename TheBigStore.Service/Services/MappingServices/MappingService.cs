@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using TheBigStore.Repository.Extensions.Paging;
 using TheBigStore.Repository.Models;
+using TheBigStore.Service.Extensions.Paging;
 
 namespace TheBigStore.Service.Services.MappingServices
 {

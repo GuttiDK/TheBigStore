@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using TheBigStore.Repository.Domain;
+using TheBigStore.Repository.Extensions;
+using TheBigStore.Repository.Extensions.Paging;
 using TheBigStore.Repository.Interfaces.GenericInterfaces;
+using TheBigStore.Repository.Models;
 
 namespace TheBigStore.Repository.Repositories.GenericRepositories
 {
@@ -50,17 +52,11 @@ namespace TheBigStore.Repository.Repositories.GenericRepositories
             return e ?? throw new Exception("Entity not found");
         }
 
-        public async Task<IEnumerable<E>> FindAsync(Expression<Func<E, bool>> predicate, Func<IQueryable<E>, IOrderedQueryable<E>> orderBy = null, int? pageNumber = null, int? pageSize = null)
+        public async Task<Page<E>> GetPagnatedList(int page, int count)
         {
-            IQueryable<E> query = _dbContext.Set<E>().Where(predicate);
-
-            if (orderBy != null)
-                query = orderBy(query);
-
-            if (pageNumber.HasValue && pageSize.HasValue)
-                query = query.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
-
-            return await query.ToListAsync();
+            var query = _dbContext.Set<E>().AsNoTracking();
+            return new Page<E> { Total = query.Count(), Items = await query.Page(page, count).ToListAsync(), CurrentPage = page, PageSize = count };
         }
+
     }
 }

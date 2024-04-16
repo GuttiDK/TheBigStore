@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using TheBigStore.Repository.Interfaces.GenericInterfaces;
+using TheBigStore.Service.Extensions.Paging;
 using TheBigStore.Service.Interfaces.GenericInterfaces;
 using TheBigStore.Service.Services.MappingServices;
 
@@ -37,6 +38,11 @@ namespace TheBigStore.Service.Services.GenericServices
         public async Task<Dto> GetById(int id)
         {
             return _mappingService._mapper.Map<Dto>(await _genericRepository.GetById(id));
+        }
+
+        public async Task<PageDto<Dto>> GetPagnatedList(int page, int count)
+        {
+            return _mappingService._mapper.Map<PageDto<Dto>>(await _genericRepository.GetPagnatedList(page, count));
         }
 
     }

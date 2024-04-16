@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Serilog;
 using TheBigStore.Repository.Domain;
 using TheBigStore.Repository.Interfaces.OrderInterfaces;
 using TheBigStore.Repository.Interfaces.UserInterfaces;
@@ -11,6 +11,12 @@ using TheBigStore.Service.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+using var logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 builder.Services.AddScoped<MappingService, MappingService>();
 

@@ -9,7 +9,7 @@ namespace TheBigStore.Repository.Domain
 {
     public class TheBigStoreContext : DbContext
     {
-        public TheBigStoreContext(DbContextOptions<TheBigStoreContext> options) : base(options)
+        public TheBigStoreContext(DbContextOptions options) : base(options)
         {
         }
 
