@@ -38,6 +38,7 @@ namespace TheBigStore.Application.Pages.Admin.Users
                 Role = await _roleService.GetById((int)User.RoleId);
 
             Roles = await _roleService.GetAllAsync();
+
             var test = Roles.SingleOrDefault(x => x.Id == User.RoleId);
             if (User.RoleId != null && test != null)
             {
