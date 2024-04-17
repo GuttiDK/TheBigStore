@@ -28,9 +28,5 @@ namespace TheBigStore.Service.Services.OrderServices
             return _mappingService._mapper.Map<List<CategoryDto>>(await _itemRepository.GetAllCategories());
         }
 
-        public async Task AddToCart(int productId, int userId, Customer customer, Address address)
-        {
-            await _itemRepository.AddToCart(productId, userId, customer, address);
-        }
     }
 }

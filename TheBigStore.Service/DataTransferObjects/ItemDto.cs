@@ -21,6 +21,6 @@
         // Image
         public int? ImageId { get; set; } // FK
         public ImageDto? Image { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
     }
 }

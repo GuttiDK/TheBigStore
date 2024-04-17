@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.ObjectModel;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Repository.Models;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
@@ -48,8 +49,8 @@ namespace TheBigStore.Application.Pages.Admin.Products
                 if (result != null)
                 {
                     result.Id = Item.Id;
-                    result.ItemName = Item.ItemName;
-                    result.Description = Item.Description;
+                    result.ItemName = Item.ItemName.FirstCharToUpper();
+                    result.Description = Item.Description.FirstCharToUpper();
                     result.Price = Item.Price;
                     result.CategoryId = Item.CategoryId;
                     result.Stock = Item.Stock;

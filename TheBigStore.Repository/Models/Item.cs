@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TheBigStore.Repository.Models
 {
@@ -26,5 +25,6 @@ namespace TheBigStore.Repository.Models
         // Image
         public int? ImageId { get; set; } // FK
         public Image? Image { get; set; }
+        public int Quantity { get; set; }
     }
 }

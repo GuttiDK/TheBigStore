@@ -115,6 +115,10 @@ Last updated: 11-04-2024
 # Bugs & Known Bugs and Bug Reporting
 We are constantly working to improve this application. If you encounter any bugs or errors, please report them to us.
 
+## ER-Diagram
+
+![ERDiagram](https://github.com/GuttiDK/TheBigStore/assets/93974633/9914de78-07e0-4b93-884d-e260d47c354e)
+
 ## Contact Info
 **Phone number:** +45 28 78 34 14  
 **Email:** [GuttiDK@gmail.com](mailto:GuttiDK@gmail.com)

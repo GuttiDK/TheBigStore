@@ -19,15 +19,5 @@ namespace TheBigStore.Service.Interfaces.OrderInterfaces
         /// <returns>Returns categories</returns>
         Task<List<CategoryDto>> GetAllCategories();
 
-        /// <summary>
-        /// Add a product to the cart
-        /// </summary>
-        /// <param name="address"></param>
-        /// <param name="customer"></param>
-        /// <param name="productId"></param>
-        /// <param name="userId"></param>
-        /// <exception cref="Exception">Thrown when user not found</exception>
-        /// <returns>Returns nothing</returns>
-        Task AddToCart(int productId, int userId, Customer customer, Address address);
     }
 }

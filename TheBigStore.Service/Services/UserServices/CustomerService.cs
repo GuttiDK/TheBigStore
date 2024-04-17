@@ -17,5 +17,10 @@ namespace TheBigStore.Service.Services.UserServices
             _customerRepository = customerRepository;
             _mappingService = mappingService;
         }
+
+        public async Task AddToCart(List<ItemDto> items, int userId, CustomerDto customer, AddressDto address)
+        {
+            await _customerRepository.AddToCart(_mappingService._mapper.Map<List<Item>>(items), userId, _mappingService._mapper.Map<Customer>(customer), _mappingService._mapper.Map<Address>(address));
+        }
     }
 }

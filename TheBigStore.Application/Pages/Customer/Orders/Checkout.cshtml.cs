@@ -3,62 +3,88 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Application.SessionHelper;
+using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.Application.Pages.Customer.Orders
 {
     public class CheckoutModel : PageModel
     {
         [BindProperty]
+        [Required(ErrorMessage = "First name is required")]
+        public string FirstName { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "Last name is required")]
+        public string LastName { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "Phone number is required")]
+        public string Phone { get; set; }
+        [BindProperty]
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
 
         [BindProperty]
-        [Required(ErrorMessage = "Name is required")]
-        public string Name { get; set; }
-
-        [BindProperty]
-        [Required(ErrorMessage = "Address is required")]
-        public string Address { get; set; }
-
-        [BindProperty]
         [Required(ErrorMessage = "Please select a payment method")]
         public string PaymentMethod { get; set; }
 
-        public List<ItemDto> Items { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "Street name is required")]
+        public string StreetName { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "Street number is required")]
+        public string StreetNumber { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "City is required")]
+        public string City { get; set; }
+        public string ZipCode { get; set; }
+        [BindProperty]
+        [Required(ErrorMessage = "Country is required")]
+        public string Country { get; set; }
 
+
+        public List<ItemDto> Items { get; set; }
+        
         [BindProperty(SupportsGet = true)]
         public string Handler { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
 
-        public CheckoutModel()
+        private readonly IUserService _userService;
+        public UserDto User { get; set; }
+
+
+        private readonly ICustomerService _customerService;
+        public CustomerDto Customer { get; set; }
+
+
+        private readonly IAddressService _addressService;
+        public AddressDto Address { get; set; }
+
+
+        public CheckoutModel(IUserService userService, ICustomerService customerService, IAddressService addressService)
         {
+            _userService=userService;
+            _customerService=customerService;
+            _addressService=addressService;
         }
 
         // Get the products from the cart/session
-        public void OnGet()
+        public async void OnGet()
         {
-            if(Handler == null)
-            {
-                Items = GetCart();
-            }
-            else if(Handler == "RemoveFromCart")
+            if (Handler == "RemoveFromCart")
             {
                 RemoveItemFromCart(Id);
-                Items = GetCart();
             }
-            else if(Handler == "IncreaseQuantity")
+            else if (Handler == "IncreaseQuantity")
             {
                 UpdateCartItemQuantity(Id, 1);
-                Items = GetCart();
             }
-            else if(Handler == "DecreaseQuantity")
+            else if (Handler == "DecreaseQuantity")
             {
                 UpdateCartItemQuantity(Id, -1);
-                Items = GetCart();
             }
+            Items = GetCart();
         }
 
         // Handle the increasing of the quantity of a product in the cart
@@ -95,10 +121,37 @@ namespace TheBigStore.Application.Pages.Customer.Orders
         }
 
         // Handle form submission (purchase)
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            // Your purchase logic here
-            return RedirectToPage("/Confirmation");
+            // Purchase logic here
+            var id = HttpContext.Session.GetInt32("id");
+            if (id == null)
+            {
+                RedirectToPage("/Login/Login");
+            }
+            var user = await _userService.GetById((int)id);
+            var cart = GetCart();
+            if (cart.Count == 0)
+            {
+                return RedirectToPage("/Index");
+            }
+            CustomerDto customer = new CustomerDto
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                Phone = Phone,
+                Email = Email,
+            };
+            AddressDto address = new AddressDto
+            {
+                StreetName = StreetName,
+                City = City,
+                ZipCode = ZipCode,
+                Country = Country,
+                StreetNumber = StreetNumber,
+            };
+            await _customerService.AddToCart(cart, (int)id, Customer, address);
+            return RedirectToPage("/Index");
         }
 
         // Helper method to get the cart from session
@@ -119,6 +172,6 @@ namespace TheBigStore.Application.Pages.Customer.Orders
             }
         }
 
-       
+
     }
 }

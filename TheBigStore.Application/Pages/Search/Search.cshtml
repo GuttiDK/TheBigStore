@@ -29,8 +29,11 @@
                 <p class="card-text">@item.Description</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group ms-4">
-                        <button type="button" class="btn btn-sm btn-outline-success">Add Cart</button>
-                        <button type="button" class="btn btn-sm btn-outline-dark ms-4">See more</button>
+                        <form method="post" asp-page-handler="AddToCart">
+                            <input type="hidden" asp-for="productId" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-success">Add Cart</button>
+                        </form>
+                        <a type="button" href="/Customer/Products/Detail/@item.Id" class="btn btn-sm btn-outline-dark ms-4">See more</a>
                     </div>
                 </div>
             </div>
