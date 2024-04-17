@@ -40,9 +40,17 @@ namespace TheBigStore.Service.Services.GenericServices
             return _mappingService._mapper.Map<Dto>(await _genericRepository.GetById(id));
         }
 
+
+        // GetPagnatedList should be implemented and it should return a pagnated list of entities
         public async Task<PageDto<Dto>> GetPagnatedList(int page, int count)
         {
-            return _mappingService._mapper.Map<PageDto<Dto>>(await _genericRepository.GetPagnatedList(page, count));
+            var pageDto = new PageDto<Dto>();
+            var pageEntity = await _genericRepository.GetPagnatedList(page, count);
+            pageDto.Total = pageEntity.Total;
+            pageDto.CurrentPage = pageEntity.CurrentPage;
+            pageDto.PageSize = pageEntity.PageSize;
+            pageDto.Items = _mappingService._mapper.Map<List<Dto>>(pageEntity.Items);
+            return pageDto;
         }
 
     }

@@ -25,8 +25,4 @@
     <ProjectReference Include="..\TheBigStore.Service\TheBigStore.Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Orders\" />
-  </ItemGroup>
-
 </Project>

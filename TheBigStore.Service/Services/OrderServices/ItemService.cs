@@ -1,4 +1,5 @@
-﻿using TheBigStore.Repository.Interfaces.OrderInterfaces;
+﻿using System.Collections.ObjectModel;
+using TheBigStore.Repository.Interfaces.OrderInterfaces;
 using TheBigStore.Repository.Models;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
@@ -25,6 +26,11 @@ namespace TheBigStore.Service.Services.OrderServices
         public async Task<List<CategoryDto>> GetAllCategories()
         {
             return _mappingService._mapper.Map<List<CategoryDto>>(await _itemRepository.GetAllCategories());
+        }
+
+        public async Task AddToCart(int productId, int userId, Customer customer, Address address)
+        {
+            await _itemRepository.AddToCart(productId, userId, customer, address);
         }
     }
 }

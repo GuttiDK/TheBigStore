@@ -1,0 +1,171 @@
+﻿@page "{handler?}/{id?}"
+@using TheBigStore.Application.SessionHelper
+@using TheBigStore.Service.DataTransferObjects
+@model CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+@if (!HttpContext.Session.GetInt32("id").HasValue)
+{
+    <div class="alert alert-danger" role="alert">
+        You are not logged in or not authorized.
+    </div>
+}
+
+else if (HttpContext.Session.GetInt32("id").HasValue)
+{
+    @if (HttpContext.Session.Get<List<ItemDto>>("cart") == null)
+    {
+        <div class="alert alert-danger" role="alert">
+            Your cart is empty.
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <h2>Checkout</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" asp-for="Email" required>
+                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Email)</div>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" asp-for="Name" required>
+                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Name)</div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <textarea class="form-control" id="address" asp-for="Address" required></textarea>
+                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Address)</div>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method:</label>
+                    <select class="form-control" id="paymentMethod" asp-for="PaymentMethod" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="credit_card">Credit Card</option>
+                        <option value="paypal">PayPal</option>
+                    </select>
+                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.PaymentMethod)</div>
+                </div>
+
+                <div id="creditCardDetails" style="display: none;">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number:</label>
+                        <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="Enter card number" maxlength="19" required pattern="\d{4} \d{4} \d{4} \d{4}" title="Please enter a valid credit card number (16 digits)">
+                    </div>
+                    <div class="form-group">
+                        <label for="cvc">CVC:</label>
+                        <input type="text" class="form-control" id="cvc" name="cvc" placeholder="Enter CVC" maxlength="3" required pattern="\d{3}" title="Please enter a valid CVC (3 digits)">
+                    </div>
+                    <div class="form-group">
+                        <label for="expirationDate">Expiration Date (MM/YY):</label>
+                        <input type="text" class="form-control" id="expirationDate" name="expirationDate" placeholder="MM/YY" maxlength="5" required pattern="(0[1-9]|1[0-2])/[0-9]{2}" title="Please enter a valid expiration date (MM/YY)">
+                    </div>
+                </div>
+
+                <div id="paypalAddress" style="display: none;">
+                    <div class="form-group">
+                        <label for="paypalEmail">PayPal Email Address:</label>
+                        <input type="email" class="form-control" id="paypalEmail" name="paypalEmail" placeholder="Enter PayPal email">
+                    </div>
+                </div>
+
+                <hr />
+
+                @if (Model.Items != null && Model.Items.Any())
+                {
+                    <h3>Cart</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>@item.ItemName</td>
+                                    <td>@item.Price</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@(item.Price * item.Quantity)</td>
+                                    <td>
+                                        <a asp-page-handler="DecreaseQuantity" asp-route-id="@item.Id" class="btn btn-primary">-</a>
+                                        <a asp-page-handler="IncreaseQuantity" asp-route-id="@item.Id" class="btn btn-primary">+</a>
+                                        <a asp-page-handler="RemoveFromCart" asp-route-id="@item.Id" class="btn btn-danger">Remove</a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="3"><strong>Total</strong></td>
+                                <td colspan="2"><strong>@Model.Items.Sum(item => item.Price * item.Quantity)</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h3>Cart</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5">No items in cart</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+
+                <button type="submit" class="btn btn-primary">Purchase</button>
+            </form>
+        </div>
+
+        <script>
+            document.getElementById("paymentMethod").addEventListener("change", function () {
+                var paymentMethod = this.value;
+                if (paymentMethod === "credit_card") {
+                    document.getElementById("creditCardDetails").style.display = "block";
+                    document.getElementById("paypalAddress").style.display = "none";
+                } else if (paymentMethod === "paypal") {
+                    document.getElementById("creditCardDetails").style.display = "none";
+                    document.getElementById("paypalAddress").style.display = "block";
+                } else {
+                    document.getElementById("creditCardDetails").style.display = "none";
+                    document.getElementById("paypalAddress").style.display = "none";
+                }
+            });
+
+            // Format credit card number with spaces after every 4 digits
+            document.getElementById("cardNumber").addEventListener("input", function () {
+                var cardNumber = this.value.replace(/\D/g, ''); // Remove non-digit characters
+                if (cardNumber.length > 0) {
+                    cardNumber = cardNumber.match(new RegExp('.{1,4}', 'g')).join(' '); // Add space after every 4 digits
+                }
+                this.value = cardNumber;
+            });
+
+            // Format expiration date with '/' after inputting month (MM)
+            document.getElementById("expirationDate").addEventListener("input", function () {
+                var expDate = this.value.replace(/\//g, ''); // Remove existing '/'
+                if (expDate.length === 2 && !expDate.includes('/')) {
+                    this.value += '/'; // Add '/' after MM
+                }
+            });
+        </script>
+    }
+}

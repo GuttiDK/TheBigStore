@@ -39,6 +39,12 @@ namespace TheBigStore.Application.Pages.Login
                     if (founduser.Id != 0)
                     {
                         HttpContext.Session.SetInt32("id", founduser.Id);
+                        // If user is not logged in as the same id as before clear the cart
+                        if (HttpContext.Session.GetInt32("id") != HttpContext.Session.GetInt32("lastid"))
+                        {
+                            HttpContext.Session.Remove("cart");
+                        }
+
                         if (founduser.RoleId != null)
                         {
 
@@ -65,7 +71,7 @@ namespace TheBigStore.Application.Pages.Login
                 }
 
             }
-            return RedirectToPagePermanent("Index", new { status = "ErrUser" });
+            return Page();
         }
 
         public IActionResult OnPostLogOut()

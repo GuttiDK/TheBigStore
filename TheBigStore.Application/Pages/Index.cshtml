@@ -4,33 +4,83 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="container py-5 h-100">
-    <div class="row d-flex
-        justify-content-center align-items-center h-100">
-        <div class="col-12 col
-            -md-8 col-lg-6 col-xl-5">
-            <div class="card" style="border-radius: 1rem;">
-                <div class="card-body p-5 text-center">
-                    <h1>Welcome to TheBigStore</h1>
-                    <p>Here you can manage roles and users.</p>
-                    @if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
-                    {
-                        <div class="row">
-                            <div class="col">
-                                <a class="btn btn-primary" href="/Admin/Roles/Roles">View</a>
-                                <a class="btn btn-primary" href="/Admin/Users/Users">View</a>
-
+@if (!HttpContext.Session.GetInt32("id").HasValue)
+{
+    <div class="alert alert-danger" role="alert">
+        You are not logged in or not authorized.
+    </div>
+}
+else if (HttpContext.Session.GetInt32("id").HasValue)
+{
+    <section class="text-center">
+        <div>
+            <p class="lead text-muted">Something short and leading about the collection below—its contents</p>
+        </div>
+    </section>
+    <body>
+        <main class="row gx-2 gy-3 ms-1">
+            
+            @if (Model.Items != null && Model.Items.Items.Any())
+            {
+                @foreach (var item in Model.Items.Items)
+                {
+                    <div class="d-inline-flex col-3">
+                        <div class="card shadow-sm border-dark ">
+                            @if (item.Image != null)
+                            {
+                                <img src="@item.Image.ImgPath" class="border-dark" width="300" height="300">
+                            }
+                            else
+                            {
+                                <img src="~/Images/NoImage.jpg" class="border-dark" width="300" height="300">
+                            }
+                            <div class="card-body border-dark">
+                                <div>
+                                    <p class="card-title">@item.ItemName</p>
+                                    <small class="float-end">@item.Price.ToString("C")</small>
+                                </div>
+                                <p class="card-text text-truncate" style="max-width: 250px;">@item.Description</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group ms-4">
+                                        <form method="post" asp-page-handler="AddToCart">
+                                            <input type="hidden" asp-for="productId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-success">Add Cart</button>
+                                        </form>
+                                        <a type="button" href="/Customer/Products/Detail/@item.Id" class="btn btn-sm btn-outline-dark ms-4">See more</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="alert alert-danger" role="alert">
-                            You are not logged in or not authorized.
-                        </div>
-                    }
+                    </div>
+                }
+                <form method="post">
+                    <nav class="d-flex justify-content-between">
+                        <ul class="pagination">
+                            <li class="page-item"><input type="submit" asp-page-handler="Search" asp-route-CurrentPage="@(Model.CurrentPage - 1)" class="page-link" value="Previous" /></li>
+                            @for (int i = 1; i <= Model.Items.PageCount; i++)
+                            {
+                                <li class="page-item"><input type="submit" asp-page-handler="Search" asp-route-CurrentPage="@i" value="@i" class="page-link" /></li>
+                            }
+                            <li class="page-item"><input class="page-link" type="submit" asp-page-handler="Search" asp-route-CurrentPage="@(Model.CurrentPage + 1)" value="Next" /></li>
+                        </ul>
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <select asp-for="PageSize" onchange="document.forms['pageSizeForm'].submit()" class="form-select-sm h-100">
+                                    <option value="8">8</option>
+                                    <option value="16">16</option>
+                                    <option value="24">24</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </nav>
+                </form>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    No items found.
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+            }
+        </main>
+    </body>
+}
