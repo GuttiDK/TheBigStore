@@ -1,0 +1,132 @@
+﻿@page
+@model TheBigStore.Application.Pages.Products.ProductsModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+@if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
+{
+}
+
+else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
+{
+    <div>
+        <h1>Products</h1>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+    </div>
+
+    <hr />
+
+    @if (Model.Items != null && Model.Items.Any())
+    {
+        <table class="table table-sm table-striped table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>ItemName</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Orders</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+
+                        <td>@item.Id</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.Description</td>
+                        <td>@item.Price.ToString("C")</td>
+                        @if (item.Category == null)
+                        {
+                            <td>None</td>
+                        }
+                        else
+                        {
+                            <td>@item.Category.CategoryName</td>
+                        }
+                        <td>@item.Stock</td>
+                        <td>@item.ItemOrders.Count()</td>
+                        <td>
+                            <form method="post" asp-page-handler="DeleteItem">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary" href="/Admin/Products/EditProduct/@item.Id">Edit</a>
+                                    <button class="btn btn-danger" name="id" value="@item.Id" type="submit">Delete</button>
+                                </div>
+                            </form>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-primary" role="alert">
+            No roles items found.
+        </div>
+    }
+
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Create a role</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="CreateItem">
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">ItemName</span>
+                            <input type="text" class="form-control" asp-for="Item.ItemName" id="itemName" name="itemName">
+                        </div>
+                        @if (Model.ErrorMessage != null)
+                        {
+                            <div><span class="text-danger">@Model.ErrorMessage</span></div>
+                        }
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Description</span>
+                            <input type="text" class="form-control" asp-for="Item.Description" id="description" name="description">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Category</span>
+                            <select class="form-select" asp-for="Item.CategoryId" id="categoryid" name="categoryid">
+                                <option selected>Select a category</option>
+                                @if (Model.Categories != null && Model.Categories.Any())
+                                {
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <option value="@category.Id">@category.CategoryName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+                            <input type="number" class="form-control" asp-for="Item.Price" id="price" name="price">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Stock</span>
+                            <input type="text" class="form-control" asp-for="Item.Stock" id="stock" name="stock">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-success" type="submit">Create</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

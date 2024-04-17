@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TheBigStore.Repository.Enums;
+﻿using TheBigStore.Service.Enums;
 
-namespace TheBigStore.Repository.Models
+namespace TheBigStore.Service.DataTransferObjects
 {
     public class OrderDto
     {
@@ -10,7 +9,7 @@ namespace TheBigStore.Repository.Models
         public CustomerDto Customer { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Now;
         public DateTime DeliveryDate { get; set; } = DateTime.Now.AddDays(7);
-        public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Pending;
+        public OrderStatusEnumDto Status { get; set; } = OrderStatusEnumDto.Pending;
         public List<ItemOrderDto> ItemOrders { get; set; } = [];
     }
 }

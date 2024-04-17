@@ -1,0 +1,88 @@
+﻿@page "{id:int}"
+@model EditUsersModel
+@{
+    ViewData["Title"] = "Edit Users";
+}
+
+@if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
+{
+    <div class="alert alert-danger" role="alert">
+        You are not logged in or not authorized.
+    </div>
+}
+else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
+{
+    <h3>Users - Edit</h3>
+    <hr />
+    <div>
+        Here can you edit a user.
+        <hr />
+    </div>
+    @if (@Model.User != null)
+    {
+        <form method="post" asp-page-handler="UpdateUser">
+            <div class="mb-3">
+                <label class="form-label">Id</label>
+                <input type="text" class="form-control" asp-for="User.Id" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" asp-for="User.UserName">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" asp-for="User.Email">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Role</label>
+                <select class="form-select" asp-for="User.RoleId">
+                    @if (Model.User.RoleId == null)
+                    {
+                        <option selected>Select role</option>
+                    }
+                    else
+                    {
+                        <option value="@Model.User.RoleId" selected>@Model.Role.RoleName - @Model.Role.IsAdmin</option>
+                    }
+                    @if (Model.Roles != null && Model.Roles.Any())
+                    {
+                        foreach (var role in Model.Roles)
+                        {
+                            <option value="@role.Id">@role.RoleName - @role.IsAdmin</option>
+                        }
+                    }
+                </select>
+                @if (Model.Rolemessage != null)
+                {
+                    <div><span class="text-danger">@Model.Rolemessage</span></div>
+                }
+            </div>
+
+
+            <div class="mb-3">
+                <button class="btn btn-primary" type="submit">Update</button>
+                <a class="btn btn-danger" href='/Admin/Users/Users'>Cancel</a>
+
+                @if (Model.SuccessMessage != null)
+                {
+                    <div><span class="text-success">@Model.SuccessMessage</span></div>
+                }
+                else if (Model.ErrorMessage != null)
+                {
+                    <div><span class="text-danger">@Model.ErrorMessage</span></div>
+                }
+
+            </div>
+
+        </form>
+    }
+    else
+    {
+        <div class="alert alert-primary" role="alert">
+            No role item found.
+        </div>
+    }
+}

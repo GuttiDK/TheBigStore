@@ -1,0 +1,68 @@
+﻿@page "{id:int}"
+@model DetailModel
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<div class="bg-farve-sort mb-2">
+    <h1 class="display-4">Details for product with ID: @Model.Product.Id</h1>
+</div>
+
+<div>
+    @if (Model.Product.Image != null)
+    {
+        <img src="~/Images/@Model.Product.Image.ImgPath" class="img-thumbnail my-4" alt="Alternate Text">
+    }
+    else
+    {
+        <img src="~/Images/NoImage.jpg" class="img-thumbnail my-4" alt="Alternate Text">
+    }
+</div>
+
+<div>
+    @if (Model.Product.Category != null)
+    {
+        <h2>@Model.Product.Category.CategoryName</h2>
+    }
+    else
+    {
+        <h2>Category not found</h2>
+    }
+    <hr />
+    <form method="post">
+        <div class="row">
+
+            <div class="col-sm-3">
+                <h5 class="font-weight-bolder">Id</h5>
+            </div>
+            <div class="col-sm-9">
+                @Model.Product.Id
+            </div>
+
+            <div class="col-sm-3">
+                <h5 class="font-weight-bolder">Description</h5>
+            </div>
+            <div class="col-sm-9">
+                <h5>@Model.Product.Description</h5>
+            </div>
+
+            <div class="col-sm-3">
+                <h5 class="font-weight-bolder">Price</h5>
+            </div>
+            <div class="col-sm-9">
+                <h5>@Model.Product.Price.ToString("C")</h5>
+            </div>
+
+            <div class="col-sm-3">
+                <h5 class="font-weight-bolder">Stock</h5>
+            </div>
+            <div class="col-sm-9">
+                <h5>@Model.Product.Stock</h5>
+            </div>
+        </div>
+        <div class="form-inline">
+            <a class="btn btn-outline-dark mr-2" asp-page="/Index"><i class="fas fa-arrow-left mr-2"></i>Go back to list</a>
+        </div>
+    </form>
+</div>
+<br />

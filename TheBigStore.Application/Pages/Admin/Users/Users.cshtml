@@ -1,0 +1,146 @@
+﻿@page
+@using TheBigStore.Repository.Models
+@model UsersModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+@if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
+{
+    <div class="alert alert-danger" role="alert">
+        You are not logged in or not authorized.
+    </div>
+}
+
+else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
+{
+    <div class="col">
+        <h1>Users</h1>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+    </div>
+
+    <hr />
+
+    @if (Model.Users != null && Model.Users.Any())
+    {
+        <table class="table table-sm table-striped table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>UserName</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>IsAdmin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Users)
+                {
+                    <tr>
+
+                        <td>@item.Id</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Email</td>
+                        @if (item.Role == null)
+                        {
+                            <td></td>
+                        }
+                        else if (item.Role != null)
+                        {
+                            <td>@item.Role.RoleName</td>
+
+                            @if (item.Role.IsAdmin)
+                            {
+                                <td>Yes</td>
+                            }
+                            else if (!item.Role.IsAdmin)
+                            {
+                                <td>No</td>
+                            }
+                        }
+                        <td>
+                            <form method="post" asp-page-handler="DeleteRole">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary" href="/Admin/Users/EditUsers/@item.Id">Edit</a>
+                                    <button class="btn btn-danger" name="id" value="@item.Id" type="submit">Delete</button>
+                                </div>
+                            </form>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-primary" role="alert">
+            No users found.
+        </div>
+    }
+
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Create a user</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="CreateAccount">
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Username</span>
+                            <input type="text" class="form-control" asp-for="UserName" id="username" name="username">
+                            @if (Model.Usernamemessage != null)
+                            {
+                                <div><span class="text-danger">@Model.Usernamemessage</span></div>
+                            }
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Email</span>
+                            <input type="text" class="form-control" asp-for="Email" id="email" name="email">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                            <input type="password" class="form-control" asp-for="Password" id="password" name="password">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Confirm Password</span>
+                            <input type="password" class="form-control" asp-for="ConfirmPassword" id="confirmpassword" name="confirmpassword">
+                            @if (Model.Passwordmessage != null)
+                            {
+                                <div><span class="text-danger">@Model.Passwordmessage</span></div>
+                            }
+                        </div>
+
+                        <div>
+                            <label class="form-label">Role</label>
+                            <select class="form-select" asp-for="RoleId">
+                                <option selected>Select a role</option>
+                                @if (Model.Roles != null && Model.Roles.Any())
+                                {
+                                    foreach (var role in Model.Roles)
+                                    {
+                                        <option value="@role.Id">@role.RoleName - @role.IsAdmin</option>
+                                    }
+                                }
+                            </select>
+                            @if (Model.Rolemessage != null)
+                            {
+                                <div><span class="text-danger">@Model.Rolemessage</span></div>
+                            }
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-success" type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+

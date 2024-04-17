@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using TheBigStore.Application.SessionHelper;
-using TheBigStore.Repository.Models;
+using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.Application.Pages
@@ -16,8 +15,8 @@ namespace TheBigStore.Application.Pages
             _roleService = roleService;
         }
 
-        public string Usernamemessage;
-        public string Passwordmessage;
+        public string Usernamemessage = string.Empty;
+        public string Passwordmessage = string.Empty;
         [BindProperty]
         public string UserName { get; set; } = string.Empty;
         [BindProperty]

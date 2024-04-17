@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TheBigStore.Repository.Models
+﻿namespace TheBigStore.Service.DataTransferObjects
 {
     public class UserDto
     {
@@ -12,8 +10,8 @@ namespace TheBigStore.Repository.Models
         public string Email { get; set; } = string.Empty;
 
         // Role
-        public int RoleId { get; set; } = 2;
-        public RoleDto Role { get; set; }
+        public int? RoleId { get; set; }
+        public RoleDto? Role { get; set; }
 
         // Customer
         public int? CustomerId { get; set; }

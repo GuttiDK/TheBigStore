@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TheBigStore.Repository.Models;
+using TheBigStore.Service.DataTransferObjects;
 
 namespace TheBigStore.Service.Services.MappingServices
 {
@@ -32,6 +33,9 @@ namespace TheBigStore.Service.Services.MappingServices
 
             cfg.CreateMap<Category, CategoryDto>();
             cfg.CreateMap<CategoryDto, Category>();
+
+            cfg.CreateMap<Image, ImageDto>();
+            cfg.CreateMap<ImageDto, Image>();
         });
 
         public MappingService()

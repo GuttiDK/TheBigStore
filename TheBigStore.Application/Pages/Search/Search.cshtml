@@ -1,0 +1,42 @@
+﻿@page
+@model TheBigStore.Application.Pages.Search.SearchModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+<form method="get" asp-page-handler="SearchSite" class="d-inline-flex">
+    <input class="form-control me-1" type="search" placeholder="Search" aria-label="Search" width="200" name="SearchString" />
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+@foreach (var item in Model.FindProducts)
+{
+    <div class="d-inline-flex ms-5 mt-5">
+        <div class="card shadow-sm border-dark ">
+            @if (item.Image != null)
+            {
+                <img src="@item.Image.ImgPath" class="border-dark" width="300" height="300">
+            }
+            else
+            {
+                <img src="~/Images/NoImage.jpg" class="border-dark" width="300" height="300">
+            }
+            <div class="card-body border-dark">
+                <div>
+                    <p class="card-title">@item.ItemName</p>
+                    <small class="float-end">@item.Price.ToString("C")</small>
+                </div>
+                <p class="card-text">@item.Description</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group ms-4">
+                        <form method="post" asp-page-handler="AddToCart">
+                            <input type="hidden" asp-for="productId" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-success">Add Cart</button>
+                        </form>
+                        <a type="button" href="/Customer/Products/Detail/@item.Id" class="btn btn-sm btn-outline-dark ms-4">See more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

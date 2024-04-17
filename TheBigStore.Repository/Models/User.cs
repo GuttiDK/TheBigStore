@@ -13,8 +13,8 @@ namespace TheBigStore.Repository.Models
         public string Email { get; set; }
 
         // Role
-        public int RoleId { get; set; }
-        public Role Role { get; set; }
+        public int? RoleId { get; set; }
+        public Role? Role { get; set; }
 
         // Customer
         public int? CustomerId { get; set; } 

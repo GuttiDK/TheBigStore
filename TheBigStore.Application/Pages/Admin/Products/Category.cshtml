@@ -1,0 +1,83 @@
+﻿@page
+@model TheBigStore.Application.Pages.Products.CategoryModel
+@{
+    ViewData["Title"] = "Category";
+}
+
+@if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
+{
+}
+
+else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
+{
+    <div>
+        <h1>Categories</h1>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+    </div>
+
+    <hr />
+
+    @if (Model.Categories != null && Model.Categories.Any())
+    {
+        <table class="table table-sm table-striped table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>CategoryName</th>
+                    <th>Items</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Categories)
+                {
+                    <tr>
+
+                        <td>@item.Id</td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.Items.Count()</td>
+                        <td>
+                            <form method="post" asp-page-handler="DeleteCategory">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary" href="/Admin/Products/EditCategory/@item.Id">Edit</a>
+                                    <button class="btn btn-danger" name="id" value="@item.Id" type="submit">Delete</button>
+                                </div>
+                            </form>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-primary" role="alert">
+            No categories found.
+        </div>
+    }
+
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Create a category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="CreateCategory">
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">CategoryName</span>
+                            <input type="text" class="form-control" asp-for="Category.CategoryName" id="categoryname" name="CategoryName">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-success" type="submit">Create</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

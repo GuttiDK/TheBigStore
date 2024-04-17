@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TheBigStore.Repository.Models
+﻿namespace TheBigStore.Service.DataTransferObjects
 {
     public class ItemDto
     {
+
         public int Id { get; set; }
 
         // Item
@@ -18,5 +17,10 @@ namespace TheBigStore.Repository.Models
         // Category
         public int? CategoryId { get; set; }
         public CategoryDto? Category { get; set; }
+
+        // Image
+        public int? ImageId { get; set; } // FK
+        public ImageDto? Image { get; set; }
+        public int Quantity { get; set; }
     }
 }

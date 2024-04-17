@@ -1,0 +1,58 @@
+﻿@page "{id:int}"
+@model EditCategoryModel
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+@if (!HttpContext.Session.GetInt32("id").HasValue || HttpContext.Session.GetInt32("role") == 2)
+{
+    <div class="alert alert-danger" role="alert">
+        You are not logged in or not authorized.
+    </div>
+}
+else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetInt32("role") == 1)
+{
+    <h3>Category - Edit</h3>
+    <hr />
+    <div>
+        Here can you edit a category.
+        <hr />
+    </div>
+    @if (@Model.Category != null)
+    {
+        <form method="post" asp-page-handler="UpdateCategory">
+
+            <div class="mb-3">
+                <label class="form-label">Id</label>
+                <input type="text" class="form-control" asp-for="Category.Id" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">CategoryName</label>
+                <input type="text" class="form-control" asp-for="Category.CategoryName">
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-primary" type="submit">Update</button>
+                <a class="btn btn-danger" href='/Admin/Products/Category'>Cancel</a>
+
+                @if (Model.SuccessMessage != null)
+                {
+                    <div><span class="text-success">@Model.SuccessMessage</span></div>
+                }
+                else if (Model.ErrorMessage != null)
+                {
+                    <div><span class="text-danger">@Model.ErrorMessage</span></div>
+                }
+
+            </div>
+
+        </form>
+    }
+    else
+    {
+        <div class="alert alert-primary" role="alert">
+            No category found.
+        </div>
+    }
+}

@@ -1,4 +1,4 @@
-﻿using TheBigStore.Repository.Models;
+﻿using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.GenericInterfaces;
 
 namespace TheBigStore.Service.Interfaces.UserInterfaces

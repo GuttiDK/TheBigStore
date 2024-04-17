@@ -9,6 +9,10 @@ namespace TheBigStore.Repository.Domain
 {
     public class TheBigStoreContext : DbContext
     {
+        public TheBigStoreContext(DbContextOptions options) : base(options)
+        {
+        }
+
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -17,17 +21,15 @@ namespace TheBigStore.Repository.Domain
         public DbSet<Order> Orders { get; set; }
         public DbSet<ItemOrder> OrderItems { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         // how to add a new migration in PMC
         // Add-Migration InitialCreate
         // Update-Database
 
-        public TheBigStoreContext(DbContextOptions<TheBigStoreContext> options) : base(options)
-        {
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("Server=dESktoP-V8\\SQLEXPRESS; Database=TheBigStoreApp; Trusted_Connection=True; TrustServerCertificate=True;");
@@ -54,6 +56,22 @@ namespace TheBigStore.Repository.Domain
                 .HasOne(io => io.Order)
                 .WithMany(o => o.ItemOrders)
                 .HasForeignKey(io => io.OrderId);
+
+            // Hard code roles Admin and User
+            modelBuilder.Entity<Role>().HasData
+                (
+                new Role { Id = 1, RoleName = "Admin", IsAdmin = true },
+                new Role { Id = 2, RoleName = "User", IsAdmin = false }
+                );
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                UserName = "admin",
+                Email = "admin@thebigstore.com",
+                Password = "admin",
+                RoleId = 1,
+            });
         }
 
     }
