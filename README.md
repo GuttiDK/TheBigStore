@@ -7,13 +7,17 @@ TheBigStore is a web application that allows users to view, create, edit, and de
 ## The Maker
 Made by Christian C. Høttges
 
-Last updated: 11-04-2024
+Last updated: 17-04-2024
 
 # How to Use
 
 1. Clone the repository to your local machine.
 2. Open the solution in Visual Studio.
-3. Run the application.
+3. Update the connection string in the `appsettings.json` file to point to your SQL Server instance.
+4. Open the Package Manager Console and run the following commands:
+   - `Add-Migration InitialCreate`
+   - `Update-Database`
+5. Run the application.
 
 **Requirements:**
 
@@ -25,8 +29,15 @@ Last updated: 11-04-2024
 * <a href="https://www.javascript.com/" target="_blank">JavaScript</a> 
 * <a href="https://html.com/" target="_blank">Html</a> (front-end)
 * <a href="https://www.w3schools.com/css/" target="_blank">CSS</a>
-* <a href="" target="_blank">Bootstrap</a> (front-end styling)
+* <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a> (front-end styling)
 * <a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank">SQL</a> (data storage)
+* <a href="https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-6.0" target="_blank">ASP.NET Core</a> (framework)
+* <a href="https://docs.microsoft.com/en-us/ef/core/" target="_blank">Entity Framework Core</a> (data access)
+* <a href="https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=visual-studio" target="_blank">Identity</a> (user management)
+* <a href="https://docs.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-6.0&tabs=visual-studio" target="_blank">Roles</a> (role-based access control)
+* <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-6.0" target="_blank">Logging</a> (error handling)
+* <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-6.0" target="_blank">Session</a> (user session management)
+* <a href="https://automapper.org/" target="_blank">AutoMapper</a> (object-object mapping)
 
 
 # Features
@@ -34,9 +45,38 @@ Last updated: 11-04-2024
 - **Back-end**: Allows users can use all the features of the application thru the repository and services.
 - **Repository pattern**: Allows users to use the repository pattern to get data from the database.
 - **Service pattern**: Allows users to use the service pattern to get data from the repository.
+- **Database**: Uses a SQL Server database to store product data.
+- **Unit Testing**: Includes comprehensive unit testing for various components of the application.
+- **Dependency Injection**: Utilizes dependency injection for improved modularity and abstraction.
+- **Logging**: Implements logging for better error handling and debugging.
+- **Security**: Includes role management features for role-based access control.
+- **User Account Management**: Enhanced user account creation process with default roles and error handling.
+- **Database Migration**: Implements a new database migration to establish the initial database schema.
+- **DTO Integration**: Introduces DTO classes for multiple entities, facilitating data transfer and abstraction between layers.
+- **Asynchronous Operations**: Modifies the `GetById` method in various interfaces and classes to be asynchronous, enhancing performance and responsiveness.
 
 # Updates
-**Version 2.0.0** (11/04/2024 - Current version)
+
+**Version 2.1.1** (17/04/2024 - Current version)
+ **Code Files and Database Structure Updates**
+- The code files related to the checkout process, item search, and customer and item services have been updated to reflect these changes. The checkout form now includes fields for first name, last name, phone number, street name, street number, city, country, and zip code. The `AddToCart` method has been moved from the item services to the customer services. A `Quantity` property has been added to the `Item` and `ItemDto` classes.
+- The database schema has been updated to include a `Quantity` field in the `Products` table. A new migration has been added to implement this change.
+
+ **Overall Changes**
+- **Redesigned Checkout Form and Shopping Cart Display**: The checkout form and shopping cart display have been significantly redesigned for improved user experience.
+- **Updated Code Files**: Several code files have been updated to reflect the changes in the checkout process, item search, and customer and item services.
+- **Database Structure Updates**: The database schema has been updated to include a `Quantity` field in the `Products` table.
+
+ **File Changes**
+- **Checkout.cshtml.cs**: Added new properties for handling checkout form inputs and a new method for handling form submission. Updated the `OnGet` method to retrieve cart items from the session. Added new methods for increasing and decreasing item quantity and removing items from the cart.
+- **Products.cshtml**: Removed old layout and added a new one with enhanced user authorization check, item display, and pagination form. Added an alert message for no items found.
+- **Login.cshtml.cs**: Corrected the form's `asp-page-handler` attribute value from "login" to "Login". Added logic to clear the cart on login with a different user ID.
+- **Logout.cshtml.cs**: Updated to store the user's last ID in the session before removing the current ID.
+- **_Layout.cshtml**: Added a search form and updated the cart link's href attribute.
+- **SessionHelper.cs**: Added new extension methods for setting and getting complex objects in the session using JSON serialization.
+
+
+**Version 2.0.0** (11/04/2024)
 1. **Namespace Refactoring**:
    - Organized namespaces for better code organization, enhancing readability and maintainability.
 2. **Dependency Injection and Logging**:
@@ -107,6 +147,7 @@ Last updated: 11-04-2024
  - Stucture of the application.
 
 ## Tags
+- <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-2.1.1">Checkout Form and Shopping Cart - v2.1.1</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-2.0.0">Comprehensive Update and Refinement - v2.0.0</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-1.0.0">Testing and Database Structure - v1.0.0</a>
 - <a href="https://github.com/GuttiDK/TheBigStore/releases/tag/version-0.0.2">Repo and service pattern - v0.0.2</a>
