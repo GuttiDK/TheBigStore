@@ -14,6 +14,5 @@
         // Navigation properties
         public AddressDto? Address { get; set; }
         public List<OrderDto> Orders { get; set; }
-        public UserDto User { get; set; }
     }
 }

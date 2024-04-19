@@ -36,18 +36,17 @@ namespace TheBigStore.Application.Pages.Products
 
         public async Task<IActionResult> OnPostCreateCategory()
         {
-            if (ModelState.IsValid)
-            {
-                if (Category.CategoryName != null)
-                {
-                    CategoryDto categoryDto = new()
-                    {
-                        CategoryName = Category.CategoryName
-                    };
 
-                    await _categoryService.CreateAsync(categoryDto);
-                }
+            if (Category.CategoryName != null)
+            {
+                CategoryDto categoryDto = new()
+                {
+                    CategoryName = Category.CategoryName
+                };
+
+                await _categoryService.CreateAsync(categoryDto);
             }
+
 
             return RedirectToPage("/Admin/Products/Category");
         }

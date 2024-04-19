@@ -14,11 +14,9 @@ namespace TheBigStore.Repository.Models
         public string Phone { get; set; }
         public int AddressId { get; set; }
 
-        // Add an address
+        // Navigation properties
         public Address Address { get; set; }
 
-        // Add a list of orders
         public List<Order> Orders { get; set; }
-        public User User { get; set; }
     }
 }
