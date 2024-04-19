@@ -12,12 +12,13 @@ namespace TheBigStore.Repository.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public int? AddressId { get; set; }
+        public int AddressId { get; set; }
 
         // Add an address
-        public Address? Address { get; set; }
+        public Address Address { get; set; }
 
         // Add a list of orders
-        public List<Order>? Orders { get; set; }
+        public List<Order> Orders { get; set; }
+        public User User { get; set; }
     }
 }

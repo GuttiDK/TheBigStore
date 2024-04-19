@@ -80,7 +80,7 @@ namespace TheBigStore.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -282,7 +282,9 @@ namespace TheBigStore.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId")
+                        .IsUnique()
+                        .HasFilter("[CustomerId] IS NOT NULL");
 
                     b.HasIndex("RoleId");
 
@@ -303,7 +305,9 @@ namespace TheBigStore.Repository.Migrations
                 {
                     b.HasOne("TheBigStore.Repository.Models.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
                 });
@@ -356,8 +360,8 @@ namespace TheBigStore.Repository.Migrations
             modelBuilder.Entity("TheBigStore.Repository.Models.User", b =>
                 {
                     b.HasOne("TheBigStore.Repository.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
+                        .WithOne("User")
+                        .HasForeignKey("TheBigStore.Repository.Models.User", "CustomerId");
 
                     b.HasOne("TheBigStore.Repository.Models.Role", "Role")
                         .WithMany("Users")
@@ -376,6 +380,9 @@ namespace TheBigStore.Repository.Migrations
             modelBuilder.Entity("TheBigStore.Repository.Models.Customer", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Image", b =>

@@ -3,8 +3,9 @@
     public class CategoryDto
     {
         public int Id { get; set; }
-        // CategoryName
-        public string CategoryName { get; set; } = string.Empty;
-        public List<ItemDto> Items { get; set; } = [];
+        public string CategoryName { get; set; }
+
+        // Navigation properties
+        public List<ItemDto> Items { get; set; }
     }
 }

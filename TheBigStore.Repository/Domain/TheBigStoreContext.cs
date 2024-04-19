@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TheBigStore.Repository.Enums;
 using TheBigStore.Repository.Models;
 
 namespace TheBigStore.Repository.Domain
@@ -10,6 +9,10 @@ namespace TheBigStore.Repository.Domain
     public class TheBigStoreContext : DbContext
     {
         public TheBigStoreContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public TheBigStoreContext()
         {
         }
 
