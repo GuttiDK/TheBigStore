@@ -27,10 +27,10 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
 
 
 
-        [HttpGet(Name = "GetUser")]
-        public async Task<IActionResult> GetUser(int UserId)
+        [HttpGet("{id:int}", Name = "GetUser")]
+        public async Task<IActionResult> GetUser(int id)
         {
-            var temp = await _userService.GetByIdAsync(UserId);
+            var temp = await _userService.GetByIdAsync(id);
 
             if (temp != null)
             {
@@ -47,7 +47,6 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
         {
             try
             {
-                user.Customer = new CustomerDto();
                 user = await _userService.CreateAsync(user);
                 return CreatedAtAction("GetUser", new { UserId = user.Id }, user);
             }
@@ -57,18 +56,18 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         [Route("remove")]
-        public async Task<IActionResult> Remove(int UserId)
+        public async Task<IActionResult> Remove(int id)
         {
-            var User = await _userService.GetByIdAsync(UserId);
+            var user = await _userService.GetByIdAsync(id);
 
-            if (User == null)
+            if (user == null)
                 return NotFound();
 
             try
             {
-                await _userService.DeleteAsync(User);
+                await _userService.DeleteAsync(user);
                 return NoContent(); // Success
             }
             catch (Exception e)
@@ -93,20 +92,20 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             }
         }
 
-        [HttpPatch]
+        [HttpPatch("{id:int}")]
         [Route("update")]
-        public async Task<IActionResult> EditPartially(int UserId, [FromBody] JsonPatchDocument<UserDto> patchDocument)
+        public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<UserDto> patchDocument)
         {
-            var User = await _userService.GetByIdAsync(UserId);
-            if (User == null)
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
             try
             {
-                patchDocument.ApplyTo(User);
-                await _userService.UpdateAsync(User);
+                patchDocument.ApplyTo(user);
+                await _userService.UpdateAsync(user);
             }
             catch (Exception e)
             {
@@ -114,7 +113,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetUser", new { UserId = User.Id }, User);
+            return CreatedAtAction("GetUser", new { UserId = user.Id }, user);
         }
     }
 }

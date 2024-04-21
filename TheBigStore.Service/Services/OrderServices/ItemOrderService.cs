@@ -1,5 +1,6 @@
 ﻿using TheBigStore.Repository.Interfaces.OrderInterfaces;
 using TheBigStore.Repository.Models;
+using TheBigStore.Repository.Repositories.OrderRepositories;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 using TheBigStore.Service.Services.GenericServices;
@@ -15,6 +16,12 @@ namespace TheBigStore.Service.Services.OrderServices
         {
             _itemOrderRepository = itemOrderRepository;
             _mappingService = mappingService;
+        }
+
+        public async Task<List<ItemOrderDto>> GetAllByOrderId(int orderId)
+        {
+            var temp = _mappingService._mapper.Map<List<ItemOrderDto>>(await _itemOrderRepository.GetAllByOrderId(orderId));
+            return temp;
         }
     }
 }

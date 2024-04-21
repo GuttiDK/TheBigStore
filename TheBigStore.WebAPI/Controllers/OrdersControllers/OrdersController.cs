@@ -10,20 +10,21 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
     [Produces("application/json")]
     public class OrdersController : ControllerBase
     {
+        #region
         private readonly IOrderService _orderService;
+        private readonly ILogger<OrdersController> _logger;
+        #endregion
 
-        public OrdersController(IOrderService orderService)
+        #region Constructor
+        public OrdersController(IOrderService orderService, ILogger<OrdersController> logger)
         {
-            _orderService=orderService;
+            _orderService = orderService;
+            _logger = logger;
         }
+        #endregion
 
-
-        /// <summary>
-        /// Get a list of all orders in DB.
-        /// </summary>
-        /// <returns>List of orders.</returns>
         [HttpGet]
-        public async Task<List<OrderDto>> GetAllOrders()
+        public async Task<IEnumerable<OrderDto>> Get()
         {
             return await _orderService.GetAllAsync();
         }

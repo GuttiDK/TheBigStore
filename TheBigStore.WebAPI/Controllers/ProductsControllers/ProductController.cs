@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
-using TheBigStore.Service.Services.OrderServices;
 
 namespace TheBigStore.WebAPI.Controllers.ProductsControllers
 {
@@ -25,7 +24,7 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Product Object</returns>
-        [HttpGet(Name = "GetProduct")]
+        [HttpGet("{id:int}", Name = "GetProduct")]
         public async Task<IActionResult> GetProduct(int id)
         {
             var temp = await _itemService.GetByIdAsync(id);
@@ -65,7 +64,7 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         [Route("remove")]
         public async Task<IActionResult> Remove(int id)
         {
@@ -106,7 +105,7 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
             }
         }
 
-        [HttpPatch]
+        [HttpPatch("{id:int}")]
         [Route("update")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<ItemDto> patchDocument)
         {

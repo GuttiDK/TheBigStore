@@ -3,31 +3,31 @@ using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 
-namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
+namespace TheBigStore.WebAPI.Controllers.ItemsControllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    public class CategoryController : ControllerBase
+    public class ItemController : ControllerBase
     {
         #region
-        private readonly ICategoryService _categoryService;
-        private readonly ILogger<CategoryController> _logger;
+        private readonly IItemService _itemService;
+        private readonly ILogger<ItemController> _logger;
         #endregion
 
         #region Constructor
-        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
+        public ItemController(IItemService itemService, ILogger<ItemController> logger)
         {
-            _categoryService = categoryService;
+            _itemService = itemService;
             _logger = logger;
         }
         #endregion
 
 
-        [HttpGet("{id:int}", Name = "GetCategory")]
-        public async Task<IActionResult> GetCategory(int id)
+        [HttpGet("{id:int}", Name = "GetItem")]
+        public async Task<IActionResult> GetItem(int id)
         {
-            var temp = await _categoryService.GetByIdAsync(id);
+            var temp = await _itemService.GetByIdAsync(id);
 
             if (temp != null)
             {
@@ -40,12 +40,12 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(CategoryDto Category)
+        public async Task<IActionResult> Create(ItemDto item)
         {
             try
             {
-                Category = await _categoryService.CreateAsync(Category);
-                return CreatedAtAction("GetCategory", new { CategoryId = Category.Id }, Category);
+                item = await _itemService.CreateAsync(item);
+                return CreatedAtAction("GetItem", new { itemId = item.Id }, item);
             }
             catch (Exception e)
             {
@@ -57,14 +57,14 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         [Route("remove")]
         public async Task<IActionResult> Remove(int id)
         {
-            var Category = await _categoryService.GetByIdAsync(id);
+            var item = await _itemService.GetByIdAsync(id);
 
-            if (Category == null)
+            if (item == null)
                 return NotFound();
 
             try
             {
-                await _categoryService.DeleteAsync(Category);
+                await _itemService.DeleteAsync(item);
                 return NoContent(); // Success
             }
             catch (Exception e)
@@ -76,12 +76,12 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
 
         [HttpPut]
         [Route("edit")]
-        public async Task<IActionResult> Edit(CategoryDto category)
+        public async Task<IActionResult> Edit(ItemDto item)
         {
             try
             {
-                await _categoryService.UpdateAsync(category);
-                return CreatedAtAction("GetCategory", new { CategoryId = category.Id }, category);
+                await _itemService.UpdateAsync(item);
+                return CreatedAtAction("GetItem", new { itemId = item.Id }, item);
             }
             catch (Exception e)
             {
@@ -91,18 +91,18 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
 
         [HttpPatch("{id:int}")]
         [Route("update")]
-        public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<CategoryDto> patchDocument)
+        public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<ItemDto> patchDocument)
         {
-            var category = await _categoryService.GetByIdAsync(id);
-            if (category == null)
+            var item = await _itemService.GetByIdAsync(id);
+            if (item == null)
             {
                 return NotFound();
             }
 
             try
             {
-                patchDocument.ApplyTo(category);
-                await _categoryService.UpdateAsync(category);
+                patchDocument.ApplyTo(item);
+                await _itemService.UpdateAsync(item);
             }
             catch (Exception e)
             {
@@ -110,7 +110,7 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetCategory", new { CategoryId = category.Id }, category);
+            return CreatedAtAction("GetItem", new { itemId = item.Id }, item);
         }
     }
 }

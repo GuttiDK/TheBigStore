@@ -57,6 +57,8 @@ namespace TheBigStore.Application.Pages
         public async Task<IActionResult> OnPostAddToCart() // Method to handle adding product to cart
         {
             var product = await _itemService.GetByIdAsync(productId);
+            product.Category = null;
+            product.Image = null;
 
             // Retrieve cart from session
             var cart = HttpContext.Session.Get<List<ItemDto>>("cart") ?? new List<ItemDto>();

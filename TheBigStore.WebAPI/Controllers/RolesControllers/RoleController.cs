@@ -24,7 +24,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
         #endregion
 
 
-        [HttpGet(Name = "GetRole")]
+        [HttpGet("{id:int}", Name = "GetRole")]
         public async Task<IActionResult> GetRole(int RoleId)
         {
             var temp = await _roleService.GetByIdAsync(RoleId);
@@ -40,12 +40,12 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(RoleDto Role)
+        public async Task<IActionResult> Create(RoleDto role)
         {
             try
             {
-                Role = await _roleService.CreateAsync(Role);
-                return CreatedAtAction("GetRole", new { RoleId = Role.Id }, Role);
+                role = await _roleService.CreateAsync(role);
+                return CreatedAtAction("GetRole", new { RoleId = role.Id }, role);
             }
             catch (Exception e)
             {
@@ -53,11 +53,11 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         [Route("remove")]
-        public async Task<IActionResult> Remove(int RoleId)
+        public async Task<IActionResult> Remove(int id)
         {
-            var Role = await _roleService.GetByIdAsync(RoleId);
+            var Role = await _roleService.GetByIdAsync(id);
 
             if (Role == null)
                 return NotFound();
@@ -76,12 +76,12 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
 
         [HttpPut]
         [Route("edit")]
-        public async Task<IActionResult> Edit(RoleDto Role)
+        public async Task<IActionResult> Edit(RoleDto role)
         {
             try
             {
-                await _roleService.UpdateAsync(Role);
-                return CreatedAtAction("GetRole", new { RoleId = Role.Id }, Role);
+                await _roleService.UpdateAsync(role);
+                return CreatedAtAction("GetRole", new { RoleId = role.Id }, role);
             }
             catch (Exception e)
             {
@@ -89,20 +89,20 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             }
         }
 
-        [HttpPatch]
+        [HttpPatch("{id:int}")]
         [Route("update")]
-        public async Task<IActionResult> EditPartially(int RoleId, [FromBody] JsonPatchDocument<RoleDto> patchDocument)
+        public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<RoleDto> patchDocument)
         {
-            var Role = await _roleService.GetByIdAsync(RoleId);
-            if (Role == null)
+            var role = await _roleService.GetByIdAsync(id);
+            if (role == null)
             {
                 return NotFound();
             }
 
             try
             {
-                patchDocument.ApplyTo(Role);
-                await _roleService.UpdateAsync(Role);
+                patchDocument.ApplyTo(role);
+                await _roleService.UpdateAsync(role);
             }
             catch (Exception e)
             {
@@ -110,7 +110,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetRole", new { RoleId = Role.Id }, Role);
+            return CreatedAtAction("GetRole", new { RoleId = role.Id }, role);
         }
     }
 }
