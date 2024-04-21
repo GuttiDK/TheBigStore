@@ -9,11 +9,13 @@ using TheBigStore.Service.Interfaces.UserInterfaces;
 using TheBigStore.Service.Services.MappingServices;
 using TheBigStore.Service.Services.OrderServices;
 using TheBigStore.Service.Services.UserServices;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<MappingService, MappingService>();
+builder.Services.AddScoped<MappingService>();
 
 // Customer services
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -51,12 +53,17 @@ builder.Services.AddScoped<IItemOrderService, ItemOrderService>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    //options.SerializerSettings.MaxDepth = 2;
+});
 
 builder.Services.AddDbContext<TheBigStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
-    
 
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

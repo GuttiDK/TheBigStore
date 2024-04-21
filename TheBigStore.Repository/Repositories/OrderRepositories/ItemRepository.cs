@@ -17,6 +17,21 @@ namespace TheBigStore.Repository.Repositories.OrderRepositories
             _dbContext = dbContext;
         }
 
+        new public async Task<List<Item>> GetAllAsync()
+        {
+            return await _dbContext.Products.AsNoTracking()
+                .Include(i => i.Image)
+                .ToListAsync();
+        }
+
+        new public async Task<Item> GetByIdAsync(int id)
+        {
+            return await _dbContext.Products.AsNoTracking()
+                .Include(i => i.Category)
+                .Include(i => i.Image)
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
         public async Task<List<Item>> SearchProductByWord(string word)
         {
             return await _dbContext.Products.AsNoTracking().Where(x => x.ItemName.Contains(word)).ToListAsync();

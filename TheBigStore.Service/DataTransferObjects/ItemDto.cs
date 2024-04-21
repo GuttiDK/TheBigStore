@@ -1,26 +1,23 @@
-﻿namespace TheBigStore.Service.DataTransferObjects
+﻿using TheBigStore.Repository.Models;
+
+namespace TheBigStore.Service.DataTransferObjects
 {
     public class ItemDto
     {
 
-        public int Id { get; set; }
+        public int Id { get; set; } // PK
 
         // Item
-        public string ItemName { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public decimal Price { get; set; } = 0;
-        public int Stock { get; set; } = 0;
-
-        // ItemOrder
-        public List<ItemOrderDto> ItemOrders { get; set; } = [];
-
-        // Category
-        public int? CategoryId { get; set; }
-        public CategoryDto? Category { get; set; }
-
-        // Image
-        public int? ImageId { get; set; } // FK
-        public ImageDto? Image { get; set; }
+        public string ItemName { get; set; }
+        public string Description { get; set; }
+        public double Price { get; set; }
+        public int Stock { get; set; }
         public int Quantity { get; set; }
+        public int? CategoryId { get; set; } // FK
+        public int? ImageId { get; set; } // FK
+
+        // Navigations 
+        public CategoryDto? Category { get; set; }
+        public ImageDto? Image { get; set; }
     }
 }

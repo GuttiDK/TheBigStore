@@ -17,20 +17,14 @@ namespace TheBigStore.Application.Pages.Products
         }
 
         [BindProperty]
-        public ObservableCollection<CategoryDto>? Categories { get; set; }
-        public ObservableCollection<ItemDto>? Items { get; set; }
+        public List<CategoryDto>? Categories { get; set; }
+        public List<ItemDto>? Items { get; set; }
         [BindProperty]
         public CategoryDto Category { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
             Categories = await _categoryService.GetAllAsync();
-            Items = await _itemService.GetAllAsync();
-            foreach (var category in Categories)
-            {
-                category.Items = Items.Where(x => x.CategoryId == category.Id).ToList();
-            }
-
             return Page();
         }
 
@@ -53,7 +47,7 @@ namespace TheBigStore.Application.Pages.Products
 
         public async Task<IActionResult> OnPostDeleteCategory(int id)
         {
-            var category = await _categoryService.GetById(id);
+            var category = await _categoryService.GetByIdAsync(id);
             await _categoryService.DeleteAsync(category);
             return RedirectToPage("/Admin/Products/Category");
         }

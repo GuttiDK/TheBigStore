@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
-using TheBigStore.Repository.Models;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 
@@ -24,7 +22,7 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         /// </summary>
         /// <returns>Categories list</returns>
         [HttpGet]
-        public async Task<ObservableCollection<CategoryDto>> GetCategories()
+        public async Task<IEnumerable<CategoryDto>> Get()
         {
             return await _categoryService.GetAllAsync();
         }

@@ -1,65 +1,30 @@
 @TheBigStore.WebAPI_HostAddress = https://localhost:7165
 
-GET {{TheBigStore.WebAPI_HostAddress}}/api/categories
+
+GET {{TheBigStore.WebAPI_HostAddress}}/api/user?UserId=1
 
 ###
 
-GET {{TheBigStore.WebAPI_HostAddress}}/api/category/3
+GET {{TheBigStore.WebAPI_HostAddress}}/api/users?apikey=12345
 
 ###
 
-POST {{TheBigStore.WebAPI_HostAddress}}/api/category/Create
+POST {{TheBigStore.WebAPI_HostAddress}}/api/user/create
 Content-Type: application/json
 
 {
-  //CategoryDto
+  "userName": "Jens",
+  "password": "Pass",
+  "email": "Jens@Jensen.dk",
+  "roleId": 3
 }
 
 ###
 
-POST {{TheBigStore.WebAPI_HostAddress}}/api/order
-Content-Type: application/json
-
-{
-  //OrderDto
-}
+DELETE {{TheBigStore.WebAPI_HostAddress}}/api/user/remove?UserId=2
 
 ###
 
-GET {{TheBigStore.WebAPI_HostAddress}}/api/orders
-
-###
-
-POST {{TheBigStore.WebAPI_HostAddress}}/api/product/Create
-Content-Type: application/json
-
-{
-  //ItemDto
-}
-
-###
-
-DELETE {{TheBigStore.WebAPI_HostAddress}}/api/product/Delete
-
-###
-
-GET {{TheBigStore.WebAPI_HostAddress}}/api/product/Get/{id:int}?id=2
-
-###
-
-PUT {{TheBigStore.WebAPI_HostAddress}}/api/product/Update
-Content-Type: application/json
-
-{
-  //ItemDto
-}
-
-###
-
-GET {{TheBigStore.WebAPI_HostAddress}}/api/products?page=1&count=8
-
-###
-
-GET {{TheBigStore.WebAPI_HostAddress}}/api/products/Search/test
+GET {{TheBigStore.WebAPI_HostAddress}}/api/users/GetDeffered
 
 ###

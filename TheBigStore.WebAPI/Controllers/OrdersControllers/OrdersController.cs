@@ -23,7 +23,7 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
         /// </summary>
         /// <returns>List of orders.</returns>
         [HttpGet]
-        public async Task<ObservableCollection<OrderDto>> GetAllOrders()
+        public async Task<List<OrderDto>> GetAllOrders()
         {
             return await _orderService.GetAllAsync();
         }

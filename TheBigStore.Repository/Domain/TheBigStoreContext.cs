@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TheBigStore.Repository.Enums;
 using TheBigStore.Repository.Models;
 
 namespace TheBigStore.Repository.Domain
@@ -51,14 +52,26 @@ namespace TheBigStore.Repository.Domain
             // ItemOrder setup - Many to Many
             modelBuilder.Entity<ItemOrder>()
                 .HasKey(io => new { io.ItemId, io.OrderId });
-            modelBuilder.Entity<ItemOrder>()
-                .HasOne(io => io.Item)
-                .WithMany(i => i.ItemOrders)
-                .HasForeignKey(io => io.ItemId);
+
             modelBuilder.Entity<ItemOrder>()
                 .HasOne(io => io.Order)
                 .WithMany(o => o.ItemOrders)
                 .HasForeignKey(io => io.OrderId);
+
+            modelBuilder.Entity<ItemOrder>()
+    .Property(io => io.Status).HasDefaultValue(OrderStatusEnum.Pending);
+
+            #region Customer
+            modelBuilder.Entity<Customer>()
+                .HasOne(c => c.User).WithOne(u => u.Customer).HasForeignKey<User>(u => u.CustomerId).OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region User
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Customer).WithOne(c => c.User).HasForeignKey<Customer>(c => c.UserId).OnDelete(DeleteBehavior.NoAction);
+           #endregion
+
 
             // Hard code roles Admin and User
             modelBuilder.Entity<Role>().HasData

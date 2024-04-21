@@ -129,7 +129,7 @@ namespace TheBigStore.Application.Pages.Customer.Orders
             {
                 RedirectToPage("/Login/Login");
             }
-            var user = await _userService.GetById((int)id);
+            var user = await _userService.GetByIdAsync((int)id);
             var cart = GetCart();
             if (cart.Count == 0)
             {

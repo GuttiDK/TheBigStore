@@ -23,7 +23,7 @@ namespace TheBigStore.Application.Pages.Admin.Roles
 
         public async Task OnGetAsync(int id)
         {
-            RoleDto roleDto = await _roleService.GetById(id);
+            RoleDto roleDto = await _roleService.GetByIdAsync(id);
 
             if (roleDto != null)
             {
@@ -35,23 +35,18 @@ namespace TheBigStore.Application.Pages.Admin.Roles
         {
             if (ModelState.IsValid)
             {
-                RoleDto roleDto = await _roleService.GetById(Role.Id);
-                if (roleDto != null)
+                try
                 {
-                    roleDto.Id = Role.Id;
-                    roleDto.RoleName = Role.RoleName.FirstCharToUpper();
-                    roleDto.IsAdmin = Role.IsAdmin;
-                    await _roleService.UpdateAsync(roleDto);
+                    Role.RoleName.FirstCharToUpper();
+                    await _roleService.UpdateAsync(Role);
                     SuccessMessage = "Role updated successfully";
                 }
-                else
+                catch (Exception e)
                 {
-                    ErrorMessage = "Role not found";
+                    ErrorMessage = e.Message;
                 }
             }
-
-            return Page();
-
+            return RedirectToPage();
         }
 
     }

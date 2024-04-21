@@ -1,20 +1,20 @@
-﻿namespace TheBigStore.Service.DataTransferObjects
+﻿using TheBigStore.Repository.Models;
+
+namespace TheBigStore.Service.DataTransferObjects
 {
     public class UserDto
     {
         public int Id { get; set; }
 
         // User
-        public string UserName { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-
-        // Role
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
         public int? RoleId { get; set; }
-        public RoleDto? Role { get; set; }
-
-        // Customer
         public int? CustomerId { get; set; }
+
+        // Navigation properties
+        public RoleDto? Role { get; set; }
         public CustomerDto? Customer { get; set; }
     }
 }

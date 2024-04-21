@@ -3,6 +3,7 @@ using TheBigStore.Repository.Extensions.Paging;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Extensions.Paging;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
+using TheBigStore.Service.Services.OrderServices;
 
 namespace TheBigStore.WebAPI.Controllers.ProductsControllers
 {
@@ -12,10 +13,12 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
     public class ProductsController : ControllerBase
     {
         private readonly IItemService _productServices;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(IItemService productServices)
+        public ProductsController(IItemService productServices, ILogger<ProductsController> logger)
         {
             _productServices = productServices;
+            _logger = logger;
         }
 
         /// <summary>
@@ -23,9 +26,16 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// </summary>
         /// <returns>Product Object</returns>
         [HttpGet]
-        public async Task<PageDto<ItemDto>> GetProducts(int page, int count)
+        public async Task<IActionResult> GetProducts(int page, int count)
         {
-            return await _productServices.GetPagnatedList(page, count);
+            var temp = await _productServices.GetPagnatedList(page, count);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return BadRequest();
         }
 
         /// <summary>
@@ -34,7 +44,17 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// <param name="searchString"></param>
         /// <returns>list of products</returns>
         [HttpGet]
-        [Route("Search/{searchString}")]
-        public async Task<List<ItemDto>> SearchProducts(string searchString) => await _productServices.SearchProductByWord(searchString);
+        [Route("search/{searchString}")]
+        public async Task<IActionResult> SearchProducts(string searchString)
+        {
+            var temp = await _productServices.SearchProductByWord(searchString);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return NotFound();
+        }
     }
 }

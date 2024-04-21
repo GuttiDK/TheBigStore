@@ -22,7 +22,7 @@ namespace TheBigStore.Application.Pages.Admin.Products
 
         public async Task OnGetAsync(int id)
         {
-            CategoryDto category = await _categoryService.GetById(id);
+            CategoryDto category = await _categoryService.GetByIdAsync(id);
 
             if (category != null)
             {
@@ -34,21 +34,20 @@ namespace TheBigStore.Application.Pages.Admin.Products
         {
             if (ModelState.IsValid)
             {
-                var dto = await _categoryService.GetById(Category.Id);
-                if (dto != null)
+                try
                 {
-                    dto.Id = Category.Id;
-                    dto.CategoryName = Category.CategoryName.FirstCharToUpper();
-                    await _categoryService.UpdateAsync(dto);
+                    Category.CategoryName.FirstCharToUpper();
+                    await _categoryService.UpdateAsync(Category);
                     SuccessMessage = "Category updated successfully";
                 }
-                else
+                catch (Exception e)
                 {
-                    ErrorMessage = "Category not found";
+                    ErrorMessage = e.Message;
                 }
+
             }
 
-            return Page();
+            return RedirectToPage();
 
         }
     }

@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using TheBigStore.Repository.Domain;
 using TheBigStore.Repository.Interfaces.OrderInterfaces;
@@ -19,6 +21,10 @@ using var logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
+
+builder.Logging.ClearProviders();
+
+builder.Logging.AddSerilog(logger);
 
 builder.Services.AddScoped<MappingService, MappingService>();
 
@@ -58,6 +64,12 @@ builder.Services.AddScoped<IItemOrderService, ItemOrderService>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 
+builder.Services.AddRazorPages().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    //options.SerializerSettings.MaxDepth = 2;
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -66,6 +78,8 @@ builder.Services.AddDbContext<TheBigStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging())
     .AddSession(option => { option.IdleTimeout = TimeSpan.FromMinutes(30); }).AddMemoryCache();
 
+builder.Logging.AddConsole();
+builder.Logging.AddEventLog();
 
 
 var app = builder.Build();

@@ -27,7 +27,7 @@ namespace TheBigStore.Application.Pages
         }
 
         public PageDto<ItemDto> Items { get; set; }
-        public ObservableCollection<ImageDto> Images { get; set; }
+        public List<ImageDto> Images { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int productId { get; set; }
@@ -45,7 +45,7 @@ namespace TheBigStore.Application.Pages
 
             foreach (var item in Items.Items)
             {
-                item.Image = Images.SingleOrDefault(x => x.ImageId == item.ImageId);
+                item.Image = Images.SingleOrDefault(x => x.Id == item.ImageId);
             }
         }
 
@@ -56,7 +56,7 @@ namespace TheBigStore.Application.Pages
 
         public async Task<IActionResult> OnPostAddToCart() // Method to handle adding product to cart
         {
-            var product = await _itemService.GetById(productId);
+            var product = await _itemService.GetByIdAsync(productId);
 
             // Retrieve cart from session
             var cart = HttpContext.Session.Get<List<ItemDto>>("cart") ?? new List<ItemDto>();

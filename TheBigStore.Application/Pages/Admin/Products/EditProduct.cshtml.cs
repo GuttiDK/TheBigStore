@@ -22,15 +22,15 @@ namespace TheBigStore.Application.Pages.Admin.Products
         [BindProperty]
         public ItemDto Item { get; set; }
         public CategoryDto Category { get; set; }
-        public ObservableCollection<CategoryDto>? Categories { get; set; }
+        public List<CategoryDto>? Categories { get; set; }
         public string SuccessMessage { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
 
         public async Task OnGetAsync(int id)
         {
-            Item = await _itemService.GetById(id);
+            Item = await _itemService.GetByIdAsync(id);
             if (Item.CategoryId != null)
-                Category = await _categoryService.GetById((int)Item.CategoryId);
+                Category = await _categoryService.GetByIdAsync((int)Item.CategoryId);
 
             Categories = await _categoryService.GetAllAsync();
 
@@ -45,28 +45,21 @@ namespace TheBigStore.Application.Pages.Admin.Products
         {
             if (ModelState.IsValid)
             {
-                var result = await _itemService.GetById(Item.Id);
-                if (result != null)
+                try
                 {
-                    result.Id = Item.Id;
-                    result.ItemName = Item.ItemName.FirstCharToUpper();
-                    result.Description = Item.Description.FirstCharToUpper();
-                    result.Price = Item.Price;
-                    result.CategoryId = Item.CategoryId;
-                    result.Stock = Item.Stock;
-                    await _itemService.UpdateAsync(result);
+                    Item.ItemName.FirstCharToUpper();
+                    Item.Description.FirstCharToUpper();
+                    await _itemService.UpdateAsync(Item);
                     SuccessMessage = "Product updated successfully";
-                    return RedirectToPage($@"/Admin/Products/Products");
                 }
-                else
+                catch (Exception e)
                 {
-                    ErrorMessage = "Product not found";
-                    return Page();
+                    ErrorMessage = e.Message;
                 }
             }
-
-            return Page();
+            return RedirectToPage();
         }
+
 
     }
 }

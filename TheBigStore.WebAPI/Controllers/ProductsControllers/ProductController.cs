@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
+using TheBigStore.Service.Services.OrderServices;
 
 namespace TheBigStore.WebAPI.Controllers.ProductsControllers
 {
@@ -10,10 +12,12 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
     public class ProductController : ControllerBase
     {
         private readonly IItemService _itemService;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IItemService itemService)
+        public ProductController(IItemService itemService, ILogger<ProductController> logger)
         {
             _itemService = itemService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -21,48 +25,40 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Product Object</returns>
-        [HttpGet()]
-        [Route("Get/{id:int}")]
-        public async Task<ActionResult<ItemDto>> GetProductById(int id) => await _itemService.GetById(id);
+        [HttpGet(Name = "GetProduct")]
+        public async Task<IActionResult> GetProduct(int id)
+        {
+            var temp = await _itemService.GetByIdAsync(id);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return NotFound();
+        }
+
 
         /// <summary>
         /// Create a new product.
         /// </summary>
-        /// <param name="newProduct"></param>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST /Product
-        ///     {
-        ///         "masterKey": 0,
-        ///         "title": "Test",
-        ///         "description": "Test",
-        ///         "price": 100,
-        ///         "stock": 100,
-        ///         "manufacture": "TestOfTest",
-        ///         "imgPath": "string"
-        ///     }
-        ///
-        /// </remarks>
+        /// <param name="item"></param>
         /// <response code="201">Returns the newly created item</response>
         /// <response code="400">If the item is null</response>
         [HttpPost]
-        [Route("Create")]
-        public async Task<ItemDto> CreateProduct(ItemDto newProduct) => await _itemService.CreateAsync(newProduct);
-
-        /// <summary>
-        /// Update product by ID.
-        /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///
-        /// </remarks>
-        /// <response code="201">Returns the newly created item</response>
-        /// <response code="400">If the item is null</response>
-        [HttpPut]
-        [Route("Update")]
-        public async Task UpdateProductById(ItemDto productsDTO) => await _itemService.UpdateAsync(productsDTO);
+        [Route("create")]
+        public async Task<IActionResult> Create(ItemDto item)
+        {
+            try
+            {
+                item = await _itemService.CreateAsync(item);
+                return CreatedAtAction("GetProduct", new { Id = item.Id }, item);
+            }
+            catch (Exception e)
+            {
+                return UnprocessableEntity(e.Message);
+            }
+        }
 
         /// <summary>
         /// Delete Product By ID.
@@ -70,8 +66,68 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("Delete")]
-        public async Task DeleteProductById(ItemDto id) => await _itemService.DeleteAsync(id);
+        [Route("remove")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var item = await _itemService.GetByIdAsync(id);
 
+            if (item == null)
+                return NotFound();
+
+            try
+            {
+                await _itemService.DeleteAsync(item);
+                return NoContent(); // Success
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return UnprocessableEntity(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Update product by ID.
+        /// </summary>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If the item is null</response>
+        [HttpPut]
+        [Route("edit")]
+        public async Task<IActionResult> Edit(ItemDto item)
+        {
+            try
+            {
+                await _itemService.UpdateAsync(item);
+                return CreatedAtAction("GetCategory", new { Id = item.Id }, item);
+            }
+            catch (Exception e)
+            {
+                return UnprocessableEntity(e.Message);
+            }
+        }
+
+        [HttpPatch]
+        [Route("update")]
+        public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<ItemDto> patchDocument)
+        {
+            var item = await _itemService.GetByIdAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                patchDocument.ApplyTo(item);
+                await _itemService.UpdateAsync(item);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return UnprocessableEntity(e.Message);
+            }
+
+            return CreatedAtAction("GetCategory", new { CategoryId = item.Id }, item);
+        }
     }
 }
