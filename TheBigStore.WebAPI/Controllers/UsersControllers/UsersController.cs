@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
+using TheBigStore.Service.Extensions.Paging;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.WebAPI.Controllers.UsersControllers
@@ -21,6 +22,23 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             _logger = logger;
         }
         #endregion
+
+
+        // Get GetPagnatedList of users with int for page and int count for page size
+        [HttpGet(Name = "GetPagnatedList")]
+        [Route("GetPagnatedList")]
+        public async Task<IActionResult> GetPagnatedList(int page, int count)
+        {
+            var users = await _userService.GetPagnatedList(page, count);
+
+            if (users != null)
+            {
+                return Ok(users);
+            }
+
+            return BadRequest();
+        }
+        
 
 
 

@@ -26,5 +26,23 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         {
             return await _categoryService.GetAllAsync();
         }
+
+        /// <summary>
+        /// Get Pagnated List Categories.
+        /// </summary>
+        /// <returns>Categories Pagnated list</returns>
+        [HttpGet(Name = "GetPagnatedList")]
+        [Route("GetPagnatedList")]
+        public async Task<IActionResult> GetPagnatedList(int page, int count)
+        {
+            var temp = await _categoryService.GetPagnatedList(page, count);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return BadRequest();
+        }
     }
 }

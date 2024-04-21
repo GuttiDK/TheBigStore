@@ -16,9 +16,9 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         #endregion
 
         #region Constructor
-        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
+        public CategoryController(ICategoryService CategoryService, ILogger<CategoryController> logger)
         {
-            _categoryService = categoryService;
+            _categoryService = CategoryService;
             _logger = logger;
         }
         #endregion

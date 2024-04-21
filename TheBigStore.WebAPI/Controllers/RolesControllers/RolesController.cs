@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
+using TheBigStore.Service.Services.UserServices;
 
 namespace TheBigStore.WebAPI.Controllers.RolesControllers
 {
@@ -22,6 +23,20 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
         }
         #endregion
 
+        // Get GetPagnatedList of users with int for page and int count for page size
+        [HttpGet(Name = "GetPagnatedList")]
+        [Route("GetPagnatedList")]
+        public async Task<IActionResult> GetPagnatedList(int page, int count)
+        {
+            var temp = await _roleService.GetPagnatedList(page, count);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return BadRequest();
+        }
 
         [HttpGet]
         public async Task<IEnumerable<RoleDto>> Get()
