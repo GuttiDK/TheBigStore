@@ -24,7 +24,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
         #endregion
 
 
-        [HttpGet("{id:int}", Name = "GetItem")]
+        [HttpGet("{id:int}", Name = "getitem")]
         public async Task<IActionResult> GetItem(int id)
         {
             var temp = await _itemService.GetByIdAsync(id);
@@ -45,7 +45,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             try
             {
                 item = await _itemService.CreateAsync(item);
-                return CreatedAtAction("GetItem", new { itemId = item.Id }, item);
+                return CreatedAtAction("getitem", new { itemId = item.Id }, item);
             }
             catch (Exception e)
             {
@@ -53,8 +53,8 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        [Route("remove")]
+        [HttpDelete]
+        [Route("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
             var item = await _itemService.GetByIdAsync(id);
@@ -81,7 +81,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             try
             {
                 await _itemService.UpdateAsync(item);
-                return CreatedAtAction("GetItem", new { itemId = item.Id }, item);
+                return CreatedAtAction("getitem", new { itemId = item.Id }, item);
             }
             catch (Exception e)
             {
@@ -89,8 +89,8 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        [Route("update")]
+        [HttpPatch]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<ItemDto> patchDocument)
         {
             var item = await _itemService.GetByIdAsync(id);
@@ -110,7 +110,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetItem", new { itemId = item.Id }, item);
+            return CreatedAtAction("getitem", new { itemId = item.Id }, item);
         }
     }
 }

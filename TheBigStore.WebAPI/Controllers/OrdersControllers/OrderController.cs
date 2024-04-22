@@ -27,7 +27,7 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
 
 
 
-        [HttpGet("{id:int}", Name = "GetOrder")]
+        [HttpGet("{id:int}", Name = "getorder")]
         public async Task<IActionResult> GetOrder(int id)
         {
             var temp = await _orderService.GetByIdAsync(id);
@@ -49,7 +49,7 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
             try
             {
                 order = await _orderService.CreateAsync(order);
-                return CreatedAtAction("GetOrder", new { OrderId = order.Id }, order);
+                return CreatedAtAction("getorder", new { OrderId = order.Id }, order);
             }
             catch (Exception e)
             {
@@ -57,8 +57,8 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        [Route("remove")]
+        [HttpDelete]
+        [Route("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
             var order = await _orderService.GetByIdAsync(id);
@@ -85,7 +85,7 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
             try
             {
                 await _orderService.UpdateAsync(order);
-                return CreatedAtAction("GetOrder", new { OrderId = order.Id }, order);
+                return CreatedAtAction("getorder", new { OrderId = order.Id }, order);
             }
             catch (Exception e)
             {
@@ -93,8 +93,8 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        [Route("update")]
+        [HttpPatch]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<OrderDto> patchDocument)
         {
             var order = await _orderService.GetByIdAsync(id);
@@ -114,7 +114,7 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetOrder", new { OrderId = order.Id }, order);
+            return CreatedAtAction("getorder", new { OrderId = order.Id }, order);
         }
     }
 }

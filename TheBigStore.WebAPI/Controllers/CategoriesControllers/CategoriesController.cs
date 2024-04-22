@@ -22,6 +22,7 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         /// </summary>
         /// <returns>Categories list</returns>
         [HttpGet]
+        [Route("get")]
         public async Task<IEnumerable<CategoryDto>> Get()
         {
             return await _categoryService.GetAllAsync();
@@ -31,8 +32,8 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         /// Get Pagnated List Categories.
         /// </summary>
         /// <returns>Categories Pagnated list</returns>
-        [HttpGet(Name = "GetPagnatedList")]
-        [Route("GetPagnatedList")]
+        [HttpGet]
+        [Route("getpagnatedlist")]
         public async Task<IActionResult> GetPagnatedList(int page, int count)
         {
             var temp = await _categoryService.GetPagnatedList(page, count);

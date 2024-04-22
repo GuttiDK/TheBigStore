@@ -26,7 +26,8 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// </summary>
         /// <returns>Product Object</returns>
         [HttpGet]
-        public async Task<IActionResult> GetProducts(int page, int count)
+        [Route("getpagnatedlist")]
+        public async Task<IActionResult> GetPagnatedList(int page, int count)
         {
             var temp = await _productServices.GetPagnatedList(page, count);
 

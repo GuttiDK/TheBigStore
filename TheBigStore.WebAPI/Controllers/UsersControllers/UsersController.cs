@@ -25,8 +25,8 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
 
 
         // Get GetPagnatedList of users with int for page and int count for page size
-        [HttpGet(Name = "GetPagnatedList")]
-        [Route("GetPagnatedList")]
+        [HttpGet]
+        [Route("getpagnatedlist")]
         public async Task<IActionResult> GetPagnatedList(int page, int count)
         {
             var users = await _userService.GetPagnatedList(page, count);
@@ -43,7 +43,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
 
 
         [HttpGet]
-        [Route("GetDeffered")]
+        [Route("getasync")]
         public async IAsyncEnumerable<UserDto> GetAsync()
         {
             foreach (var user in await _userService.GetAllAsync())
@@ -53,6 +53,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
         }
 
         [HttpGet]
+        [Route("get")]
         public async Task<IEnumerable<UserDto>> Get()
         {
             return await _userService.GetAllAsync();

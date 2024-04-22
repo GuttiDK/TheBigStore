@@ -24,7 +24,7 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Product Object</returns>
-        [HttpGet("{id:int}", Name = "GetProduct")]
+        [HttpGet("{id:int}", Name = "getproduct")]
         public async Task<IActionResult> GetProduct(int id)
         {
             var temp = await _itemService.GetByIdAsync(id);
@@ -51,7 +51,7 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
             try
             {
                 item = await _itemService.CreateAsync(item);
-                return CreatedAtAction("GetProduct", new { Id = item.Id }, item);
+                return CreatedAtAction("getproduct", new { Id = item.Id }, item);
             }
             catch (Exception e)
             {
@@ -64,8 +64,8 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id:int}")]
-        [Route("remove")]
+        [HttpDelete]
+        [Route("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
             var item = await _itemService.GetByIdAsync(id);
@@ -97,7 +97,7 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
             try
             {
                 await _itemService.UpdateAsync(item);
-                return CreatedAtAction("GetCategory", new { Id = item.Id }, item);
+                return CreatedAtAction("getcategory", new { Id = item.Id }, item);
             }
             catch (Exception e)
             {
@@ -105,8 +105,8 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        [Route("update")]
+        [HttpPatch]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<ItemDto> patchDocument)
         {
             var item = await _itemService.GetByIdAsync(id);
@@ -126,7 +126,7 @@ namespace TheBigStore.WebAPI.Controllers.ProductsControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetCategory", new { CategoryId = item.Id }, item);
+            return CreatedAtAction("getcategory", new { CategoryId = item.Id }, item);
         }
     }
 }

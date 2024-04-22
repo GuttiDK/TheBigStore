@@ -23,8 +23,8 @@ namespace TheBigStore.WebAPI.Controllers.ItemOrdersControllers
 
 
         // Get GetPagnatedList of users with int for page and int count for page size
-        [HttpGet(Name = "GetPagnatedList")]
-        [Route("GetPagnatedList")]
+        [HttpGet]
+        [Route("getpagnatedlist")]
         public async Task<IActionResult> GetPagnatedList(int page, int count)
         {
             var temp = await _itemOrderService.GetPagnatedList(page, count);

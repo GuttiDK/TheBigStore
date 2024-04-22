@@ -24,7 +24,7 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         #endregion
 
 
-        [HttpGet("{id:int}", Name = "GetCategory")]
+        [HttpGet("{id:int}", Name = "getcategory")]
         public async Task<IActionResult> GetCategory(int id)
         {
             var temp = await _categoryService.GetByIdAsync(id);
@@ -45,7 +45,7 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
             try
             {
                 Category = await _categoryService.CreateAsync(Category);
-                return CreatedAtAction("GetCategory", new { CategoryId = Category.Id }, Category);
+                return CreatedAtAction("getcategory", new { Id = Category.Id }, Category);
             }
             catch (Exception e)
             {
@@ -53,18 +53,18 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        [Route("remove")]
+        [HttpDelete]
+        [Route("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var Category = await _categoryService.GetByIdAsync(id);
+            var temp = await _categoryService.GetByIdAsync(id);
 
-            if (Category == null)
+            if (temp == null)
                 return NotFound();
 
             try
             {
-                await _categoryService.DeleteAsync(Category);
+                await _categoryService.DeleteAsync(temp);
                 return NoContent(); // Success
             }
             catch (Exception e)
@@ -81,7 +81,7 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
             try
             {
                 await _categoryService.UpdateAsync(category);
-                return CreatedAtAction("GetCategory", new { CategoryId = category.Id }, category);
+                return CreatedAtAction("getcategory", new { Id = category.Id }, category);
             }
             catch (Exception e)
             {
@@ -89,8 +89,8 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        [Route("update")]
+        [HttpPatch]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<CategoryDto> patchDocument)
         {
             var category = await _categoryService.GetByIdAsync(id);
@@ -110,7 +110,7 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetCategory", new { CategoryId = category.Id }, category);
+            return CreatedAtAction("getcategory", new { Id = category.Id }, category);
         }
     }
 }

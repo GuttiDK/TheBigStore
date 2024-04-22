@@ -24,7 +24,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
         #endregion
 
 
-        [HttpGet("{id:int}", Name = "GetRole")]
+        [HttpGet("{id:int}", Name = "getrole")]
         public async Task<IActionResult> GetRole(int RoleId)
         {
             var temp = await _roleService.GetByIdAsync(RoleId);
@@ -45,7 +45,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             try
             {
                 role = await _roleService.CreateAsync(role);
-                return CreatedAtAction("GetRole", new { RoleId = role.Id }, role);
+                return CreatedAtAction("getrole", new { Id = role.Id }, role);
             }
             catch (Exception e)
             {
@@ -53,18 +53,18 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        [Route("remove")]
+        [HttpDelete]
+        [Route("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var Role = await _roleService.GetByIdAsync(id);
+            var temp = await _roleService.GetByIdAsync(id);
 
-            if (Role == null)
+            if (temp == null)
                 return NotFound();
 
             try
             {
-                await _roleService.DeleteAsync(Role);
+                await _roleService.DeleteAsync(temp);
                 return NoContent(); // Success
             }
             catch (Exception e)
@@ -81,7 +81,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             try
             {
                 await _roleService.UpdateAsync(role);
-                return CreatedAtAction("GetRole", new { RoleId = role.Id }, role);
+                return CreatedAtAction("getrole", new { Id = role.Id }, role);
             }
             catch (Exception e)
             {
@@ -89,8 +89,8 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        [Route("update")]
+        [HttpPatch]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<RoleDto> patchDocument)
         {
             var role = await _roleService.GetByIdAsync(id);
@@ -110,7 +110,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetRole", new { RoleId = role.Id }, role);
+            return CreatedAtAction("getrole", new { Id = role.Id }, role);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
 
 
 
-        [HttpGet("{id:int}", Name = "GetUser")]
+        [HttpGet("{id:int}", Name = "getuser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var temp = await _userService.GetByIdAsync(id);
@@ -48,7 +48,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             try
             {
                 user = await _userService.CreateAsync(user);
-                return CreatedAtAction("GetUser", new { UserId = user.Id }, user);
+                return CreatedAtAction("getuser", new { Id = user.Id }, user);
             }
             catch (Exception e)
             {
@@ -56,8 +56,8 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        [Route("remove")]
+        [HttpDelete]
+        [Route("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -84,7 +84,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             try
             {
                 await _userService.UpdateAsync(user);
-                return CreatedAtAction("GetUser", new { UserId = user.Id }, user);
+                return CreatedAtAction("getuser", new { Id = user.Id }, user);
             }
             catch (Exception e)
             {
@@ -92,8 +92,8 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        [Route("update")]
+        [HttpPatch]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<UserDto> patchDocument)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -113,7 +113,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetUser", new { UserId = user.Id }, user);
+            return CreatedAtAction("getuser", new { Id = user.Id }, user);
         }
     }
 }

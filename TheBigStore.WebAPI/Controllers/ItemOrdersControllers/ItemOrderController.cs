@@ -24,7 +24,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemOrdersControllers
         #endregion
 
 
-        [HttpGet("{id:int}", Name = "GetItemOrders")]
+        [HttpGet("{id:int}", Name = "getitemorders")]
         public async Task<IActionResult> GetItemOrdersByOrderId(int id)
         {
             var temp = await _itemOrderService.GetAllByOrderId(id);
@@ -44,7 +44,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemOrdersControllers
             try
             {
                 await _itemOrderService.CreateListAsync(itemOrders);
-                return CreatedAtAction("GetItemOrders", itemOrders);
+                return CreatedAtAction("getitemorders", itemOrders);
             }
             catch (Exception e)
             {
@@ -52,18 +52,18 @@ namespace TheBigStore.WebAPI.Controllers.ItemOrdersControllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        [Route("remove")]
+        [HttpDelete]
+        [Route("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var itemOrder = await _itemOrderService.GetByIdAsync(id);
+            var temp = await _itemOrderService.GetByIdAsync(id);
 
-            if (itemOrder == null)
+            if (temp == null)
                 return NotFound();
 
             try
             {
-                await _itemOrderService.DeleteAsync(itemOrder);
+                await _itemOrderService.DeleteAsync(temp);
                 return NoContent(); // Success
             }
             catch (Exception e)
@@ -80,7 +80,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemOrdersControllers
             try
             {
                 await _itemOrderService.UpdateAsync(itemOrder);
-                return CreatedAtAction("GetItemOrder", new { ItemOrderId = itemOrder.Id }, itemOrder);
+                return CreatedAtAction("getitemorder", new { Id = itemOrder.Id }, itemOrder);
             }
             catch (Exception e)
             {
@@ -88,8 +88,8 @@ namespace TheBigStore.WebAPI.Controllers.ItemOrdersControllers
             }
         }
 
-        [HttpPatch("{id:int}")]
-        [Route("update")]
+        [HttpPatch]
+        [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<ItemOrderDto> patchDocument)
         {
             var itemOrder = await _itemOrderService.GetByIdAsync(id);
@@ -109,7 +109,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemOrdersControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("GetItemOrder", new { ItemOrderId = itemOrder.Id }, itemOrder);
+            return CreatedAtAction("getitemorder", new { Id = itemOrder.Id }, itemOrder);
         }
     }
 }

@@ -24,8 +24,8 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
         #endregion
 
         // Get GetPagnatedList of users with int for page and int count for page size
-        [HttpGet(Name = "GetPagnatedList")]
-        [Route("GetPagnatedList")]
+        [HttpGet]
+        [Route("getpagnatedlist")]
         public async Task<IActionResult> GetPagnatedList(int page, int count)
         {
             var temp = await _roleService.GetPagnatedList(page, count);
@@ -39,6 +39,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
         }
 
         [HttpGet]
+        [Route("get")]
         public async Task<IEnumerable<RoleDto>> Get()
         {
             return await _roleService.GetAllAsync();
