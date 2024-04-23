@@ -11,8 +11,18 @@ using TheBigStore.Service.Services.OrderServices;
 using TheBigStore.Service.Services.UserServices;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+using var logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 builder.Services.AddScoped<MappingService>();
@@ -67,6 +77,9 @@ builder.Services.AddDbContext<TheBigStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
 
 builder.Services.AddControllers();
+
+builder.Logging.AddConsole();
+builder.Logging.AddEventLog();
 
 var app = builder.Build();
 
