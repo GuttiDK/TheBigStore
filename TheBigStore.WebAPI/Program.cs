@@ -67,7 +67,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-    //options.SerializerSettings.MaxDepth = 2;
 });
 
 builder.Services.AddEndpointsApiExplorer();

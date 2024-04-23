@@ -53,6 +53,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return UnprocessableEntity(e.Message);
             }
         }
@@ -89,6 +90,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return UnprocessableEntity(e.Message);
             }
         }

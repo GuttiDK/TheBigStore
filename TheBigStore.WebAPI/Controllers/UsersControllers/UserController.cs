@@ -39,6 +39,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
                 return Ok(temp);
             }
 
+            _logger.LogError("User not found");
             return NotFound();
         }
 
@@ -56,6 +57,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return UnprocessableEntity(e.Message);
             }
         }
@@ -92,6 +94,7 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return UnprocessableEntity(e.Message);
             }
         }

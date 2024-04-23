@@ -37,6 +37,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
                 return Ok(temp);
             }
 
+            _logger.LogError("Role not found");
             return NotFound();
         }
 
@@ -54,6 +55,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return UnprocessableEntity(e.Message);
             }
         }
@@ -90,6 +92,7 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return UnprocessableEntity(e.Message);
             }
         }

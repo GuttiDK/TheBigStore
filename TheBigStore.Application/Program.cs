@@ -68,7 +68,6 @@ builder.Services.AddRazorPages().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-    //options.SerializerSettings.MaxDepth = 2;
 });
 
 // Add services to the container.

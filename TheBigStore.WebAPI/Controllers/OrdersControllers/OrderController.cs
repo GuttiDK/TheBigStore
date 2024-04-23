@@ -41,6 +41,7 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
                 return Ok(temp);
             }
 
+            _logger.LogError("Order not found");
             return NotFound();
         }
 
@@ -94,6 +95,7 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return UnprocessableEntity(e.Message);
             }
         }
