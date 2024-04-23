@@ -30,7 +30,10 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             return await _itemService.GetAllAsync();
         }
 
-        // Get GetPagnatedList of users with int for page and int count for page size
+        /// <summary>
+        /// Get List of all products in DB.
+        /// </summary>
+        /// <returns>Product Object</returns>
         [HttpGet]
         [Route("getpagnatedlist")]
         public async Task<IActionResult> GetPagnatedList(int page, int count)
@@ -43,6 +46,25 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             }
 
             return BadRequest();
+        }
+
+        /// <summary>
+        /// Get a List of products by search title.
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns>list of products</returns>
+        [HttpGet]
+        [Route("search/{searchString}")]
+        public async Task<IActionResult> SearchProducts(string searchString)
+        {
+            var temp = await _itemService.SearchProductByWord(searchString);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return NotFound();
         }
     }
 }

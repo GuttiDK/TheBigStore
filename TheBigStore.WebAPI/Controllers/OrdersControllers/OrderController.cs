@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using TheBigStore.Repository.Models;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
+using TheBigStore.WebAPI.Extensions;
+using TheBigStore.WebAPI.Models;
 
 namespace TheBigStore.WebAPI.Controllers.OrdersControllers
 {
@@ -44,12 +47,14 @@ namespace TheBigStore.WebAPI.Controllers.OrdersControllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(OrderDto order)
+        public async Task<IActionResult> Create(OrderModel order)
         {
+            var orderDto = order.MapOrderToDto();
+
             try
             {
-                order = await _orderService.CreateAsync(order);
-                return CreatedAtAction("getorder", new { OrderId = order.Id }, order);
+                orderDto = await _orderService.CreateAsync(orderDto);
+                return CreatedAtAction("getorder", new { OrderId = orderDto.Id }, orderDto);
             }
             catch (Exception e)
             {

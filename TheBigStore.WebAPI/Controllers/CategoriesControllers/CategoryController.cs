@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
+using TheBigStore.WebAPI.Extensions;
+using TheBigStore.WebAPI.Models;
 
 namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
 {
@@ -40,12 +42,14 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(CategoryDto Category)
+        public async Task<IActionResult> Create(CategoryModel category)
         {
+            var categoryDto = category.MapCategoryToDto();
+
             try
             {
-                Category = await _categoryService.CreateAsync(Category);
-                return CreatedAtAction("getcategory", new { Id = Category.Id }, Category);
+                categoryDto = await _categoryService.CreateAsync(categoryDto);
+                return CreatedAtAction("getcategory", new { Id = categoryDto.Id }, categoryDto);
             }
             catch (Exception e)
             {

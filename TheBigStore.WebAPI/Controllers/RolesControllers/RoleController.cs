@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using TheBigStore.Repository.Models;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
+using TheBigStore.WebAPI.Extensions;
+using TheBigStore.WebAPI.Models;
 
 namespace TheBigStore.WebAPI.Controllers.RolesControllers
 {
@@ -40,12 +43,14 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(RoleDto role)
+        public async Task<IActionResult> Create(RoleModel role)
         {
+            var roleDto = role.MapRoleToDto();
+
             try
             {
-                role = await _roleService.CreateAsync(role);
-                return CreatedAtAction("getrole", new { Id = role.Id }, role);
+                roleDto = await _roleService.CreateAsync(roleDto);
+                return CreatedAtAction("getrole", new { Id = roleDto.Id }, roleDto);
             }
             catch (Exception e)
             {

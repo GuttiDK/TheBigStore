@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
+using TheBigStore.WebAPI.Extensions;
+using TheBigStore.WebAPI.Models;
 
 namespace TheBigStore.WebAPI.Controllers.ItemsControllers
 {
@@ -40,12 +42,14 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(ItemDto item)
+        public async Task<IActionResult> Create(ItemModel item)
         {
+            var itemDto = item.MapItemToDto();
+
             try
             {
-                item = await _itemService.CreateAsync(item);
-                return CreatedAtAction("getitem", new { itemId = item.Id }, item);
+                itemDto = await _itemService.CreateAsync(itemDto);
+                return CreatedAtAction("getitem", new { itemId = itemDto.Id }, itemDto);
             }
             catch (Exception e)
             {

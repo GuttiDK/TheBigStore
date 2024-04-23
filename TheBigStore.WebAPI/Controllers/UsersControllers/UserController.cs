@@ -2,6 +2,8 @@
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 using Microsoft.AspNetCore.JsonPatch;
+using TheBigStore.WebAPI.Models;
+using TheBigStore.WebAPI.Extensions;
 
 namespace TheBigStore.WebAPI.Controllers.UsersControllers
 {
@@ -43,12 +45,14 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(UserDto user)
+        public async Task<IActionResult> Create(UserModel user)
         {
+            var userDto = user.MapUserToDto();
+
             try
             {
-                user = await _userService.CreateAsync(user);
-                return CreatedAtAction("getuser", new { Id = user.Id }, user);
+                userDto = await _userService.CreateAsync(userDto);
+                return CreatedAtAction("getuser", new { Id = userDto.Id }, userDto);
             }
             catch (Exception e)
             {

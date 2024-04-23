@@ -27,4 +27,8 @@
     <ProjectReference Include="..\TheBigStore.Service\TheBigStore.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>
