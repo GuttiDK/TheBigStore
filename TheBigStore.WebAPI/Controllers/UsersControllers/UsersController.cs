@@ -38,19 +38,6 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
 
             return BadRequest();
         }
-        
-
-
-
-        [HttpGet]
-        [Route("getasync")]
-        public async IAsyncEnumerable<UserDto> GetAsync()
-        {
-            foreach (var user in await _userService.GetAllAsync())
-            {
-                yield return user;
-            }
-        }
 
         [HttpGet]
         [Route("get")]
