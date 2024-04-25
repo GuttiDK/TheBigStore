@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBigStore.Application", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBigStore.WebAPI", "TheBigStore.WebAPI\TheBigStore.WebAPI.csproj", "{C43933B8-AD0C-44BC-B35F-16D5CF8949DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheBigStore.Blazor", "TheBigStore.Blazor\TheBigStore.Blazor.csproj", "{8F3AA310-3EF3-45B4-BFB4-F477C9930D0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBigStore.Blazor", "TheBigStore.Blazor\TheBigStore.Blazor.csproj", "{8F3AA310-3EF3-45B4-BFB4-F477C9930D0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

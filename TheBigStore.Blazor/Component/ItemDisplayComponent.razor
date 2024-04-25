@@ -1,0 +1,89 @@
+﻿<section class="text-center">
+    <div>
+        <p class="lead text-muted">Something short and leading about the collection below—its contents</p>
+    </div>
+</section>
+<body>
+    <main class="row gx-2 gy-3 ms-1">
+
+        @if (Items != null && Items.Items.Any())
+        {
+            @foreach (var item in Items.Items)
+            {
+                <div class="d-inline-flex col-3">
+                    <div class="card shadow-sm border-dark ">
+                        @if (item.Image != null)
+                        {
+                            <img src="@item.Image.ImageUrl" class="border-dark" width="300" height="300">
+                        }
+                        else
+                        {
+                            <img src="~/Images/NoImage.jpg" class="border-dark" width="300" height="300">
+                        }
+                        <div class="card-body border-dark">
+                            <div>
+                                <p class="card-title">@item.ItemName</p>
+                                <small class="float-end">@item.Price.ToString("C")</small>
+                            </div>
+                            <p class="card-text text-truncate" style="max-width: 250px;">@item.Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group ms-4">
+                                    <form method="post" asp-page-handler="AddToCart">
+                                        <input type="hidden" asp-for="productId" value="@item.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-success">Add Cart</button>
+                                    </form>
+                                    <a type="button" href="/Customer/Products/Detail/@item.Id" class="btn btn-sm btn-outline-dark ms-4">See more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <form method="post">
+                <nav class="d-flex justify-content-between">
+                    <ul class="pagination">
+                        <li class="page-item"><input type="submit" asp-page-handler="Search" asp-route-CurrentPage="@(CurrentPage - 1)" class="page-link" value="Previous" /></li>
+                        @for (int i = 1; i <= Items.PageCount; i++)
+                        {
+                            <li class="page-item"><input type="submit" asp-page-handler="Search" asp-route-CurrentPage="@i" value="@i" class="page-link" /></li>
+                        }
+                        <li class="page-item"><input class="page-link" type="submit" asp-page-handler="Search" asp-route-CurrentPage="@(CurrentPage + 1)" value="Next" /></li>
+                    </ul>
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <select asp-for="PageSize" onchange="document.forms['pageSizeForm'].submit()" class="form-select-sm h-100">
+                                <option value="8">8</option>
+                                <option value="16">16</option>
+                                <option value="24">24</option>
+                            </select>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                No items found.
+            </div>
+        }
+    </main>
+</body>
+
+@code {
+    [Parameter]
+    public PageDto<ItemDto> Items { get; set; }
+    [Parameter]
+    public List<ImageDto> Images { get; set; }
+
+    [Parameter]
+    public int productId { get; set; }
+
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public int PageSize { get; set; }
+
+
+}
