@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using TheBigStore.Repository.Domain;
 using TheBigStore.Repository.Extensions;
-using TheBigStore.Repository.Extensions.Paging;
 using TheBigStore.Repository.Interfaces.GenericInterfaces;
 using TheBigStore.Repository.Models;
+using TheBigStore.Repository.Models.Paging;
 
 namespace TheBigStore.Repository.Repositories.GenericRepositories
 {
@@ -73,7 +73,14 @@ namespace TheBigStore.Repository.Repositories.GenericRepositories
         public async Task<Page<E>> GetPagnatedList(int page, int count)
         {
             var query = _dbContext.Set<E>().AsNoTracking();
-            return new Page<E> { Total = query.Count(), Items = await query.Page(page, count).ToListAsync(), CurrentPage = page, PageSize = count };
+            Page<E> pageResult = new()
+            { 
+                Total = query.Count(), 
+                Items = await query.Page(page, count).ToListAsync(), 
+                CurrentPage = page, 
+                PageSize = count 
+            };
+            return pageResult;
         }
 
     }

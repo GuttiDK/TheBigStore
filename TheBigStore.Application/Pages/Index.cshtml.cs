@@ -1,12 +1,8 @@
-using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
-using System.Collections.ObjectModel;
 using TheBigStore.Application.SessionHelper;
-using TheBigStore.Repository.Extensions.Paging;
 using TheBigStore.Service.DataTransferObjects;
-using TheBigStore.Service.Extensions.Paging;
+using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 

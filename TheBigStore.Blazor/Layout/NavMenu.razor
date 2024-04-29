@@ -1,4 +1,13 @@
-﻿﻿<nav class="navbar navbar-expand-lg bg-body-tertiary">
+﻿@using TheBigStore.Blazor.Utility
+@using System.Text.Json;
+@using TheBigStore.Blazor.Models
+@inject NavigationManager _navigationManager
+@inject IndexedDbAccessor _indexedDbAccessor
+@inject CookieAccessor _cookieAccessor
+@inject LocalStorage _localStorage
+
+<script src="https://kit.fontawesome.com/b87b53de45.js" crossorigin="anonymous"></script>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="/Images/GPlo.png" alt="Bootstrap" width="30" height="24">
@@ -7,24 +16,45 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
+            <div class="col-10">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page">Home</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-2 justify-content-end">
+                <ul class="navbar-nav">
+                    <li>
+                        <a @onclick='() => _navigationManager.NavigateTo("/Cart")' class="p-0 pt-2 ps-1 nav-link" style="cursor:pointer">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="badge badge-warning" style="transform: translate(-10px,-10px);">
+                                <span class="badge bg-primary">@CartExtension.CartCount</span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
 
-@code {
+@using TheBigStore.Blazor.Extensions
 
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        string? storage = await _localStorage.GetValueAsync<string>("Cart");
+
+        if (storage != null)
+        {
+            var storedValue = JsonSerializer.Deserialize<List<Item>>(storage);
+            CartExtension.CartCount = storedValue.Sum(wi => wi.Quantity);
+        }
+        else
+        {
+            CartExtension.CartCount = 0;
+        }
+        await base.OnInitializedAsync();
+    }
 }

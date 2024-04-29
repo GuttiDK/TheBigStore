@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using TheBigStore.Repository.Extensions.Paging;
+using TheBigStore.Repository.Models.Paging;
 
 namespace TheBigStore.Repository.Interfaces.GenericInterfaces
 {

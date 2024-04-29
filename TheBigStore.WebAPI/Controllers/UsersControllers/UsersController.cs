@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Service.DataTransferObjects;
-using TheBigStore.Service.Extensions.Paging;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.WebAPI.Controllers.UsersControllers

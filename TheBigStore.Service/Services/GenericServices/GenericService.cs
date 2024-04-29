@@ -1,5 +1,5 @@
 ﻿using TheBigStore.Repository.Interfaces.GenericInterfaces;
-using TheBigStore.Service.Extensions.Paging;
+using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.GenericInterfaces;
 using TheBigStore.Service.Services.MappingServices;
 

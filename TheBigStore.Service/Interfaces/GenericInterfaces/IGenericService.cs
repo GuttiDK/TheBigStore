@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using TheBigStore.Service.Extensions.Paging;
+using TheBigStore.Service.DataTransferObjects.Paging;
 
 namespace TheBigStore.Service.Interfaces.GenericInterfaces
 {

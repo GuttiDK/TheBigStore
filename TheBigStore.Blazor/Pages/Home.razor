@@ -1,28 +1,63 @@
-﻿
-﻿@page "/"
+﻿@using TheBigStore.Blazor.Service.Intefaces
 
+@inject NotificationService _notificationService
+@inject NavigationManager _navigationManager
+
+
+
+@page "/"
 <PageTitle>Home</PageTitle>
 
-<h1>@currentCount</h1>
+<div class="container">
+    <div class="row border-bottom border-primary">
+        <div class="col-8">
+            <h1>Catalog</h1>
+        </div>
+        <div class="col-4">
+            <form method="post" asp-page-handler="Search">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search for product ID or Name" name="searchQuery">
+                    <button class="btn btn-primary toggleLoader" type="submit"><i class="bi bi-search"></i> Search</button>
+                </div>
+            </form>
 
-<RadzenButton Text="Count -" Click="@(() => DecrementCount())" />
-<RadzenButton Text="Count +" Click="@(() => IncrementCount())" />
+        </div>
+    </div>
 
-Welcome to your new app.
+    <div class="row mt-2">
+        @foreach (var category in Categories)
+        {
+            <div class="col-4 mt-2">
+                <RadzenButton class="col-12" Variant="Variant.Outlined" Click=@(() => _navigationManager.NavigateTo("/ItemView/" + category.Id)) Text="@category.CategoryName" ButtonStyle="ButtonStyle.Primary" />
+            </div>
+        }
+    </div>
+
+    <div class="mb-2 mt-2">
+        <hr />
+    </div>
+    <div class="text-center">
+        <h2>Featured Items</h2>
+    </div>
+    <TheBigStore.Blazor.Component.ItemDisplayComponent Items="FeaturedItems" />
+
+</div>
 
 @code {
+    @using TheBigStore.Blazor.Models
 
-    int currentCount = 0;
+    @inject ICategoryService _categoryService
+    @inject IItemService _itemService
 
-    void IncrementCount()
+    public List<Category> Categories { get; set; } = new();
+    public List<Item> FeaturedItems { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        Categories = await _categoryService.GetAllCategoriesAsync();
+        FeaturedItems = await _itemService.GetFeaturedItemsAsync();
     }
 
-    void DecrementCount()
-    {
-        currentCount--;
-    }
 
 
 }

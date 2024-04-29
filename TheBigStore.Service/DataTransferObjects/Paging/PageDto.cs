@@ -1,8 +1,8 @@
-﻿namespace TheBigStore.Repository.Extensions.Paging
+﻿namespace TheBigStore.Service.DataTransferObjects.Paging
 {
-    public class Page<E>
+    public class PageDto<E>
     {
-        public List<E> Items { get; set; } = [];
+        public List<E> Items { get; set; }
         public int Total { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 10;

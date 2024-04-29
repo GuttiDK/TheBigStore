@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
 using TheBigStore.Repository.Domain;
-using TheBigStore.Repository.Extensions;
-using TheBigStore.Repository.Extensions.Paging;
 using TheBigStore.Repository.Interfaces.OrderInterfaces;
 using TheBigStore.Repository.Models;
 using TheBigStore.Repository.Repositories.GenericRepositories;
