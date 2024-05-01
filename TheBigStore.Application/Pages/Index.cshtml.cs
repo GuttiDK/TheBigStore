@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TheBigStore.Application.SessionHelper;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
@@ -36,7 +37,12 @@ namespace TheBigStore.Application.Pages
 
         public async Task OnGetAsync(int page = 1, int count = 8)
         {
-            Items = await _itemService.GetPagnatedList(page, count);
+            PageOptions options = new()
+            {
+                CurrentPage = page,
+                PageSize = count
+            };
+            Items = await _itemService.GetPagnatedList(options);
             Images = await _imageService.GetAllAsync();
 
             foreach (var item in Items.Items)

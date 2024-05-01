@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Repository.Models.Paging;
 
 namespace TheBigStore.Repository.Interfaces.GenericInterfaces
@@ -56,9 +57,8 @@ namespace TheBigStore.Repository.Interfaces.GenericInterfaces
         /// <summary>
         /// Gets a pagnated list of entities
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="count"></param>
+        /// <param name="options"></param>
         /// <returns>Returns a page</returns>
-        Task<Page<E>> GetPagnatedList(int page, int count);
+        Task<Page<E>> GetPagnatedList(PageOptions options);
     }
 }

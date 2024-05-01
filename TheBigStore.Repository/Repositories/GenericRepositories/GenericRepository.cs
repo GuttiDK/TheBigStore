@@ -70,15 +70,15 @@ namespace TheBigStore.Repository.Repositories.GenericRepositories
             return entity;
         }
 
-        public async Task<Page<E>> GetPagnatedList(int page, int count)
+        public async Task<Page<E>> GetPagnatedList(PageOptions options)
         {
             var query = _dbContext.Set<E>().AsNoTracking();
             Page<E> pageResult = new()
             { 
                 Total = query.Count(), 
-                Items = await query.Page(page, count).ToListAsync(), 
-                CurrentPage = page, 
-                PageSize = count 
+                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(), 
+                CurrentPage = options.CurrentPage, 
+                PageSize = options.PageSize 
             };
             return pageResult;
         }

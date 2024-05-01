@@ -1,5 +1,6 @@
-﻿using TheBigStore.Repository.Models;
+﻿using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
+using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.GenericInterfaces;
 
 namespace TheBigStore.Service.Interfaces.OrderInterfaces
@@ -19,5 +20,6 @@ namespace TheBigStore.Service.Interfaces.OrderInterfaces
         /// <returns>Returns categories</returns>
         Task<List<CategoryDto>> GetAllCategories();
 
+        Task<PageDto<ItemDto>> GetItemsByCategory(int categoryId, PageOptions options);
     }
 }

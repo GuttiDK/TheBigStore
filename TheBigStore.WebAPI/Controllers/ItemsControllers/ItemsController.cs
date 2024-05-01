@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 
@@ -38,7 +39,12 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
         [Route("getpagnatedlist")]
         public async Task<IActionResult> GetPagnatedList(int page, int count)
         {
-            var temp = await _itemService.GetPagnatedList(page, count);
+            PageOptions options = new()
+            {
+                CurrentPage = page,
+                PageSize = count
+            };
+            var temp = await _itemService.GetPagnatedList(options);
 
             if (temp != null)
             {

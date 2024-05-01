@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TheBigStore.Repository.Domain;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Repository.Interfaces.OrderInterfaces;
 using TheBigStore.Repository.Models;
+using TheBigStore.Repository.Models.Paging;
 using TheBigStore.Repository.Repositories.GenericRepositories;
 
 namespace TheBigStore.Repository.Repositories.OrderRepositories
@@ -37,6 +40,22 @@ namespace TheBigStore.Repository.Repositories.OrderRepositories
         public async Task<List<Category>> GetAllCategories()
         {
             return await _dbContext.Categories.ToListAsync();
+        }
+
+        public async Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options)
+        {
+            var query = _dbContext.Products.AsNoTracking()
+                .Include(s => s.Category)
+                .Where(s => s.CategoryId == categoryId);
+
+            Page<Item> pageResult = new()
+            {
+                Total = query.Count(),
+                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(),
+                CurrentPage = options.CurrentPage,
+                PageSize = options.PageSize
+            };
+            return pageResult;
         }
 
     }

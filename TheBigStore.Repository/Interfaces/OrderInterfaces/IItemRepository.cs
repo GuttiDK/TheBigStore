@@ -1,5 +1,7 @@
-﻿using TheBigStore.Repository.Interfaces.GenericInterfaces;
+﻿using TheBigStore.Repository.Extensions;
+using TheBigStore.Repository.Interfaces.GenericInterfaces;
 using TheBigStore.Repository.Models;
+using TheBigStore.Repository.Models.Paging;
 
 namespace TheBigStore.Repository.Interfaces.OrderInterfaces
 {
@@ -17,5 +19,7 @@ namespace TheBigStore.Repository.Interfaces.OrderInterfaces
         /// </summary>
         /// <returns>List of all categories</returns>
         Task<List<Category>> GetAllCategories();
+
+        Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options);
     }
 }

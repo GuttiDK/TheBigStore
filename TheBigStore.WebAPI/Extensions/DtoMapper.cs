@@ -36,7 +36,7 @@ namespace TheBigStore.WebAPI.Extensions
                     ItemId = item.ItemId,
                     OrderId = item.OrderId,
                     Quantity = item.Quantity,
-                    Status = (Service.Enums.OrderStatusEnumDto)item.Status,
+                    Status = item.Status,
                 });
             }
 
@@ -48,7 +48,7 @@ namespace TheBigStore.WebAPI.Extensions
             return new OrderDto
             {
                 OrderDate = order.OrderDate,
-                Status = (Service.Enums.OrderStatusEnumDto)order.Status,
+                Status = order.Status,
                 CustomerId = order.CustomerId
             };
         }
