@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using TheBigStore.Repository.Domain;
+using TheBigStore.Repository.Enums;
 using TheBigStore.Repository.Extensions;
 using TheBigStore.Repository.Interfaces.OrderInterfaces;
 using TheBigStore.Repository.Models;
 using TheBigStore.Repository.Models.Paging;
 using TheBigStore.Repository.Repositories.GenericRepositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TheBigStore.Repository.Repositories.OrderRepositories
 {
@@ -42,22 +44,6 @@ namespace TheBigStore.Repository.Repositories.OrderRepositories
             return await _dbContext.Categories.ToListAsync();
         }
 
-        public async Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options)
-        {
-            var query = _dbContext.Products.AsNoTracking()
-                .Include(s => s.Category)
-                .Where(s => s.CategoryId == categoryId);
-
-            Page<Item> pageResult = new()
-            {
-                Total = query.Count(),
-                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(),
-                CurrentPage = options.CurrentPage,
-                PageSize = options.PageSize
-            };
-            return pageResult;
-        }
-
         // Check stock of an item with amount and id and returns bool
         public async Task<bool> CheckStock(int id, int amount)
         {
@@ -84,6 +70,66 @@ namespace TheBigStore.Repository.Repositories.OrderRepositories
                 return item;
             }
             return new Item();
+        }
+
+        public async Task<List<Item>> GetItemsbyCategory(int categoryId)
+        {
+            return await _dbContext.Products.AsNoTracking()
+                .Include(c => c.Category)
+                .Where(i => i.Category.Id == categoryId)
+                .Include(s => s.Image)
+                .ToListAsync();
+        }
+
+        public async Task<Page<Item>> GetItemsbyCategory(string category, PageOptions options)
+        {
+            var query = _dbContext.Products.AsNoTracking()
+                .Include(c => c.Category)
+                .Where(i => i.Category.CategoryName == category)
+                .Include(s => s.Image);
+
+            Page<Item> pageResult = new()
+            {
+                Total = query.Count(),
+                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(),
+                CurrentPage = options.CurrentPage,
+                PageSize = options.PageSize
+            };
+            return pageResult;
+        }
+
+        public async Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options)
+        {
+            var query = _dbContext.Products.AsNoTracking()
+                .Include(s => s.Category)
+                .Where(s => s.CategoryId == categoryId);
+
+            Page<Item> pageResult = new()
+            {
+                Total = query.Count(),
+                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(),
+                CurrentPage = options.CurrentPage,
+                PageSize = options.PageSize
+            };
+            return pageResult;
+        }
+
+        public async Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options, OrderByOptionsItem orderBy)
+        {
+            var query = _dbContext.Products.AsNoTracking()
+                .Include(s => s.Category)
+                .Include(s => s.Image)
+                .Where(s => s.CategoryId == categoryId)
+                .OrderItemsBy(orderBy);
+
+            Page<Item> pageResult = new()
+            {
+                Total = query.Count(),
+                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(),
+                CurrentPage = options.CurrentPage,
+                PageSize = options.PageSize
+            };
+            return pageResult;
         }
 
     }

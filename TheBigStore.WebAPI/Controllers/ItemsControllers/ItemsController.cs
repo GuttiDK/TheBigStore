@@ -45,6 +45,20 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             return await _itemService.GetItemsByCategory(categoryId, pageOptions);
         }
 
+        [HttpGet]
+        [Route("GetFeaturedItems")]
+        public async Task<IEnumerable<ItemDto>> GetFeatured()
+        {
+            return _itemService.GetAllAsync().Result.Take(8);
+        }
+
+        [HttpGet]
+        [Route("GetItemsByCategory/{categoryId:int}")]
+        public async Task<IEnumerable<ItemDto>> GetByCategory(int categoryId)
+        {
+            return await _itemService.GetItemsByCategory(categoryId);
+        }
+
         /// <summary>
         /// Get List of all products in DB.
         /// </summary>

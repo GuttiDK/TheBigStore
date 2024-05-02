@@ -1,6 +1,7 @@
 ﻿using TheBigStore.Blazor.Models;
 using TheBigStore.Blazor.Service.Intefaces;
 using System.Net.Http.Json;
+using Newtonsoft.Json;
 
 namespace TheBigStore.Blazor.Service.Services
 {
@@ -15,8 +16,7 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            var Request = "api/Categories/get";
-
+            var Request = "/api/Categories/get";
             return await _client.GetFromJsonAsync<List<Category>>(Request);
         }
 

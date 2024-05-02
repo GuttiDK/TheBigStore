@@ -1,4 +1,5 @@
-﻿using TheBigStore.Repository.Extensions;
+﻿using TheBigStore.Repository.Enums;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Repository.Interfaces.GenericInterfaces;
 using TheBigStore.Repository.Models;
 using TheBigStore.Repository.Models.Paging;
@@ -20,10 +21,18 @@ namespace TheBigStore.Repository.Interfaces.OrderInterfaces
         /// <returns>List of all categories</returns>
         Task<List<Category>> GetAllCategories();
 
-        Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options);
-
         Task<bool> CheckStock(int id, int amount);
 
         Task<Item> UpdateStock(int id, int amount);
+
+        /// <summary>
+        /// Get all items by category
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Item>> GetItemsbyCategory(int categoryId);
+        Task<Page<Item>> GetItemsbyCategory(string category, PageOptions options);
+        Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options);
+        Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options, OrderByOptionsItem orderBy);
+
     }
 }

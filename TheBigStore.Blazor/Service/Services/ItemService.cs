@@ -27,7 +27,7 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<List<Item>> GetFeaturedItemsAsync()
         {
-            var Request = "/api/items/GetFeaturedItems";
+            var Request = "/api/items/getfeatureditems";
 
             return await _client.GetFromJsonAsync<List<Item>>(Request);
         }
