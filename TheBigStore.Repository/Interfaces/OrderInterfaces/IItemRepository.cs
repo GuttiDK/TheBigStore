@@ -21,5 +21,9 @@ namespace TheBigStore.Repository.Interfaces.OrderInterfaces
         Task<List<Category>> GetAllCategories();
 
         Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options);
+
+        Task<bool> CheckStock(int id, int amount);
+
+        Task<Item> UpdateStock(int id, int amount);
     }
 }

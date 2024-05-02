@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
+using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 
 namespace TheBigStore.WebAPI.Controllers.ItemsControllers
@@ -31,9 +32,24 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             return await _itemService.GetAllAsync();
         }
 
+        [HttpGet]
+        [Route("getfeatureditemsbycategory/{categoryId:int}/{page:int}/{pagesize:int}")]
+        public async Task<PageDto<ItemDto>> GetFeaturedByCategory(int categoryId, int page, int pagesize)
+        {
+            PageOptions pageOptions = new()
+            {
+                CurrentPage = page,
+                PageSize = pagesize
+            };
+
+            return await _itemService.GetItemsByCategory(categoryId, pageOptions);
+        }
+
         /// <summary>
         /// Get List of all products in DB.
         /// </summary>
+        /// <param name="count"></param>
+        /// <param name="page"></param>
         /// <returns>Product Object</returns>
         [HttpGet]
         [Route("getpagnatedlist")]

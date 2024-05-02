@@ -58,5 +58,33 @@ namespace TheBigStore.Repository.Repositories.OrderRepositories
             return pageResult;
         }
 
+        // Check stock of an item with amount and id and returns bool
+        public async Task<bool> CheckStock(int id, int amount)
+        {
+            var item = await _dbContext.Products.FirstOrDefaultAsync(i => i.Id == id);
+            if (item.Stock >= amount)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        // Update stock of an item with amount and id and return the item
+        public async Task<Item> UpdateStock(int id, int amount)
+        {
+            var item = await _dbContext.Products.FirstOrDefaultAsync(i => i.Id == id);
+            if (item != null)
+            {
+                item.Stock -= amount;
+                await _dbContext.SaveChangesAsync();
+                return item;
+            }
+            return new Item();
+        }
+
     }
 }

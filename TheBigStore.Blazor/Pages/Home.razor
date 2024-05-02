@@ -1,4 +1,4 @@
-﻿@using TheBigStore.Blazor.Service.Intefaces
+﻿﻿@using TheBigStore.Blazor.Service.Intefaces
 
 @inject NotificationService _notificationService
 @inject NavigationManager _navigationManager
@@ -9,6 +9,7 @@
 <PageTitle>Home</PageTitle>
 
 <div class="container">
+    
     <div class="row border-bottom border-primary">
         <div class="col-8">
             <h1>Catalog</h1>
@@ -23,7 +24,12 @@
 
         </div>
     </div>
-
+    @if (isLoading)
+    {
+        <RadzenStack AlignItems="AlignItems.Center" Class="rz-m-12" Gap="2rem">
+            <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />  
+        </RadzenStack>
+    }
     <div class="row mt-2">
         @foreach (var category in Categories)
         {
@@ -51,11 +57,14 @@
 
     public List<Category> Categories { get; set; } = new();
     public List<Item> FeaturedItems { get; set; } = new();
+    public bool isLoading { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         Categories = await _categoryService.GetAllCategoriesAsync();
         FeaturedItems = await _itemService.GetFeaturedItemsAsync();
+        isLoading = false;
     }
 
 

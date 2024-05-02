@@ -4,6 +4,15 @@ namespace TheBigStore.Blazor.Service.Intefaces
 {
     public interface IItemService
     {
+
+        Task<bool> CheckStock(int itemId, int amount);
+
+
+
+        Task<Item> CreateItem(Item item);
+
+        Task<Item> UpdateShopAsync(int itemId, Item newitem);
+
         /// <summary>
         /// Get all items
         /// </summary>

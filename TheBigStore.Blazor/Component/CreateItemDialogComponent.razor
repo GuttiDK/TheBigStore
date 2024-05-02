@@ -1,0 +1,78 @@
+﻿
+@using TheBigStore.Blazor.Models
+@using TheBigStore.Blazor.Service.Intefaces
+@inject IItemService _itemService
+@inject ICategoryService _categoryService
+@inject Radzen.DialogService DialogService
+
+<RadzenStack Gap="1.5rem">
+    <EditForm Model="EditItem" OnValidSubmit="SubmitAsync" FormName="Edit">
+        <DataAnnotationsValidator />
+        <div>
+            <label class="form-label fw-bold">Name</label>
+            <input type="text" class="form-control border-primary" @bind="EditItem.ItemName" />
+            <ValidationMessage For="() => EditItem.ItemName" />
+        </div>
+
+        <!-- Category dropdown -->
+        <div class="mt-2">
+            <label class="form-label fw-bold">Category</label>
+            <select class="form-select border-primary" @bind="EditItem.CategoryId">
+                @foreach (var category in Categories)
+                {
+                    <option value="@category.Id">@category.CategoryName</option>
+                }
+            </select>
+            <ValidationMessage For="() => EditItem.CategoryId" />
+        </div>
+
+        <!-- Product description -->
+        <div class="mt-2">
+            <label class="form-label fw-bold">Description</label>
+            <textarea @bind="EditItem.Description" rows="10" class="form-control border-primary"></textarea>
+            <ValidationMessage For="() => EditItem.Description" />
+        </div>
+        <div>
+            <label class="form-label fw-bold">Price</label>
+            <input type="text" class="form-control border-primary" @bind="EditItem.Price" />
+            <ValidationMessage For="() => EditItem.Price" />
+        </div>
+
+        <!-- Product images -->
+        <div class="mt-2 mb-2">
+            <label class="form-label fw-bold">New image(s)</label>
+            <RadzenFileInput Accept="image/*" @bind-Value=NewImage Placeholder="Select image(s)" />
+        </div>
+
+
+
+
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenButton Text="Create" ButtonType="ButtonType.Submit" Style="width: 80px;" />
+                <RadzenButton Text="Cancel" Click="() => DialogService.Close(false)" ButtonStyle="ButtonStyle.Light" />
+            </RadzenStack>
+        </RadzenStack>
+    </EditForm>
+</RadzenStack>
+
+@code {
+
+    public Item EditItem { get; set; } = new();
+    public List<Category> Categories { get; set; } = new();
+
+    public string NewImage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await _categoryService.GetAllCategoriesAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task SubmitAsync()
+    {
+        EditItem = await _itemService.CreateItem(EditItem);
+
+        DialogService.Close(true);
+    }
+}

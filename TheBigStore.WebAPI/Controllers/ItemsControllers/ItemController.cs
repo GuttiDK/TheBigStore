@@ -26,6 +26,36 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
         #endregion
 
 
+        // Check stock of an item with amount and id and returns bool
+        [HttpGet]
+        [Route("checkstock/{id:int}/{amount:int}")]
+        public async Task<IActionResult> CheckStock(int id, int amount)
+        {
+            var context = await _itemService.CheckStock(id, amount);
+            if (context != null)
+            {
+                return Ok(context);
+            }
+            return NotFound();
+        }
+
+        // Update stock of an item with amount and id
+        [HttpPut]
+        [Route("updatestock/{id:int}/{amount:int}")]
+        public async Task<IActionResult> UpdateStock(int id, int amount)
+        {
+            try
+            {
+                await _itemService.UpdateStock(id, amount);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return UnprocessableEntity(e.Message);
+            }
+        }
+
         [HttpGet("{id:int}", Name = "getitem")]
         public async Task<IActionResult> GetItem(int id)
         {

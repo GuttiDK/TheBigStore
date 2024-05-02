@@ -15,7 +15,7 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            var Request = "/Categories";
+            var Request = "api/Categories/get";
 
             return await _client.GetFromJsonAsync<List<Category>>(Request);
         }

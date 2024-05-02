@@ -1,0 +1,248 @@
+﻿
+@inject NotificationService _notificationService
+
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 col-lg-8 mb-4">
+                <!-- Checkout -->
+                <EditForm Model="NewUser" FormName="Checkout">
+                    <div class="card shadow-0 border">
+                        <div class="p-4">
+                            <h5 class="card-title mb-3">Checkout</h5>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <p class="mb-0">First name</p>
+                                    <div class="form-outline">
+                                        <input type="text" @bind-value="NewUser.Customer.FirstName" placeholder="Type here" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <p class="mb-0">Last name</p>
+                                    <div class="form-outline">
+                                        <input type="text" @bind-value="NewUser.Customer.LastName" placeholder="Type here" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <p class="mb-0">Phone</p>
+                                    <div class="form-outline">
+                                        <input type="tel" @bind-value="NewUser.Customer.Phone" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <p class="mb-0">Email</p>
+                                    <div class="form-outline">
+                                        <input type="email" @bind-value="NewUser.Customer.Email" placeholder="example@gmail.com" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4" />
+
+                            <h5 class="card-title mb-3">Shipping info</h5>
+
+                            <div class="row mb-3">
+                                <RadzenRadioButtonList Value=@ShippingPrice @onclick=Update TValue="int" Change=@(args => ShippingPrice = args) class="mb-5">
+                                    <Items>
+                                        <div class="col-lg-4 mb-3">
+
+                                            <div class="p-3">
+                                                <RadzenRadioButtonListItem Text="Pick Up - Free" Value="0" />
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+
+                                            <div class="p-3">
+                                                <RadzenRadioButtonListItem Text="Standard delivery - 39 DKK" Value="39" />
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 mb-3">
+
+                                            <div class="p-3">
+                                                <RadzenRadioButtonListItem Text="Express delivery - 59 DKK" Value="59" />
+                                            </div>
+
+                                        </div>
+                                    </Items>
+                                </RadzenRadioButtonList>
+
+
+                                <div class="row">
+                                    <div class="col-sm-8 mb-3">
+                                        <p class="mb-0">Street Name</p>
+                                        <div class="form-outline">
+                                            <input type="text" @bind-value="NewUser.Customer.Address.StreetName" placeholder="Type here" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <p class="mb-0">City</p>
+                                        <div class="form-outline">
+                                            <input type="text" @bind-value="NewUser.Customer.Address.City" placeholder="Type here" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 mb-3">
+                                        <p class="mb-0">Street Number</p>
+                                        <div class="form-outline">
+                                            <input type="text" @bind-value="NewUser.Customer.Address.StreetNumber" placeholder="Type here" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 col-6 mb-3">
+                                        <p class="mb-0">Postal code</p>
+                                        <div class="form-outline">
+                                            <input type="text" @bind-value="NewUser.Customer.Address.ZipCode" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-light border">Cancel</button>
+                                    @if (CookieItemProducts.Count == 0)
+                                    {
+                                        <button type="submit" class="btn btn-outline-primary shadow-0 border" disabled>Pay</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-outline-primary shadow-0 border">Pay</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+
+            </div>
+            <!-- Checkout -->
+            <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+                <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+                    <h6 class="mb-3">Summary</h6>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-2">Total price:</p>
+                        <p class="mb-2">@($"{ItemTotalPrice:C}")</p>
+                    </div>
+                    @if (DiscountDeduct != 0)
+                    {
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-2">Discount:</p>
+                            <p class="mb-2 text-danger">- @($"{DiscountDeduct:C}")</p>
+                        </div>
+                    }
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-2">Shipping cost:</p>
+                        <p class="mb-2">+ @($"{ShippingPrice:C}")</p>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-2">Total price:</p>
+                        <p class="mb-2 fw-bold">@($"{TotalPrice:C}")</p>
+                    </div>
+
+                    <div class="input-group mt-3 mb-4">
+                        <input type="text" class="form-control border" name="" placeholder="Promo code" @bind="DiscountCode" />
+                        <button @onclick='args => ApplyDiscount()' class="btn btn-light text-primary border">Apply</button>
+                    </div>
+
+                    <hr />
+                    <h6 class="text-dark my-4">Items in cart</h6>
+
+                    @foreach (var item in CookieItemProducts)
+                    {
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="me-3 position-relative">
+                                <span class="badge badge-primary" style="transform:translate(-1rem, -1rem);">
+                                    <span class="badge bg-primary">@item.Quantity</span>
+                                </span>
+                                @if (item.Image != null)
+                                {
+                                    <img src="/images/items/@item.Image.ImageUrl" style="height: 96px; width: 96x; float:left" class="img-sm rounded border" />
+                                }
+                                else
+                                {
+                                    <img src="/images/items/no_image_available.svg" style="height: 96px; width: 96x; float:left" class="img-sm rounded border" />
+                                }
+
+                            </div>
+                            <div class="">
+                                <p>
+                                    @item.ItemName <br />
+                                    @item.Category.CategoryName
+                                </p>
+                                <div class="price text-muted">
+                                    Price: @($"{(item.Price * item.Quantity):C}")
+                                </div>
+                                <div>
+                                    <button type="submit" name="itemId" value="@item.Id" class="btn-close" style="transform:translate(7.5rem, -1.5rem)"></button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@using TheBigStore.Blazor.Models
+@using TheBigStore.Blazor.Utility
+@using System.Text.Json;
+@inject LocalStorage _localStorage
+
+@code {
+    public List<Item> CookieItemProducts { get; set; } = new();
+    public Customer NewCustomer { get; set; } = new();
+    public Address NewCustomerAddress { get; set; } = new();
+    public User NewUser { get; set; } = new();
+
+    #region Checkout Values
+    public double ItemTotalPrice { get; set; } = 0;
+    public int ShippingPrice { get; set; } = 59;
+    public double DiscountDeduct { get; set; } = 0;
+    public double TotalPrice { get; set; } = 0;
+    public string DiscountCode { get; set; }
+    #endregion
+
+    private void Update()
+    {
+        TotalPrice = ItemTotalPrice + ShippingPrice - DiscountDeduct;
+    }
+
+    private void ApplyDiscount()
+    {
+        if (DiscountCode == "GREENPRINT10")
+        {
+            DiscountDeduct = ItemTotalPrice * 0.1;
+            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{DiscountCode} was applied", Duration = 4000 });
+            TotalPrice -= DiscountDeduct;
+        }
+        else
+        {
+            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = $"{DiscountCode} is not a valid code", Duration = 4000 });
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        NewUser.Customer = NewCustomer;
+        NewUser.Customer.Address = NewCustomerAddress;
+
+        var storage = await _localStorage.Get<List<Item>>("Cart");
+
+        if (storage != null)
+        {
+            CookieItemProducts = storage;
+        }
+
+        ItemTotalPrice = CookieItemProducts.Sum(x => x.Price * x.Quantity);
+        ShippingPrice = 59;
+        TotalPrice = ItemTotalPrice + ShippingPrice - DiscountDeduct;
+
+        await base.OnParametersSetAsync();
+    }
+}

@@ -43,5 +43,17 @@ namespace TheBigStore.Service.Services.OrderServices
             return pageDto;
         }
 
+        // Check stock of an item with amount and id and returns bool
+        public async Task<bool> CheckStock(int id, int amount)
+        {
+            var context = await _itemRepository.CheckStock(id, amount);
+            return context;
+        }
+
+        // Update stock of an item with amount and id
+        public async Task<ItemDto> UpdateStock(int id, int amount)
+        {
+            return _mappingService._mapper.Map<ItemDto>(await _itemRepository.UpdateStock(id, amount));
+        }
     }
 }

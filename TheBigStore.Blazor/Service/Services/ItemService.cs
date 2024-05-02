@@ -18,7 +18,7 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<Item> CreateItem(Item item)
         {
-            var response = await _client.PostAsJsonAsync("/Item/create", item);
+            var response = await _client.PostAsJsonAsync("api/item/create", item);
 
             response.EnsureSuccessStatusCode();
 
@@ -27,28 +27,28 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<List<Item>> GetFeaturedItemsAsync()
         {
-            var Request = "/Items/GetFeaturedItems";
+            var Request = "/api/items/GetFeaturedItems";
 
             return await _client.GetFromJsonAsync<List<Item>>(Request);
         }
 
         public async Task<List<Item>> GetAllItemsByCategory(int categoryId)
         {
-            var Request = $"/Items/GetItemsByCategory/{categoryId}";
+            var Request = $"/api/items/getitemsbycategory/{categoryId}";
 
             return await _client.GetFromJsonAsync<List<Item>>(Request);
         }
 
         public async Task<List<Item>> GetFeaturedItemsByCategoryAsync(int categoryId)
         {
-            var Request = $"/Items/GetFeaturedItemsByCategory/{categoryId}/1/8";
+            var Request = $"/api/items/getfeatureditemsbycategory/{categoryId}/1/8";
 
             return await _client.GetFromJsonAsync<List<Item>>(Request);
         }
 
         public async Task<Item> GetItemByIdAsync(int itemId)
         {
-            var Request = $"/Item/{itemId}";
+            var Request = $"/api/item/{itemId}";
 
             return await _client.GetFromJsonAsync<Item>(Request);
         }
@@ -63,13 +63,28 @@ namespace TheBigStore.Blazor.Service.Services
 
             StringContent stringContent = new(JsonConvert.SerializeObject(document), System.Text.Encoding.UTF8, "application/json-patch+json");
 
-            var request = new HttpRequestMessage(HttpMethod.Patch, $"/Item/update/{itemId}") { Content = stringContent };
+            var request = new HttpRequestMessage(HttpMethod.Patch, $"/item/update/{itemId}") { Content = stringContent };
 
             var response = await _client.SendAsync(request);
 
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<Item>();
+        }
+
+        public async Task<bool> CheckStock(int itemId, int amount)
+        {
+            var Request = $"/api/item/checkstock/{itemId}/{amount}";
+
+            return await _client.GetFromJsonAsync<bool>(Request);
+        }
+
+        // Update stock of an item with amount and id and return the item
+        public async Task<Item> UpdateStock(int itemId, int amount)
+        {
+            var Request = $"/api/item/updatestock/{itemId}/{amount}";
+
+            return await _client.GetFromJsonAsync<Item>(Request);
         }
     }
 }
