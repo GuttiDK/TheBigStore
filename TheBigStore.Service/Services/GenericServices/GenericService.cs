@@ -1,5 +1,6 @@
-﻿using TheBigStore.Repository.Interfaces.GenericInterfaces;
-using TheBigStore.Service.Extensions.Paging;
+﻿using TheBigStore.Repository.Extensions;
+using TheBigStore.Repository.Interfaces.GenericInterfaces;
+using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.GenericInterfaces;
 using TheBigStore.Service.Services.MappingServices;
 
@@ -43,10 +44,10 @@ namespace TheBigStore.Service.Services.GenericServices
 
 
         // GetPagnatedList should be implemented and it should return a pagnated list of entities
-        public async Task<PageDto<Dto>> GetPagnatedList(int page, int count)
+        public async Task<PageDto<Dto>> GetPagnatedList(PageOptions options)
         {
             var pageDto = new PageDto<Dto>();
-            var pageEntity = await _genericRepository.GetPagnatedList(page, count);
+            var pageEntity = await _genericRepository.GetPagnatedList(options);
             pageDto.Total = pageEntity.Total;
             pageDto.CurrentPage = pageEntity.CurrentPage;
             pageDto.PageSize = pageEntity.PageSize;

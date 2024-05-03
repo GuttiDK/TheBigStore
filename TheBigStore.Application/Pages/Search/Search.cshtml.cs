@@ -42,7 +42,7 @@ namespace TheBigStore.Application.Pages.Search
             var product = await _itemService.GetByIdAsync(productId);
 
             // Retrieve cart from session
-            var cart = HttpContext.Session.Get<List<ItemDto>>("cart") ?? new List<ItemDto>();
+            var cart = HttpContext.Session.Get<List<ItemDto>>("Cart") ?? new List<ItemDto>();
 
             // Check if the product already exists in the cart
             var existingItem = cart.FirstOrDefault(item => item.Id == product.Id);
@@ -60,7 +60,7 @@ namespace TheBigStore.Application.Pages.Search
             }
 
             // Update cart in session
-            HttpContext.Session.Set("cart", cart);
+            HttpContext.Session.Set("Cart", cart);
 
             // Redirect to checkout page
             return RedirectToPage("/Customer/Orders/Checkout");

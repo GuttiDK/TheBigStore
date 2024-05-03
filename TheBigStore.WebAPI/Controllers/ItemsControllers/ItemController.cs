@@ -26,6 +26,36 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
         #endregion
 
 
+        // Check stock of an item with amount and id and returns bool
+        [HttpGet]
+        [Route("checkstock/{id:int}/{amount:int}")]
+        public async Task<IActionResult> CheckStock(int id, int amount)
+        {
+            var context = await _itemService.CheckStock(id, amount);
+            if (context != null)
+            {
+                return Ok(context);
+            }
+            return NotFound();
+        }
+
+        // Update stock of an item with amount and id
+        [HttpPut]
+        [Route("updatestock/{id:int}/{amount:int}")]
+        public async Task<IActionResult> UpdateStock(int id, int amount)
+        {
+            try
+            {
+                await _itemService.UpdateStock(id, amount);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return UnprocessableEntity(e.Message);
+            }
+        }
+
         [HttpGet("{id:int}", Name = "getitem")]
         public async Task<IActionResult> GetItem(int id)
         {
@@ -44,12 +74,19 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
         [Route("create")]
         public async Task<IActionResult> Create(ItemModel item)
         {
-            var itemDto = item.MapItemToDto();
+            ItemDto itemDto = new()
+            {
+                ItemName = item.ItemName,
+                Description = item.Description,
+                Price = item.Price,
+                Stock = item.Stock,
+                CategoryId = item.CategoryId,
+            };
 
             try
             {
                 itemDto = await _itemService.CreateAsync(itemDto);
-                return CreatedAtAction("getitem", new { itemId = itemDto.Id }, itemDto);
+                return CreatedAtAction("getitem", new { id = itemDto.Id }, itemDto);
             }
             catch (Exception e)
             {
@@ -86,7 +123,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             try
             {
                 await _itemService.UpdateAsync(item);
-                return CreatedAtAction("getitem", new { itemId = item.Id }, item);
+                return CreatedAtAction("getitem", new { id = item.Id }, item);
             }
             catch (Exception e)
             {
@@ -96,10 +133,12 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
         }
 
         [HttpPatch]
+        [Consumes("application/json-patch+json")]
         [Route("update/{id:int}")]
         public async Task<IActionResult> EditPartially(int id, [FromBody] JsonPatchDocument<ItemDto> patchDocument)
         {
             var item = await _itemService.GetByIdAsync(id);
+            item.Category = null;
             if (item == null)
             {
                 return NotFound();
@@ -116,7 +155,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
                 return UnprocessableEntity(e.Message);
             }
 
-            return CreatedAtAction("getitem", new { itemId = item.Id }, item);
+            return CreatedAtAction("getitem", new { id = item.Id }, item);
         }
     }
 }

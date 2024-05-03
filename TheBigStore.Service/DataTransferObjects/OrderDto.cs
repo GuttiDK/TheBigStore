@@ -1,4 +1,4 @@
-﻿using TheBigStore.Service.Enums;
+﻿using TheBigStore.Repository.Enums;
 
 namespace TheBigStore.Service.DataTransferObjects
 {
@@ -9,7 +9,7 @@ namespace TheBigStore.Service.DataTransferObjects
 
         public DateTime OrderDate { get; set; }
         public DateTime DeliveryDate { get; set; } 
-        public OrderStatusEnumDto Status { get; set; }
+        public OrderStatusEnum Status { get; set; }
 
         // Navigation properties
         public List<ItemOrderDto>? ItemOrders { get; set; }

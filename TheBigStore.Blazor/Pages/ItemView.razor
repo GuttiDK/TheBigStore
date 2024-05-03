@@ -1,0 +1,93 @@
+﻿@page "/ItemView/{Id:int}"
+
+@inject NavigationManager _navigationManager
+
+<RadzenNotification />
+<div class="container">
+    <div class="row">
+        <div class="row border-bottom border-primary">
+            <h1>@Category?.CategoryName</h1>
+        </div>
+    </div>
+
+    <div class="row mt-2 col-12">
+        <RadzenDataList PageSize="3" WrapItems="true" AllowPaging="true" Data="@Items" TItem="Item" PageSizeOptions="@PageSizeOptions">
+            <Template Context="item">
+                <div class="col-3 mt-2">
+                    <div class="card">
+                        <a @onclick='() => _navigationManager.NavigateTo("/Items/Item/" + item.Id)' style="text-decoration:none;color:black;cursor:pointer">
+                            @if (item.Image != null)
+                            {
+                                <img loading="lazy" src="/Images/Items/@item.Image.ImageUrl" class="card-img-top" alt="...">
+                            }
+                            else
+                            {
+                                <img loading="lazy" src="/Images/Items/No_image_available.svg" class="card-img-top" alt="...">
+                            }
+
+                            <div class="card-body">
+                                <h5 class="card-title">@item.ItemName</h5>
+                                <p class="card-text">@item.Description</p>
+                                <p class="card-text">@($"{item.Price:C}")</p>
+                            </div>
+                        </a>
+                        <div class="card-footer text-center">
+                            <RadzenButton Shade="Shade.Lighter" Click=@(args => AddToCart(item.Id)) Text="Add To Cart" ButtonStyle="ButtonStyle.Primary" />
+                        </div>
+                    </div>
+                </div>
+            </Template>
+        </RadzenDataList>
+    </div>
+    
+</div>
+
+
+@using System.ComponentModel.DataAnnotations;
+@using TheBigStore.Blazor.Service.Interfaces;
+@using TheBigStore.Blazor.Models;
+@using TheBigStore.Blazor.Models.Enums
+@using TheBigStore.Blazor.Utility
+@using TheBigStore.Blazor.Extensions
+@inject IItemService _itemService
+@inject ICategoryService _categoryService
+@inject LocalStorage _localStorage
+@inject NotificationService _notificationService
+
+@code {
+    [Parameter]
+    public int Id { get; set; } = 0;
+
+    public int CurrentPage { get; set; } = 1;
+    public int PageSize { get; set; } = 3;
+    public int TotalPages { get; set; }
+
+    public List<Item> Items { get; set; } = new();
+    public Category Category { get; set; }
+
+
+    public int[] PageSizeOptions = new int[] { 3, 6, 9, 12, 15 };
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Category = await _categoryService.GetByIdAsync(Id);
+        Items = await _itemService.GetAllItemsByCategory(Category.Id);
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task AddToCart(int itemId)
+    {
+        var item = await _itemService.GetItemByIdAsync(itemId);
+
+        if (await _itemService.CheckStock(itemId, 1))
+        {
+            await CartExtension.AddToCart(_localStorage, _itemService, itemId);
+            StateHasChanged();
+            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{item.ItemName} was added to cart", Duration = 4000 });
+        }
+        else
+        {
+            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = $"{item.ItemName} is out of stock!", Duration = 4000 });
+        }
+    }
+}

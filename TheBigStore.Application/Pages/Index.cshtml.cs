@@ -1,12 +1,9 @@
-using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
-using System.Collections.ObjectModel;
 using TheBigStore.Application.SessionHelper;
-using TheBigStore.Repository.Extensions.Paging;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
-using TheBigStore.Service.Extensions.Paging;
+using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
@@ -40,7 +37,12 @@ namespace TheBigStore.Application.Pages
 
         public async Task OnGetAsync(int page = 1, int count = 8)
         {
-            Items = await _itemService.GetPagnatedList(page, count);
+            PageOptions options = new()
+            {
+                CurrentPage = page,
+                PageSize = count
+            };
+            Items = await _itemService.GetPagnatedList(options);
             Images = await _imageService.GetAllAsync();
 
             foreach (var item in Items.Items)
@@ -61,7 +63,7 @@ namespace TheBigStore.Application.Pages
             product.Image = null;
 
             // Retrieve cart from session
-            var cart = HttpContext.Session.Get<List<ItemDto>>("cart") ?? new List<ItemDto>();
+            var cart = HttpContext.Session.Get<List<ItemDto>>("Cart") ?? new List<ItemDto>();
 
             // Check if the product already exists in the cart
             var existingItem = cart.FirstOrDefault(item => item.Id == product.Id);
@@ -79,7 +81,7 @@ namespace TheBigStore.Application.Pages
             }
 
             // Update cart in session
-            HttpContext.Session.Set("cart", cart);
+            HttpContext.Session.Set("Cart", cart);
 
             // Redirect to checkout page
             return RedirectToPage("/Customer/Orders/Checkout");

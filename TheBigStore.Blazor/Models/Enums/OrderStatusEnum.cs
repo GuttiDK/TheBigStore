@@ -1,6 +1,6 @@
-﻿namespace TheBigStore.Service.Enums
+﻿namespace TheBigStore.Blazor.Models.Enums
 {
-    public enum OrderStatusEnumDto
+    public enum OrderStatusEnum
     {
         Pending = 0,
         Processing = 1,

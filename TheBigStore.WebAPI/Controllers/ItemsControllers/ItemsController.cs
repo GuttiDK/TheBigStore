@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TheBigStore.Repository.Extensions;
 using TheBigStore.Service.DataTransferObjects;
+using TheBigStore.Service.DataTransferObjects.Paging;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 
 namespace TheBigStore.WebAPI.Controllers.ItemsControllers
@@ -30,15 +32,49 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
             return await _itemService.GetAllAsync();
         }
 
+        [HttpGet]
+        [Route("getfeatureditemsbycategory/{categoryId:int}/{page:int}/{pagesize:int}")]
+        public async Task<List<ItemDto>> GetFeaturedByCategory(int categoryId, int page, int pagesize)
+        {
+            PageOptions pageOptions = new()
+            {
+                CurrentPage = page,
+                PageSize = pagesize
+            };
+
+            return await _itemService.GetItemsByCategory(categoryId, pageOptions);
+        }
+
+        [HttpGet]
+        [Route("GetFeaturedItems")]
+        public async Task<IEnumerable<ItemDto>> GetFeatured()
+        {
+            return _itemService.GetAllAsync().Result.Take(8);
+        }
+
+        [HttpGet]
+        [Route("GetItemsByCategory/{categoryId:int}")]
+        public async Task<IEnumerable<ItemDto>> GetByCategory(int categoryId)
+        {
+            return await _itemService.GetItemsByCategory(categoryId);
+        }
+
         /// <summary>
         /// Get List of all products in DB.
         /// </summary>
+        /// <param name="count"></param>
+        /// <param name="page"></param>
         /// <returns>Product Object</returns>
         [HttpGet]
         [Route("getpagnatedlist")]
         public async Task<IActionResult> GetPagnatedList(int page, int count)
         {
-            var temp = await _itemService.GetPagnatedList(page, count);
+            PageOptions options = new()
+            {
+                CurrentPage = page,
+                PageSize = count
+            };
+            var temp = await _itemService.GetPagnatedList(options);
 
             if (temp != null)
             {
