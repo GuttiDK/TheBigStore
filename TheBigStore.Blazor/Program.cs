@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
 using TheBigStore.Blazor;
-using TheBigStore.Blazor.Service.Intefaces;
+using TheBigStore.Blazor.Service.Interfaces;
 using TheBigStore.Blazor.Service.Services;
 using TheBigStore.Blazor.Utility;
 
@@ -14,6 +14,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7289") });
 
 builder.Services.AddBlazoredSessionStorageAsSingleton();
+builder.Services.AddRadzenComponents();
 
 #region IndexedDb
 builder.Services.AddScoped<IndexedDbAccessor>();
@@ -35,6 +36,10 @@ if (indexedDB is not null)
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IItemOrderService, ItemOrderService>();
 
 // Radzen Services
 builder.Services.AddScoped<NotificationService>();

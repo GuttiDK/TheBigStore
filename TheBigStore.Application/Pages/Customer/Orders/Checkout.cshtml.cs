@@ -130,14 +130,14 @@ namespace TheBigStore.Application.Pages.Customer.Orders
             if (item != null)
             {
                 cart.Remove(item);
-                HttpContext.Session.Set("cart", cart);
+                HttpContext.Session.Set("Cart", cart);
             }
         }
 
         // Helper method to get the cart from session
         private List<ItemDto> GetCart()
         {
-            return HttpContext.Session.Get<List<ItemDto>>("cart") ?? new List<ItemDto>();
+            return HttpContext.Session.Get<List<ItemDto>>("Cart") ?? new List<ItemDto>();
         }
 
         // Helper method to update quantity of an item in the cart
@@ -148,7 +148,7 @@ namespace TheBigStore.Application.Pages.Customer.Orders
             if (item != null)
             {
                 item.Quantity += change;
-                HttpContext.Session.Set("cart", cart);
+                HttpContext.Session.Set("Cart", cart);
             }
         }
 

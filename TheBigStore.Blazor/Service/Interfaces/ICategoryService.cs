@@ -1,6 +1,6 @@
 ﻿using TheBigStore.Blazor.Models;
 
-namespace TheBigStore.Blazor.Service.Intefaces
+namespace TheBigStore.Blazor.Service.Interfaces
 {
     public interface ICategoryService
     {

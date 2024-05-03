@@ -2,7 +2,7 @@
     let Cart = indexedDB.open(DATABASE_NAME, CURRENT_VERSION);
     Cart.onupgradeneeded = function () {
         let db = Cart.result;
-        db.createObjectStore("items", { keyPath: "id", autoIncrement: true});
+        db.createObjectStore("items", { keyPath: "id", autoIncrement: true });
     }
 }
 

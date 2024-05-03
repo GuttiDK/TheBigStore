@@ -54,22 +54,5 @@ namespace TheBigStore.Blazor.Utility
             await WaitForReference();
             await _accessorJsRef.Value.InvokeVoidAsync("remove", key);
         }
-
-        public async Task Set<T>(string key, T value)
-        {
-            await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("set", key, JsonConvert.SerializeObject(value));
-        }
-
-        public async Task<T> Get<T>(string key)
-        {
-            await WaitForReference();
-            var value = await _accessorJsRef.Value.InvokeAsync<T>("get", key);
-
-            return value ==
-                null ?
-                default(T) :
-                value;
-        }
     }
 }

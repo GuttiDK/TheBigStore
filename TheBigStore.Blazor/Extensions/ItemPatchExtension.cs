@@ -37,6 +37,18 @@ namespace TheBigStore.Blazor.Extensions
             {
                 patchdoc.Replace(p => p.CategoryId, NewItem.CategoryId);
             }
+            if (NewItem.ImageId != OldItem.ImageId)
+            {
+                patchdoc.Replace(p => p.ImageId, NewItem.ImageId);
+            }
+            if (NewItem.Stock != OldItem.Stock)
+            {
+                patchdoc.Replace(p => p.Stock, NewItem.Stock);
+            }
+            if (NewItem.Quantity != OldItem.Quantity)
+            {
+                patchdoc.Replace(p => p.Quantity, NewItem.Quantity);
+            }
             //var props = OldItem.GetType().GetProperties();
 
             //foreach (PropertyInfo propertyInfo in props)

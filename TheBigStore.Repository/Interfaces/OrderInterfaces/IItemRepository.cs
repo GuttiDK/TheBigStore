@@ -31,7 +31,7 @@ namespace TheBigStore.Repository.Interfaces.OrderInterfaces
         /// <returns></returns>
         Task<List<Item>> GetItemsbyCategory(int categoryId);
         Task<Page<Item>> GetItemsbyCategory(string category, PageOptions options);
-        Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options);
+        Task<List<Item>> GetItemsbyCategory(int categoryId, PageOptions options);
         Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options, OrderByOptionsItem orderBy);
 
     }

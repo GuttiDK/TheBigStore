@@ -42,7 +42,7 @@ namespace TheBigStore.Application.Pages.Login
                         // If user is not logged in as the same id as before clear the cart
                         if (HttpContext.Session.GetInt32("id") != HttpContext.Session.GetInt32("lastid"))
                         {
-                            HttpContext.Session.Remove("cart");
+                            HttpContext.Session.Remove("Cart");
                         }
 
                         if (founduser.RoleId != null)

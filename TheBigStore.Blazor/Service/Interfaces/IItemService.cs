@@ -1,13 +1,14 @@
 ﻿using TheBigStore.Blazor.Models;
+using TheBigStore.Blazor.Models.Paging;
 
-namespace TheBigStore.Blazor.Service.Intefaces
+namespace TheBigStore.Blazor.Service.Interfaces
 {
     public interface IItemService
     {
 
         Task<bool> CheckStock(int itemId, int amount);
 
-
+        Task<Item> UpdateStock(int itemId, int amount);
 
         Task<Item> CreateItem(Item item);
 
@@ -38,5 +39,19 @@ namespace TheBigStore.Blazor.Service.Intefaces
         /// <param name="categoryId"></param>
         /// <returns></returns>
         public Task<List<Item>> GetFeaturedItemsByCategoryAsync(int categoryId);
+
+        /// <summary>
+        /// Delete an item
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        public Task DeleteItem(int itemId);
+
+        /// <summary>
+        /// Get all items
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<Item>> GetAllItems();
+
     }
 }

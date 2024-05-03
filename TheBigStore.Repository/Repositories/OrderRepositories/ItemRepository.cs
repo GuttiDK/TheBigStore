@@ -98,20 +98,14 @@ namespace TheBigStore.Repository.Repositories.OrderRepositories
             return pageResult;
         }
 
-        public async Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options)
+        public async Task<List<Item>> GetItemsbyCategory(int categoryId, PageOptions options)
         {
             var query = _dbContext.Products.AsNoTracking()
                 .Include(s => s.Category)
+                .Include(s => s.Image)
                 .Where(s => s.CategoryId == categoryId);
 
-            Page<Item> pageResult = new()
-            {
-                Total = query.Count(),
-                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(),
-                CurrentPage = options.CurrentPage,
-                PageSize = options.PageSize
-            };
-            return pageResult;
+            return await query.Skip((options.CurrentPage -1) * options.PageSize).Take(options.PageSize).ToListAsync();
         }
 
         public async Task<Page<Item>> GetItemsbyCategory(int categoryId, PageOptions options, OrderByOptionsItem orderBy)

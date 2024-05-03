@@ -1,5 +1,5 @@
 ﻿using TheBigStore.Blazor.Models;
-using TheBigStore.Blazor.Service.Intefaces;
+using TheBigStore.Blazor.Service.Interfaces;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
 using TheBigStore.Blazor.Extensions;
@@ -16,6 +16,14 @@ namespace TheBigStore.Blazor.Service.Services
             _client = client;
         }
 
+        public async Task DeleteItem(int itemId)
+        {
+            var response = await _client.DeleteAsync($"/api/item/remove/{itemId}");
+
+
+            response.EnsureSuccessStatusCode();
+        }
+
         public async Task<Item> CreateItem(Item item)
         {
             var response = await _client.PostAsJsonAsync("api/item/create", item);
@@ -23,6 +31,20 @@ namespace TheBigStore.Blazor.Service.Services
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<Item>();
+        }
+
+        public async Task<List<Item>> GetAllItems()
+        {
+            var Request = "/api/items/get";
+
+            return await _client.GetFromJsonAsync<List<Item>>(Request);
+        }
+
+        public async Task<Item> GetItemByIdAsync(int itemId)
+        {
+            var Request = $"/api/item/{itemId}";
+
+            return await _client.GetFromJsonAsync<Item>(Request);
         }
 
         public async Task<List<Item>> GetFeaturedItemsAsync()
@@ -41,16 +63,9 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<List<Item>> GetFeaturedItemsByCategoryAsync(int categoryId)
         {
-            var Request = $"/api/items/getfeatureditemsbycategory/{categoryId}/1/8";
-
-            return await _client.GetFromJsonAsync<List<Item>>(Request);
-        }
-
-        public async Task<Item> GetItemByIdAsync(int itemId)
-        {
-            var Request = $"/api/item/{itemId}";
-
-            return await _client.GetFromJsonAsync<Item>(Request);
+            var Request = $"/api/Items/getfeatureditemsbycategory/{categoryId}/1/8";
+            var temp = await _client.GetFromJsonAsync<List<Item>>(Request);
+            return temp;
         }
 
         public async Task<Item> UpdateShopAsync(int itemId, Item newitem)
@@ -63,11 +78,9 @@ namespace TheBigStore.Blazor.Service.Services
 
             StringContent stringContent = new(JsonConvert.SerializeObject(document), System.Text.Encoding.UTF8, "application/json-patch+json");
 
-            var request = new HttpRequestMessage(HttpMethod.Patch, $"/item/update/{itemId}") { Content = stringContent };
+            var request = new HttpRequestMessage(HttpMethod.Patch, $"/api/item/update/{itemId}") { Content = stringContent };
 
             var response = await _client.SendAsync(request);
-
-            response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<Item>();
         }

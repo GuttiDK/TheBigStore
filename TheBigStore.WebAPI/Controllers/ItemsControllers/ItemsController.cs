@@ -34,7 +34,7 @@ namespace TheBigStore.WebAPI.Controllers.ItemsControllers
 
         [HttpGet]
         [Route("getfeatureditemsbycategory/{categoryId:int}/{page:int}/{pagesize:int}")]
-        public async Task<PageDto<ItemDto>> GetFeaturedByCategory(int categoryId, int page, int pagesize)
+        public async Task<List<ItemDto>> GetFeaturedByCategory(int categoryId, int page, int pagesize)
         {
             PageOptions pageOptions = new()
             {

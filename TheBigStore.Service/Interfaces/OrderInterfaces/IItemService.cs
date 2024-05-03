@@ -22,7 +22,7 @@ namespace TheBigStore.Service.Interfaces.OrderInterfaces
         Task<List<CategoryDto>> GetAllCategories();
         Task<List<ItemDto>> GetItemsByCategory(int categoryId);
         Task<PageDto<ItemDto>> GetItemsByCategory(string category, PageOptions options);
-        Task<PageDto<ItemDto>> GetItemsByCategory(int categoryId, PageOptions options);
+        Task<List<ItemDto>> GetItemsByCategory(int categoryId, PageOptions options);
         Task<PageDto<ItemDto>> GetItemsByCategory(int categoryId, PageOptions options, OrderByOptionsItem orderBy);
 
         Task<bool> CheckStock(int id, int amount);

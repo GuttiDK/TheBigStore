@@ -21,7 +21,9 @@ namespace TheBigStore.WebAPI.Extensions
                 Description = item.Description,
                 Price = item.Price,
                 CategoryId = item.CategoryId,
-                Image = item.Image.MapItemImageToDto(),
+                ImageId = item.ImageId,
+                Stock = item.Stock,
+                Quantity = item.Quantity,
             };
         }
 

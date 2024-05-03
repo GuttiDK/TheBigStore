@@ -15,7 +15,7 @@
 
 else if (HttpContext.Session.GetInt32("id").HasValue)
 {
-    @if (HttpContext.Session.Get<List<ItemDto>>("cart") == null)
+    @if (HttpContext.Session.Get<List<ItemDto>>("Cart") == null)
     {
         <div class="alert alert-danger" role="alert">
             Your cart is empty.

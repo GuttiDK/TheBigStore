@@ -1,4 +1,8 @@
-﻿
+﻿@page "/Cart"
+@using System.Text.Json
+@using TheBigStore.Blazor.Models
+@using TheBigStore.Blazor.Service.Interfaces
+@using TheBigStore.Blazor.Utility
 @inject NotificationService _notificationService
 
 <section class="bg-light py-5">
@@ -6,7 +10,8 @@
         <div class="row">
             <div class="col-xl-8 col-lg-8 mb-4">
                 <!-- Checkout -->
-                <EditForm Model="NewUser" FormName="Checkout">
+                <EditForm Model="NewUser" OnValidSubmit=Checkout FormName="Checkout">
+                    <DataAnnotationsValidator />
                     <div class="card shadow-0 border">
                         <div class="p-4">
                             <h5 class="card-title mb-3">Checkout</h5>
@@ -14,28 +19,32 @@
                                 <div class="col-6 mb-3">
                                     <p class="mb-0">First name</p>
                                     <div class="form-outline">
-                                        <input type="text" @bind-value="NewUser.Customer.FirstName" placeholder="Type here" class="form-control" />
+                                        <input type="text" @bind-value="NewCustomer.FirstName" placeholder="Type here" class="form-control" />
+                                        <ValidationMessage For="() => NewCustomer.FirstName" />
                                     </div>
                                 </div>
 
                                 <div class="col-6">
                                     <p class="mb-0">Last name</p>
                                     <div class="form-outline">
-                                        <input type="text" @bind-value="NewUser.Customer.LastName" placeholder="Type here" class="form-control" />
+                                        <input type="text" @bind-value="NewCustomer.LastName" placeholder="Type here" class="form-control" />
+                                        <ValidationMessage For="() => NewCustomer.LastName" />
                                     </div>
                                 </div>
 
                                 <div class="col-6 mb-3">
                                     <p class="mb-0">Phone</p>
                                     <div class="form-outline">
-                                        <input type="tel" @bind-value="NewUser.Customer.Phone" class="form-control" />
+                                        <input type="tel" @bind-value="NewCustomer.Phone" class="form-control" />
+                                        <ValidationMessage For="() => NewCustomer.Phone" />
                                     </div>
                                 </div>
 
                                 <div class="col-6 mb-3">
                                     <p class="mb-0">Email</p>
                                     <div class="form-outline">
-                                        <input type="email" @bind-value="NewUser.Customer.Email" placeholder="example@gmail.com" class="form-control" />
+                                        <input type="email" @bind-value="NewCustomer.Email" placeholder="example@gmail.com" class="form-control" />
+                                        <ValidationMessage For="() => NewCustomer.Email" />
                                     </div>
                                 </div>
                             </div>
@@ -76,31 +85,55 @@
                                     <div class="col-sm-8 mb-3">
                                         <p class="mb-0">Street Name</p>
                                         <div class="form-outline">
-                                            <input type="text" @bind-value="NewUser.Customer.Address.StreetName" placeholder="Type here" class="form-control" />
+                                            <input type="text" @bind-value="NewCustomerAddress.StreetName" placeholder="Type here" class="form-control" />
+                                            <ValidationMessage For="() => NewCustomerAddress.StreetName" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4 mb-3">
                                         <p class="mb-0">City</p>
                                         <div class="form-outline">
-                                            <input type="text" @bind-value="NewUser.Customer.Address.City" placeholder="Type here" class="form-control" />
+                                            <input type="text" @bind-value="NewCustomerAddress.City" placeholder="Type here" class="form-control" />
+                                            <ValidationMessage For="() => NewCustomerAddress.City" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4 mb-3">
                                         <p class="mb-0">Street Number</p>
                                         <div class="form-outline">
-                                            <input type="text" @bind-value="NewUser.Customer.Address.StreetNumber" placeholder="Type here" class="form-control" />
+                                            <input type="text" @bind-value="NewCustomerAddress.StreetNumber" placeholder="Type here" class="form-control" />
+                                            <ValidationMessage For="() => NewCustomerAddress.StreetNumber" />
                                         </div>
                                     </div>
 
                                     <div class="col-sm-4 col-6 mb-3">
                                         <p class="mb-0">Postal code</p>
                                         <div class="form-outline">
-                                            <input type="text" @bind-value="NewUser.Customer.Address.ZipCode" class="form-control" />
+                                            <input type="text" @bind-value="NewCustomerAddress.ZipCode" class="form-control" />
+                                            <ValidationMessage For="() => NewCustomerAddress.ZipCode" />
                                         </div>
                                     </div>
 
+                                </div>
+                                <div class="mb-3">
+                                    <p class="mb-0">Account</p>
+                                    <div class="form-floating mb-2">
+                                        <input type="email" @bind-value="NewUser.Email" id="email" class="form-control" placeholder="Email" />
+                                        <label class="form-label" for="email">Email address</label>
+                                        <ValidationMessage For="() => NewUser.Email" />
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-floating mb-2 col-6">
+                                            <input type="password" @bind-value="NewUser.Password" id="pass1" class="form-control" placeholder="Password" />
+                                            <label class="form-label" for="pass1">Password</label>
+                                            <ValidationMessage For="() => NewUser.Password" />
+                                        </div>
+                                        <div class="form-floating mb-2 col-6">
+                                            <input type="password" @bind-value="NewUser.Password" id="pass2" class="form-control" placeholder="Confirm Password" />
+                                            <label class="form-label" for="pass2">Confirm Password</label>
+                                            <ValidationMessage For="() => NewUser.Password" />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="text-center">
                                     <button class="btn btn-light border">Cancel</button>
@@ -189,16 +222,21 @@
     </div>
 </section>
 
-@using TheBigStore.Blazor.Models
-@using TheBigStore.Blazor.Utility
-@using System.Text.Json;
+
 @inject LocalStorage _localStorage
+@inject IUserService _userService
+@inject IOrderService _orderService
+@inject IItemOrderService _itemOrderService
+@inject NavigationManager _navigationManager
+@inject ICustomerService _customerService
+@inject IItemService _itemService
 
 @code {
     public List<Item> CookieItemProducts { get; set; } = new();
     public Customer NewCustomer { get; set; } = new();
     public Address NewCustomerAddress { get; set; } = new();
     public User NewUser { get; set; } = new();
+    public TheBigStore.Blazor.Models.Order NewOrder { get; set; } = new();
 
     #region Checkout Values
     public double ItemTotalPrice { get; set; } = 0;
@@ -229,14 +267,12 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        NewUser.Customer = NewCustomer;
-        NewUser.Customer.Address = NewCustomerAddress;
 
-        var storage = await _localStorage.Get<List<Item>>("Cart");
+        string? storage = await _localStorage.GetValueAsync<string>("Cart");
 
         if (storage != null)
         {
-            CookieItemProducts = storage;
+            CookieItemProducts = JsonSerializer.Deserialize<List<Item>>(storage);
         }
 
         ItemTotalPrice = CookieItemProducts.Sum(x => x.Price * x.Quantity);
@@ -244,5 +280,64 @@
         TotalPrice = ItemTotalPrice + ShippingPrice - DiscountDeduct;
 
         await base.OnParametersSetAsync();
+    }
+
+    private async Task Checkout()
+    {
+
+        NewUser.RoleId = 2;
+        NewUser.Customer = NewCustomer;
+        NewUser.Customer.Address = NewCustomerAddress;
+        bool check = NewCustomer.Equals(new Customer()) || NewCustomerAddress.Equals(new Address());
+        if (check)
+            NewUser = await _userService.CreateUser(NewUser);
+        List<ItemOrder> itemOrders = new();
+
+        string? storage = await _localStorage.GetValueAsync<string>("Cart");
+
+        if (storage != null)
+        {
+            CookieItemProducts = JsonSerializer.Deserialize<List<Item>>(storage);
+        }
+
+        NewOrder.CustomerId = NewUser.Customer.Id;
+        NewOrder.OrderDate = DateTime.Now;
+        NewOrder.Status = Models.Enums.OrderStatusEnum.Pending;
+
+        NewOrder = await _orderService.CreateOrder(NewOrder);
+
+        foreach (Item item in CookieItemProducts)
+        {
+            if (await _itemService.CheckStock(item.Id, item.Stock))
+            {
+                ItemOrder newItemOrder = new()
+                    {
+                        ItemId = item.Id,
+                        OrderId = NewOrder.Id,
+                        Quantity = item.Quantity,
+                        Status = Models.Enums.OrderStatusEnum.Pending,
+                    };
+
+                itemOrders.Add(newItemOrder);
+            }
+        }
+
+        if (itemOrders.Count != 0)
+        {
+            await _itemOrderService.CreateItemOrders(itemOrders);
+        }
+
+        // update stock
+        foreach (Item item in CookieItemProducts)
+        {
+            Item warehouseItem = await _itemService.GetItemByIdAsync(item.Id);
+            warehouseItem.Stock -= item.Quantity;
+            await _itemService.UpdateStock(warehouseItem.Id, warehouseItem.Stock);
+        }
+
+        await _localStorage.Clear();
+
+        _navigationManager.NavigateTo("/Order/" + NewOrder.Id);
+
     }
 }

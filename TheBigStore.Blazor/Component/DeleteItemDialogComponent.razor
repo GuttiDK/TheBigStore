@@ -1,0 +1,29 @@
+﻿@page "/deleteitem/{itemId:int}"
+
+@using TheBigStore.Blazor.Models
+@using TheBigStore.Blazor.Service.Interfaces
+@inject IItemService _itemService
+@inject ICategoryService _categoryService
+@inject DialogService DialogService
+
+ <div class="rz-p-12 rz-text-align-center">
+    <RadzenButton Text="Confirm Deletion" ButtonStyle="ButtonStyle.Secondary"
+                   />
+</div> 
+
+@code {
+    [Parameter]
+    public int itemId { get; set; } = 0;
+
+    public Item Item { get; set; } = new();
+    public List<Category> Categories { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DialogService.Confirm($"This action cannot be undone", "Are you sure?", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        Item = await _itemService.GetItemByIdAsync(itemId);
+        Categories = await _categoryService.GetAllCategoriesAsync();
+        await base.OnInitializedAsync();
+    }
+    
+}

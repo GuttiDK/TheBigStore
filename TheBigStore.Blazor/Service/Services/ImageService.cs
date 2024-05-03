@@ -1,5 +1,5 @@
 ﻿using TheBigStore.Blazor.Models;
-using TheBigStore.Blazor.Service.Intefaces;
+using TheBigStore.Blazor.Service.Interfaces;
 using System.Net.Http.Json;
 
 namespace TheBigStore.Blazor.Service.Services
@@ -15,7 +15,7 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<List<Image>> GetAllByItemId(int itemId)
         {
-            var Request = $"/Image/GetImagesById/{itemId}";
+            var Request = $"/api/image/getimagesbyid/{itemId}";
 
             return await _client.GetFromJsonAsync<List<Image>>(Request);
         }

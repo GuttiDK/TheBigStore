@@ -2,13 +2,13 @@
 
 namespace TheBigStore.Blazor.Service.Interfaces
 {
-    public interface IImageService
+    public interface IUserService
     {
         /// <summary>
-        /// Get all images by item id
+        /// Creates a new user
         /// </summary>
-        /// <param name="itemId"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        Task <List<Image>> GetAllByItemId(int itemId);
+        public Task<User> CreateUser(User user);
     }
 }

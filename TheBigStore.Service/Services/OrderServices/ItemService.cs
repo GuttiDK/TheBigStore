@@ -63,15 +63,9 @@ namespace TheBigStore.Service.Services.OrderServices
             return pageDto;
         }
 
-        public async Task<PageDto<ItemDto>> GetItemsByCategory(int categoryId, PageOptions options)
+        public async Task<List<ItemDto>> GetItemsByCategory(int categoryId, PageOptions options)
         {
-            var pageDto = new PageDto<ItemDto>();
-            var pageEntity = await _itemRepository.GetItemsbyCategory(categoryId, options);
-            pageDto.Total = pageEntity.Total;
-            pageDto.CurrentPage = pageEntity.CurrentPage;
-            pageDto.PageSize = pageEntity.PageSize;
-            pageDto.Items = _mappingService._mapper.Map<List<ItemDto>>(pageEntity.Items);
-            return pageDto;
+            return _mappingService._mapper.Map<List<ItemDto>>(await _itemRepository.GetItemsbyCategory(categoryId, options));
         }
         public async Task<PageDto<ItemDto>> GetItemsByCategory(int categoryId, PageOptions options, OrderByOptionsItem orderBy)
         {

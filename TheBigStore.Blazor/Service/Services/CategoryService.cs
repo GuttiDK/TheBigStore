@@ -1,5 +1,5 @@
 ﻿using TheBigStore.Blazor.Models;
-using TheBigStore.Blazor.Service.Intefaces;
+using TheBigStore.Blazor.Service.Interfaces;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
 
@@ -22,7 +22,7 @@ namespace TheBigStore.Blazor.Service.Services
 
         public async Task<Category> GetByIdAsync(int id)
         {
-            var Request = $"/Category/{id}";
+            var Request = $"/api/category/{id}";
 
             return await _client.GetFromJsonAsync<Category>(Request);
         }

@@ -1,0 +1,156 @@
+﻿@page "/Items/Item/{Id:int}"
+
+@inject DialogService dialogService
+
+<section class="py-5">
+    <div class="container">
+        <div class="row gx-5">
+            <aside class="col-lg-6">
+                <div class="border rounded-4 mb-3 d-flex justify-content-center">
+                    <div id="carouselControls" class="carousel carousel-fade slide" data-bs-ride="carousel">
+
+                        <!-- Images -->
+
+                        <div class="carousel-inner bg-black rounded" style="max-height: 450px">
+
+                            @if (LoadedItem.Image != null)
+                            {
+                                <div class="carousel-item active">
+                                    <img src="/images/Items/@LoadedItem.Image.ImageUrl" class="d-block w-100" style="max-height: 450px" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <img src="/images/Items/No_image_available.svg" class="d-block w-100" style="max-height: 450px" />
+                                </div>
+                            }
+
+                        </div>
+
+
+                        @if (Images != null)
+                        {
+                 
+
+                            <!-- Indicators -->
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#carouselControls" data-bs-slide-to="@LoadedItem.Image" class="active bg-primary" aria-current="true"></button>
+                            </div>
+
+                            
+                        }
+
+                    </div>
+                </div>
+
+            </aside>
+            <main class="col-lg-6">
+                <div class="ps-lg-3">
+
+                    <h4 class="title text-dark">
+                        @LoadedItem.ItemName
+                    </h4>
+
+                    <div class="d-flex flex-row my-3">
+                        <div class="text-warning mb-1 me-2">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span class="ms-1">
+                                4.5
+                            </span>
+                        </div>
+
+                        @if (LoadedItem.Stock > 0)
+                        {
+                            <span class="text-success ms-2">In stock</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger ms-2">Sold Out</span>
+                        }
+
+
+
+                    </div>
+
+
+                    <div class="mb-3">
+                        <span class="h5">@($"{LoadedItem.Price:C}")</span>
+                    </div>
+
+                    <p>
+                        @LoadedItem.Description
+                    </p>
+
+                    <hr />
+                    <div class="row">
+
+                        <form asp-page-handler="AddToCart" class="col-6">
+
+                            @if (LoadedItem.Stock > 0)
+                            {
+                                <RadzenButton Shade="Shade.Lighter" Icon="shopping_cart" Text="Add To Cart" ButtonStyle="ButtonStyle.Primary" />
+                            }
+                            else
+                            {
+                                <RadzenButton Shade="Shade.Lighter" Disabled Icon="shopping_cart" Text="Add To Cart" ButtonStyle="ButtonStyle.Primary" />
+                            }
+
+                        </form>
+
+
+                        <RadzenButton Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Warning" Text="Edit" Icon="edit" Click=@EditItem class="col-2 me-2" />
+                        <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3 col-2"> <i class="me-1 fa fa-heart fa-lg"></i> Save </a>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="mb-2 mt-2">
+        <hr />
+    </div>
+    <div class="text-center">
+        <h2>You might also like</h2>
+    </div>
+    <TheBigStore.Blazor.Component.ItemDisplayComponent Items="SuggestedItems" />
+
+
+</section>
+
+
+@code {
+    @using TheBigStore.Blazor.Service.Interfaces
+    @using TheBigStore.Blazor.Component
+    @inject IItemService _itemService
+    @inject IImageService _imageService
+
+    [Parameter]
+    public int Id { get; set; } = 0;
+
+
+    public TheBigStore.Blazor.Models.Item LoadedItem { get; set; } = new();
+    public List<TheBigStore.Blazor.Models.Item>? SuggestedItems { get; set; } = new();
+    public List<TheBigStore.Blazor.Models.Image>? Images { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        LoadedItem = await _itemService.GetItemByIdAsync(Id);
+        SuggestedItems = await _itemService.GetFeaturedItemsByCategoryAsync(LoadedItem.CategoryId ?? 1);
+        Images = await _imageService.GetAllByItemId(Id);
+
+        await base.OnParametersSetAsync();
+    }
+
+    public async Task EditItem()
+    {
+        await dialogService.OpenAsync<EditItemDialogComponent>($"Editing {LoadedItem.ItemName}",
+               new Dictionary<string, object>() { { "itemId", Id } },
+               new DialogOptions() { Resizable = true, Draggable = true });
+    }
+}

@@ -12,7 +12,5 @@ namespace TheBigStore.WebAPI.Models
         public int Quantity { get; set; }
         public int? CategoryId { get; set; } // FK
         public int? ImageId { get; set; } // FK
-
-        public ImageModel? Image { get; set; }
     }
 }

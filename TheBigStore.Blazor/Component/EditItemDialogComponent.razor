@@ -1,6 +1,7 @@
-﻿
+﻿@page "/edititem/{itemId:int}"
+
 @using TheBigStore.Blazor.Models
-@using TheBigStore.Blazor.Service.Intefaces
+@using TheBigStore.Blazor.Service.Interfaces
 @inject IItemService _itemService
 @inject ICategoryService _categoryService
 @inject Radzen.DialogService DialogService
@@ -13,7 +14,7 @@
             <input type="text" class="form-control border-primary" @bind="EditItem.ItemName" />
             <ValidationMessage For="() => EditItem.ItemName" />
         </div>
-        
+
 
 
         <!-- Category dropdown -->
@@ -34,6 +35,13 @@
             <textarea @bind="EditItem.Description" rows="10" class="form-control border-primary"></textarea>
             <ValidationMessage For="() => EditItem.Description" />
         </div>
+
+        <div>
+            <label class="form-label fw-bold">Stock</label>
+            <input type="text" class="form-control border-primary" @bind="EditItem.Stock" />
+            <ValidationMessage For="() => EditItem.Stock" />
+        </div>
+
         <div>
             <label class="form-label fw-bold">Price</label>
             <input type="text" class="form-control border-primary" @bind="EditItem.Price" />
@@ -103,7 +111,7 @@
             }
         }
 
-        await _itemService.UpdateShopAsync(EditItem.Id,EditItem);
+        await _itemService.UpdateShopAsync(EditItem.Id, EditItem);
         DialogService.Close(true);
     }
 }
