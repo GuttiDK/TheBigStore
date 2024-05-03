@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using TheBigStore.Repository.Domain;
 using TheBigStore.Repository.Extensions;
-using TheBigStore.Repository.Extensions.Paging;
 using TheBigStore.Repository.Interfaces.GenericInterfaces;
 using TheBigStore.Repository.Models;
+using TheBigStore.Repository.Models.Paging;
 
 namespace TheBigStore.Repository.Repositories.GenericRepositories
 {
@@ -24,12 +24,30 @@ namespace TheBigStore.Repository.Repositories.GenericRepositories
             return entity;
         }
 
+        public async Task<List<E>> CreateListAsync(List<E> entityList)
+        {
+            _dbContext.AddRange(entityList);
+            await _dbContext.SaveChangesAsync();
+            return entityList;
+        }
+
         public async Task<E> UpdateAsync(E entity)
         {
             _dbContext.Set<E>().Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return entity;
+        }
+
+        public async Task<List<E>> UpdateListAsync(List<E> entityList)
+        {
+            _dbContext.Set<E>().AttachRange(entityList);
+            foreach (E entity in entityList)
+            {
+                _dbContext.Entry(entity).State = EntityState.Modified;
+            }
+            await _dbContext.SaveChangesAsync();
+            return entityList;
         }
 
         public async Task<E> DeleteAsync(E entity)
@@ -39,23 +57,30 @@ namespace TheBigStore.Repository.Repositories.GenericRepositories
             return entity;
         }
 
-        public async Task<ObservableCollection<E>> GetAllAsync()
+        public async Task<List<E>> GetAllAsync()
         {
-            ObservableCollection<E> temp = new(await _dbContext.Set<E>().AsNoTracking().ToListAsync());
+            List<E> temp = new(await _dbContext.Set<E>().AsNoTracking().ToListAsync());
             return temp;
         }
 
-        public async Task<E> GetById(int id)
+        public async Task<E> GetByIdAsync(int id)
         {
-            E? e = await _dbContext.Set<E>().FindAsync(id);
-            _dbContext.Entry(e).State = EntityState.Detached;
-            return e ?? throw new Exception("Entity not found");
+            E entity = await _dbContext.Set<E>().FindAsync(id);
+            _dbContext.Entry(entity).State = EntityState.Detached;
+            return entity;
         }
 
-        public async Task<Page<E>> GetPagnatedList(int page, int count)
+        public async Task<Page<E>> GetPagnatedList(PageOptions options)
         {
             var query = _dbContext.Set<E>().AsNoTracking();
-            return new Page<E> { Total = query.Count(), Items = await query.Page(page, count).ToListAsync(), CurrentPage = page, PageSize = count };
+            Page<E> pageResult = new()
+            { 
+                Total = query.Count(), 
+                Items = await query.Page(options.CurrentPage, options.PageSize).ToListAsync(), 
+                CurrentPage = options.CurrentPage, 
+                PageSize = options.PageSize 
+            };
+            return pageResult;
         }
 
     }

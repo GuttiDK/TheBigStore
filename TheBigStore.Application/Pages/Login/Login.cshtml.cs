@@ -42,13 +42,13 @@ namespace TheBigStore.Application.Pages.Login
                         // If user is not logged in as the same id as before clear the cart
                         if (HttpContext.Session.GetInt32("id") != HttpContext.Session.GetInt32("lastid"))
                         {
-                            HttpContext.Session.Remove("cart");
+                            HttpContext.Session.Remove("Cart");
                         }
 
                         if (founduser.RoleId != null)
                         {
 
-                            RoleDto role = await _roleService.GetById((int)founduser.RoleId);
+                            RoleDto role = await _roleService.GetByIdAsync((int)founduser.RoleId);
                             if (role == null)
                             {
                                 HttpContext.Session.SetInt32("role", 2);

@@ -25,16 +25,16 @@ namespace TheBigStore.Application.Pages.Customer.Products
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Product = await _productService.GetById(id);
+            Product = await _productService.GetByIdAsync(id);
             if (Product != null)
             {
                 if (Product.CategoryId != null)
                 {
-                    Product.Category = await _categoryService.GetById((int)Product.CategoryId);
+                    Product.Category = await _categoryService.GetByIdAsync((int)Product.CategoryId);
                 }
                 if (Product.ImageId != null)
                 {
-                    Product.Image = await _imageService.GetById((int)Product.ImageId);
+                    Product.Image = await _imageService.GetByIdAsync((int)Product.ImageId);
                 }
             }
             if (Product == null)

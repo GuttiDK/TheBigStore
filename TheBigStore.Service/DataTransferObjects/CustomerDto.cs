@@ -1,20 +1,21 @@
-﻿namespace TheBigStore.Service.DataTransferObjects
+﻿using TheBigStore.Repository.Models;
+
+namespace TheBigStore.Service.DataTransferObjects
 {
     // Make a fully functional Customer domain class
     public class CustomerDto
     {
         public int Id { get; set; }
-        // Add a first name, last name, email, and phone number
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public int? AddressId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public int AddressId { get; set; }
+        public int UserId { get; set; }
 
-        // Add an address
+        // Navigation properties
         public AddressDto? Address { get; set; }
-
-        // Add a list of orders
-        public List<OrderDto> Orders { get; set; } = [];
+        public List<OrderDto>? Orders { get; set; }
+        public UserDto User { get; set; }
     }
 }

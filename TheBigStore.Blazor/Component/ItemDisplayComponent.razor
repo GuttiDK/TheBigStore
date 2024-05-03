@@ -1,0 +1,101 @@
+﻿@using TheBigStore.Blazor.Models
+@using TheBigStore.Blazor.Service.Interfaces
+@using TheBigStore.Blazor.Utility
+@using System.Text.Json;
+
+@inject IndexedDbAccessor _indexedDbAccessor
+@inject NavigationManager _navigationManager
+@inject CookieAccessor _cookieAccessor
+@inject LocalStorage _localStorage
+@inject NotificationService _notificationService
+@inject IItemService _itemService
+
+<RadzenNotification />
+<!--Featured Carousel-->
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="row">
+                @foreach (var itemview in Items.Take(4))
+                {
+                    <div class="col-3 mt-2">
+                        <div class="card">
+                            <a @onclick='() => _navigationManager.NavigateTo("/Items/Item/" + itemview.Id)' style="text-decoration:none;color:black;cursor:pointer">
+                                @if (itemview.Image != null)
+                                {
+                                    <img loading="lazy" src="/Images/Items/@itemview.Image.ImageUrl" class="card-img-top" alt="...">
+                                }
+                                else
+                                {
+                                    <img src="/Images/Items/No_image_available.svg" class="card-img-top" alt="...">
+                                }
+
+                                <div class="card-body">
+                                    <h5 class="card-title">@itemview.ItemName</h5>
+                                    <p class="card-text">@itemview.Description</p>
+                                    <p class="card-text">@($"{itemview.Price:C}")</p>
+                                </div>
+                            </a>
+                            <div class="card-footer text-center">
+                                <RadzenButton Shade="Shade.Lighter" @onclick="() => ButtonClicked.InvokeAsync()" Click=@(args => AddToCart(itemview.Id)) Text="Add To Cart" ButtonStyle="ButtonStyle.Primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (Items.Count > 4)
+        {
+            <div class="carousel-item">
+                <div class="row">
+                    @foreach (var itemview in Items.Skip(4).Take(4))
+                    {
+                        <div class="col-3 mt-2">
+                            <div class="card">
+                                <a @onclick='() => _navigationManager.NavigateTo("/Items/Item/" + itemview.Id)' style="text-decoration:none;color:black;cursor:pointer">
+                                    @if (itemview.Image != null)
+                                    {
+                                        <img loading="lazy" src="/Images/Items/@itemview.Image.ImageUrl" class="card-img-top" alt="...">
+                                    }
+                                    else
+                                    {
+                                        <img loading="lazy" src="/Images/Items/No_image_available.svg" class="card-img-top" alt="...">
+                                    }
+
+                                    <div class="card-body">
+                                        <h5 class="card-title">@itemview.ItemName</h5>
+                                        <p class="card-text">@itemview.Description</p>
+                                        <p class="card-text">@($"{itemview.Price:C}")</p>
+                                    </div>
+                                </a>
+                                <div class="card-footer text-center">
+                                    <RadzenButton Shade="Shade.Lighter" @onclick="() => ButtonClicked.InvokeAsync()" Click=@(args => AddToCart(itemview.Id)) Text="Add To Cart" ButtonStyle="ButtonStyle.Primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@using TheBigStore.Blazor.Extensions
+
+@code {
+    [Parameter]
+    public List<Item> Items { get; set; }
+
+    [Parameter]
+    public EventCallback ButtonClicked { get; set; } = new EventCallback();
+
+    private async Task AddToCart(int itemId)
+    {
+        var item = await _itemService.GetItemByIdAsync(itemId);
+        await CartExtension.AddToCart(_localStorage, _itemService, itemId);
+
+
+        StateHasChanged();
+        _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{item.ItemName} added to cart", Duration = 4000 });
+    }
+}

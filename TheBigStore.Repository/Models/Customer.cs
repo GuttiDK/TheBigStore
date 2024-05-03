@@ -7,17 +7,16 @@ namespace TheBigStore.Repository.Models
     {
         [Key]
         public int Id { get; set; }
-        // Add a first name, last name, email, and phone number
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public int? AddressId { get; set; }
+        public int AddressId { get; set; }
+        public int UserId { get; set; }
 
-        // Add an address
+        // Navigation properties
         public Address? Address { get; set; }
-
-        // Add a list of orders
         public List<Order>? Orders { get; set; }
+        public User User { get; set; }
     }
 }

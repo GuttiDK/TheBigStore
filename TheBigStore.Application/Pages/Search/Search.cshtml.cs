@@ -22,7 +22,7 @@ namespace TheBigStore.Application.Pages.Search
         }
 
         public List<ItemDto> FindProducts { get; set; }
-        public ObservableCollection<ImageDto> Images { get; set; }
+        public List<ImageDto> Images { get; set; }
         [BindProperty(SupportsGet = true)]
         public int productId { get; set; }
 
@@ -33,16 +33,16 @@ namespace TheBigStore.Application.Pages.Search
 
             foreach (var item in FindProducts)
             {
-                item.Image = Images.SingleOrDefault(x => x.ImageId == item.ImageId);
+                item.Image = Images.SingleOrDefault(x => x.Id == item.ImageId);
             }
         }
 
         public async Task<IActionResult> OnPostAddToCart() // Method to handle adding product to cart
         {
-            var product = await _itemService.GetById(productId);
+            var product = await _itemService.GetByIdAsync(productId);
 
             // Retrieve cart from session
-            var cart = HttpContext.Session.Get<List<ItemDto>>("cart") ?? new List<ItemDto>();
+            var cart = HttpContext.Session.Get<List<ItemDto>>("Cart") ?? new List<ItemDto>();
 
             // Check if the product already exists in the cart
             var existingItem = cart.FirstOrDefault(item => item.Id == product.Id);
@@ -60,7 +60,7 @@ namespace TheBigStore.Application.Pages.Search
             }
 
             // Update cart in session
-            HttpContext.Session.Set("cart", cart);
+            HttpContext.Session.Set("Cart", cart);
 
             // Redirect to checkout page
             return RedirectToPage("/Customer/Orders/Checkout");

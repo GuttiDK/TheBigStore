@@ -60,7 +60,7 @@ namespace TheBigStore.UnitTesting.Tests
 
             //Act
 
-            var customer = await _service.GetById(1);
+            var customer = await _service.GetByIdAsync(1);
 
             //Assert
             Assert.NotNull(customer);

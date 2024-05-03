@@ -30,6 +30,7 @@ Last updated: 17-04-2024
 * <a href="https://html.com/" target="_blank">Html</a> (front-end)
 * <a href="https://www.w3schools.com/css/" target="_blank">CSS</a>
 * <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a> (front-end styling)
+* <a href="https://blazor.radzen.com/" target="_blank">Radzen Blazor</a> (styling)
 * <a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank">SQL</a> (data storage)
 * <a href="https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-6.0" target="_blank">ASP.NET Core</a> (framework)
 * <a href="https://docs.microsoft.com/en-us/ef/core/" target="_blank">Entity Framework Core</a> (data access)
@@ -56,6 +57,27 @@ Last updated: 17-04-2024
 - **Asynchronous Operations**: Modifies the `GetById` method in various interfaces and classes to be asynchronous, enhancing performance and responsiveness.
 
 # Updates
+
+**Version 2.2.2** (03/05/2024 - Current version)
+**Major Changes and Refactoring**
+- **Blazor Application**: A new Blazor project, `TheBigStore.Blazor`, was added to the solution. This project includes pages for Home, Counter, and Weather, along with a navigation menu and main layout. This marks a significant addition to the solution, introducing Blazor as a new framework.
+- **Solution File Modification**: The solution file `TheBigStore.sln` was updated to include the new Blazor project, indicating a broader scope for the solution. The project type for `TheBigStore.WebAPI` was also changed.
+- **Launch Settings and Icons**: Updated the `launchSettings.json` file with new configurations for launching the Blazor application. Additionally, updated `favicon.png`, and added new icon files (`icon-192.png`, `icon-512.png`) and a web manifest file (`manifest.webmanifest`), providing additional resources for the application.
+- **Blazor Project Configuration**: The `Program.cs` file was updated to initialize the Blazor WebAssembly host and set up various services, including `HttpClient`. This change indicates a shift towards Blazor and enhances dependency injection support.
+- **New Components and Services**: Added new components such as `MainLayout.razor`, `NavMenu.razor`, and `App.razor`, structuring the Blazor application. The `service-worker.js` file was added to provide offline support through service workers.
+- **Additional Refactoring and Cleanup**: Removed obsolete files, updated existing components to align with the new Blazor structure, and deleted unused methods and properties to streamline the codebase.
+
+**Code Refactoring and Database Updates**
+- **Data Type Refactoring**: Updated data types from `ObservableCollection` to `List` in various `.cshtml.cs` files to improve performance and reduce overhead.
+- **Asynchronous Operations**: Replaced synchronous `GetById` methods with asynchronous `GetByIdAsync`, improving application responsiveness.
+- **Database Update Operations**: Updated how entities are updated in the database by directly passing the updated entity to the `UpdateAsync` method.
+- **Package Additions**: Added `Newtonsoft.Json` and `Microsoft.AspNetCore.Mvc.NewtonsoftJson` to `TheBigStore.Application.csproj` for improved JSON serialization and deserialization.
+- **Repository Updates**: Updated `IGenericRepository` to include methods for adding and updating lists of entities. Updated several repository files to support CRUD operations and reflect changes in the database schema.
+- **DTO and Entity Property Updates**: Added new properties and navigation properties to `Customer`, `Image`, `ItemOrder`, and `User` classes to enhance relationships between entities.
+- **Service Layer Enhancements**: Updated `IGenericService.cs` and `GenericService.cs` with new methods for creating and updating lists of entities.
+- **Controller Updates**: Updated various controller files to use more RESTful conventions and refactored `Checkout.cshtml.cs` to improve item quantity handling in the cart.
+- **Database Schema Changes**: Implemented a new migration `FixedVersion` to update the database schema and maintain consistency with the refactored entity models.
+
 
 **Version 2.1.1** (17/04/2024 - Current version)
  **Code Files and Database Structure Updates**

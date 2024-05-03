@@ -1,0 +1,108 @@
+﻿﻿@using TheBigStore.Blazor.Models
+
+@page "/Admin/Dashboard"
+
+<div class="container">
+    <div class="row border-bottom border-primary">
+        <h1>Admin panel</h1>
+    </div>
+
+    <div class="row mt-3 justify-content-evenly">
+        <div class="col-2 p-1">
+            <RadzenButton Icon="add" Text="Add Product" style="width: 180px" ButtonStyle="ButtonStyle.Primary" Click=@CreateItem />
+        </div>
+    </div>
+
+    <RadzenTabs RenderMode="TabRenderMode.Client">
+        <Tabs>
+            <RadzenTabsItem Text="Categories">
+                <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                                Data="@Categories" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single">
+                    <Columns>
+                        <RadzenDataGridColumn Property="Id" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
+                        <RadzenDataGridColumn Property="CategoryName" Title="Name" Frozen="true" Width="160px" />
+                    </Columns>
+                </RadzenDataGrid>
+                <form method="post" asp-page-handler="AddCategory" class="col-12 border-top border-primary border-3 p-2">
+                    <div class="input-group">
+                        <input type="text" name="newCategoryName" class="form-control border-primary" />
+                        <button type="submit" class="btn btn-outline-primary"><i class="fa-solid fa-circle-plus"></i> Add</button>
+                    </div>
+                </form>
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="Items">
+                <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" PageSizeOptions="@PageSizeOptions" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                                Data="@Items" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single">
+                    <Columns>
+                        <RadzenDataGridColumn Property="Id" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
+                        <RadzenDataGridColumn Property="ItemName" Title="Name" Frozen="true" Width="160px" />
+                        <RadzenDataGridColumn Property="Description" Title="Description" />
+                        <RadzenDataGridColumn Property="Stock" Title="Stock" TextAlign="TextAlign.Center" />
+                        <RadzenDataGridColumn Property="Price" Title="Price" TextAlign="TextAlign.Center" />
+                        <RadzenDataGridColumn Title="Actions" Sortable="false" Filterable="false" TextAlign="TextAlign.Center" Width="100px">
+                            <Template>
+                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Click="@(() => dialogService.OpenAsync<EditItemDialogComponent>($"Edit {context.ItemName}",
+                            new Dictionary<string, object>() { { "itemId", context.Id } },
+                            new DialogOptions() { Resizable = true, Draggable = true }))" />
+                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Click=@(args => Delete(context.Id, context.ItemName)) />
+                            </Template>
+
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+</div>
+
+@using TheBigStore.Blazor.Service.Interfaces
+@using TheBigStore.Blazor.Component
+@inject ICategoryService _categoryService
+@inject IItemService _itemService
+@inject DialogService dialogService
+@inject NotificationService _notificationService
+
+@code {
+    private List<Category> Categories { get; set; } = new();
+    [SupplyParameterFromForm]
+    private List<Item> Items { get; set; } = new();
+    public int[] PageSizeOptions = new int[] { 3, 6, 9, 12, 15 };
+
+    private int value { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Items = await _itemService.GetAllItems();
+        Categories = await _categoryService.GetAllCategoriesAsync();
+        await base.OnInitializedAsync();
+    }
+
+    public async Task CreateItem()
+    {
+        await dialogService.OpenAsync<CreateItemDialogComponent>($"Create New Item",
+               new Dictionary<string, object>() { },
+               new DialogOptions() { Resizable = true, Draggable = true });
+    }
+
+    public async Task Delete(int id, string name)
+    {
+        var delete = await this.dialogService.Confirm($"This action cannot be undone. {name} will be removed forever", "Are you sure?", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+
+        if (delete == true)
+        {
+            try
+            {
+                await _itemService.DeleteItem(id);
+                _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{name} was deleted", Duration = 4000 });
+            }
+            catch (Exception ex)
+            {
+
+                _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = $"ERROR", Detail = $"{ex.Message}", Duration = 4000 });
+            }
+        }
+    }
+
+
+}

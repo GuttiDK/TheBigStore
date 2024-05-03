@@ -80,7 +80,7 @@ namespace TheBigStore.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -99,30 +99,35 @@ namespace TheBigStore.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Image", b =>
                 {
-                    b.Property<int>("ImageId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DefaultText")
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImgPath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ImageId");
+                    b.HasKey("Id");
 
                     b.ToTable("Images");
                 });
@@ -184,7 +189,9 @@ namespace TheBigStore.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("ItemId", "OrderId");
 
@@ -282,8 +289,6 @@ namespace TheBigStore.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
@@ -303,9 +308,19 @@ namespace TheBigStore.Repository.Migrations
                 {
                     b.HasOne("TheBigStore.Repository.Models.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TheBigStore.Repository.Models.User", "User")
+                        .WithOne("Customer")
+                        .HasForeignKey("TheBigStore.Repository.Models.Customer", "UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Address");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Item", b =>
@@ -326,7 +341,7 @@ namespace TheBigStore.Repository.Migrations
             modelBuilder.Entity("TheBigStore.Repository.Models.ItemOrder", b =>
                 {
                     b.HasOne("TheBigStore.Repository.Models.Item", "Item")
-                        .WithMany("ItemOrders")
+                        .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -355,15 +370,9 @@ namespace TheBigStore.Repository.Migrations
 
             modelBuilder.Entity("TheBigStore.Repository.Models.User", b =>
                 {
-                    b.HasOne("TheBigStore.Repository.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
                     b.HasOne("TheBigStore.Repository.Models.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId");
-
-                    b.Navigation("Customer");
 
                     b.Navigation("Role");
                 });
@@ -380,13 +389,7 @@ namespace TheBigStore.Repository.Migrations
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Image", b =>
                 {
-                    b.Navigation("Item")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TheBigStore.Repository.Models.Item", b =>
-                {
-                    b.Navigation("ItemOrders");
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("TheBigStore.Repository.Models.Order", b =>
@@ -397,6 +400,11 @@ namespace TheBigStore.Repository.Migrations
             modelBuilder.Entity("TheBigStore.Repository.Models.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TheBigStore.Repository.Models.User", b =>
+                {
+                    b.Navigation("Customer");
                 });
 #pragma warning restore 612, 618
         }

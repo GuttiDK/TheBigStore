@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using TheBigStore.Service.Extensions.Paging;
+using TheBigStore.Repository.Extensions;
+using TheBigStore.Service.DataTransferObjects.Paging;
 
 namespace TheBigStore.Service.Interfaces.GenericInterfaces
 {
@@ -11,6 +12,8 @@ namespace TheBigStore.Service.Interfaces.GenericInterfaces
         /// <param name="entity"></param>
         /// <returns></returns>
         Task<Dto> CreateAsync(Dto entity);
+
+        Task<List<Dto>> CreateListAsync(List<Dto> entityList);
 
         /// <summary>
         /// Deletes an entity
@@ -30,21 +33,20 @@ namespace TheBigStore.Service.Interfaces.GenericInterfaces
         /// Get all entities
         /// </summary>
         /// <returns></returns>
-        Task<ObservableCollection<Dto>> GetAllAsync();
+        Task<List<Dto>> GetAllAsync();
 
         /// <summary>
         /// Get an entity by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Dto> GetById(int id);
+        Task<Dto> GetByIdAsync(int id);
 
         /// <summary>
         /// Gets a pagnated list of entities
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="count"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
-        Task<PageDto<Dto>> GetPagnatedList(int page, int count);
+        Task<PageDto<Dto>> GetPagnatedList(PageOptions options);
     }
 }

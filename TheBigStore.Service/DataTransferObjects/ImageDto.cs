@@ -1,11 +1,14 @@
-﻿namespace TheBigStore.Service.DataTransferObjects
+﻿using TheBigStore.Repository.Models;
+
+namespace TheBigStore.Service.DataTransferObjects
 {
     public class ImageDto
     {
-        public int ImageId { get; set; } // PK
-        public string DefaultText { get; set; } = "Image Not Load";
-        public string ImgPath { get; set; }
+        public int Id { get; set; }
+        public string ImageUrl { get; set; }
+        public DateTime DateCreated { get; set; }
 
-        public ItemDto Item { get; set; }
+        // Navigation Properties
+        public ItemDto? Item { get; set; }
     }
 }

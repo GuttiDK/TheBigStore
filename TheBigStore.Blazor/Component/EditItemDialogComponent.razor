@@ -1,0 +1,117 @@
+﻿@page "/edititem/{itemId:int}"
+
+@using TheBigStore.Blazor.Models
+@using TheBigStore.Blazor.Service.Interfaces
+@inject IItemService _itemService
+@inject ICategoryService _categoryService
+@inject Radzen.DialogService DialogService
+
+<RadzenStack Gap="1.5rem">
+    <EditForm Model="EditItem" OnValidSubmit="SubmitAsync" FormName="Edit">
+        <DataAnnotationsValidator />
+        <div>
+            <label class="form-label fw-bold">Name</label>
+            <input type="text" class="form-control border-primary" @bind="EditItem.ItemName" />
+            <ValidationMessage For="() => EditItem.ItemName" />
+        </div>
+
+
+
+        <!-- Category dropdown -->
+        <div class="mt-2">
+            <label class="form-label fw-bold">Category</label>
+            <select class="form-select border-primary" @bind="EditItem.CategoryId">
+                @foreach (var category in Categories)
+                {
+                    <option value="@category.Id">@category.CategoryName</option>
+                }
+            </select>
+            <ValidationMessage For="() => EditItem.CategoryId" />
+        </div>
+
+        <!-- Product description -->
+        <div class="mt-2">
+            <label class="form-label fw-bold">Description</label>
+            <textarea @bind="EditItem.Description" rows="10" class="form-control border-primary"></textarea>
+            <ValidationMessage For="() => EditItem.Description" />
+        </div>
+
+        <div>
+            <label class="form-label fw-bold">Stock</label>
+            <input type="text" class="form-control border-primary" @bind="EditItem.Stock" />
+            <ValidationMessage For="() => EditItem.Stock" />
+        </div>
+
+        <div>
+            <label class="form-label fw-bold">Price</label>
+            <input type="text" class="form-control border-primary" @bind="EditItem.Price" />
+            <ValidationMessage For="() => EditItem.Price" />
+        </div>
+
+        <!-- Product images -->
+        <div class="mt-2 mb-2" cla>
+            <label class="form-label fw-bold">New image(s)</label>
+            <RadzenUpload Multiple="true" Url="upload/multiple" Accept="image/*" Complete=@OnComplete @bind-value="NewImages" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
+        </div>
+
+
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenButton Text="Update" ButtonType="ButtonType.Submit" Style="width: 80px;" />
+                <RadzenButton Text="Cancel" Click="() => DialogService.Close(false)" ButtonStyle="ButtonStyle.Light" />
+            </RadzenStack>
+        </RadzenStack>
+    </EditForm>
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public int itemId { get; set; } = 0;
+
+    RadzenUpload _upload;
+
+    public Item EditItem { get; set; } = new();
+    public List<Category> Categories { get; set; } = new();
+    public IReadOnlyList<IBrowserFile> NewImages { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        EditItem = await _itemService.GetItemByIdAsync(itemId);
+        Categories = await _categoryService.GetAllCategoriesAsync();
+        await base.OnInitializedAsync();
+    }
+
+    void HandleSelection(InputFileChangeEventArgs eventArgs)
+    {
+        NewImages = eventArgs.GetMultipleFiles();
+    }
+
+    void OnComplete(UploadCompleteEventArgs args)
+    {
+    }
+
+
+    private async Task SubmitAsync()
+    {
+        if (NewImages != null)
+        {
+            List<Image> productImages = new();
+
+            foreach (var image in NewImages)
+            {
+                string websiteImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Items");
+                string imageName = $"{EditItem.Id}{Guid.NewGuid()}.png";
+                string imagePath = Path.Combine(websiteImagePath, imageName);
+                using (FileStream fileStream = new(imagePath, FileMode.Create))
+                {
+                    await image.OpenReadStream().CopyToAsync(fileStream);
+                }
+
+                productImages.Add(new() { ImageUrl = imageName, DateCreated = DateTime.Now });
+            }
+        }
+
+        await _itemService.UpdateShopAsync(EditItem.Id, EditItem);
+        DialogService.Close(true);
+    }
+}

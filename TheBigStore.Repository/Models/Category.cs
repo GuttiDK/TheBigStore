@@ -6,8 +6,9 @@ namespace TheBigStore.Repository.Models
     {
         [Key]
         public int Id { get; set; }
-        // CategoryName
         public string CategoryName { get; set; }
-        public List<Item>? Items { get; set; }
+
+        // Navigation properties
+        public List<Item> Items { get; set; }
     }
 }
