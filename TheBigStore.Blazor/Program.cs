@@ -16,19 +16,10 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 builder.Services.AddBlazoredSessionStorageAsSingleton();
 builder.Services.AddRadzenComponents();
 
-#region IndexedDb
-builder.Services.AddScoped<IndexedDbAccessor>();
-builder.Services.AddScoped<CookieAccessor>();
+#region LocalStorage
 builder.Services.AddScoped<LocalStorage>();
 
 var host = builder.Build();
-using var scope = host.Services.CreateScope();
-await using var indexedDB = scope.ServiceProvider.GetService<IndexedDbAccessor>();
-
-if (indexedDB is not null)
-{
-    await indexedDB.InitializeAsync();
-}
 #endregion
 
 #region DI Container

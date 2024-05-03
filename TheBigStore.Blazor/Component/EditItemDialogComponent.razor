@@ -48,12 +48,6 @@
             <ValidationMessage For="() => EditItem.Price" />
         </div>
 
-        <!-- Product images -->
-        <div class="mt-2 mb-2" cla>
-            <label class="form-label fw-bold">New image(s)</label>
-            <RadzenUpload Multiple="true" Url="upload/multiple" Accept="image/*" Complete=@OnComplete @bind-value="NewImages" class="w-100" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
-        </div>
-
 
         <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
             <RadzenStack Orientation="Orientation.Horizontal">

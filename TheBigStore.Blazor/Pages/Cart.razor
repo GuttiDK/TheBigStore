@@ -253,7 +253,7 @@
 
     private void ApplyDiscount()
     {
-        if (DiscountCode == "GREENPRINT10")
+        if (DiscountCode == "TheBigStore")
         {
             DiscountDeduct = ItemTotalPrice * 0.1;
             _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{DiscountCode} was applied", Duration = 4000 });

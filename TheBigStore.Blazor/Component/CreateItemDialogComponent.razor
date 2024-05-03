@@ -46,15 +46,6 @@
             <ValidationMessage For="() => EditItem.Price" />
         </div>
 
-        <!-- Product images -->
-        <div class="mt-2 mb-2">
-            <label class="form-label fw-bold">New image(s)</label>
-            <RadzenFileInput Accept="image/*" @bind-Value=NewImage Placeholder="Select image(s)" />
-        </div>
-
-
-
-
         <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
             <RadzenStack Orientation="Orientation.Horizontal">
                 <RadzenButton Text="Create" ButtonType="ButtonType.Submit" Style="width: 80px;" />
