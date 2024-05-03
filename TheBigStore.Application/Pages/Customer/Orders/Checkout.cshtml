@@ -71,7 +71,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue)
                         }
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Total: @Model.Items.Sum(item => item.Quantity)</span>
-                            <strong>@Model.Items.Sum(item => item.Price * item.Quantity)</strong>
+                            <strong>@Model.Items.Sum(item => item.Price * item.Quantity).ToString("C")</strong>
                         </li>
                     </ul>
 

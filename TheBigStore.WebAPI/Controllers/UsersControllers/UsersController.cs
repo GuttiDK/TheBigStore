@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
 using TheBigStore.Service.DataTransferObjects;
+using TheBigStore.Service.Extensions.Paging;
 using TheBigStore.Service.Interfaces.UserInterfaces;
 
 namespace TheBigStore.WebAPI.Controllers.UsersControllers
@@ -10,18 +10,38 @@ namespace TheBigStore.WebAPI.Controllers.UsersControllers
     [Produces("application/json")]
     public class UsersController : ControllerBase
     {
+        #region
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly ILogger<UsersController> _logger;
+        #endregion
+
+        #region Constructor
+        public UsersController(IUserService userService, ILogger<UsersController> logger)
         {
             _userService = userService;
+            _logger = logger;
+        }
+        #endregion
+
+
+        // Get GetPagnatedList of users with int for page and int count for page size
+        [HttpGet]
+        [Route("getpagnatedlist")]
+        public async Task<IActionResult> GetPagnatedList(int page, int count)
+        {
+            var users = await _userService.GetPagnatedList(page, count);
+
+            if (users != null)
+            {
+                return Ok(users);
+            }
+
+            return BadRequest();
         }
 
-        /// <summary>
-        /// Get a list of all Users.
-        /// </summary>
-        /// <returns>Users list</returns>
         [HttpGet]
-        public async Task<ObservableCollection<UserDto>> GetUsers()
+        [Route("get")]
+        public async Task<IEnumerable<UserDto>> Get()
         {
             return await _userService.GetAllAsync();
         }

@@ -28,7 +28,6 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                     <th>Price</th>
                     <th>Category</th>
                     <th>Stock</th>
-                    <th>Orders</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -50,7 +49,6 @@ else if (HttpContext.Session.GetInt32("id").HasValue && HttpContext.Session.GetI
                             <td>@item.Category.CategoryName</td>
                         }
                         <td>@item.Stock</td>
-                        <td>@item.ItemOrders.Count()</td>
                         <td>
                             <form method="post" asp-page-handler="DeleteItem">
                                 <div class="btn-group">

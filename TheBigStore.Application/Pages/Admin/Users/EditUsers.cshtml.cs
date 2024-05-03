@@ -17,7 +17,7 @@ namespace TheBigStore.Application.Pages.Admin.Users
         [BindProperty]
         public RoleDto Role { get; set; }
         [BindProperty]
-        public ObservableCollection<RoleDto> Roles { get; set; }
+        public List<RoleDto> Roles { get; set; }
         public string SuccessMessage { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
 
@@ -33,9 +33,9 @@ namespace TheBigStore.Application.Pages.Admin.Users
 
         public async Task OnGetAsync(int id)
         {
-            User = await _userService.GetById(id);
+            User = await _userService.GetByIdAsync(id);
             if (User.RoleId != null)
-                Role = await _roleService.GetById((int)User.RoleId);
+                Role = await _roleService.GetByIdAsync((int)User.RoleId);
 
             Roles = await _roleService.GetAllAsync();
 
@@ -50,25 +50,18 @@ namespace TheBigStore.Application.Pages.Admin.Users
         {
             if (ModelState.IsValid)
             {
-                UserDto userDto = await _userService.GetById(User.Id);
-                if (userDto != null)
+                try
                 {
-                    userDto.Id = User.Id;
-                    userDto.UserName = User.UserName;
-                    userDto.Password = User.Password;
-                    userDto.Email = User.Email;
-                    userDto.RoleId = User.RoleId;
-                    await _userService.UpdateAsync(userDto);
+                    await _userService.UpdateAsync(User);
                     SuccessMessage = "User updated successfully";
-                    return RedirectToPage($@"/Admin/Users/Users");
                 }
-                else
+                catch (Exception e)
                 {
-                    ErrorMessage = "Role not found";
+                    ErrorMessage = e.Message;
+                    return BadRequest(e.Message);
                 }
             }
-
-            return Page();
+            return RedirectToPage();
 
         }
 

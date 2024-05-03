@@ -12,6 +12,8 @@ namespace TheBigStore.Service.Interfaces.GenericInterfaces
         /// <returns></returns>
         Task<Dto> CreateAsync(Dto entity);
 
+        Task<List<Dto>> CreateListAsync(List<Dto> entityList);
+
         /// <summary>
         /// Deletes an entity
         /// </summary>
@@ -30,14 +32,14 @@ namespace TheBigStore.Service.Interfaces.GenericInterfaces
         /// Get all entities
         /// </summary>
         /// <returns></returns>
-        Task<ObservableCollection<Dto>> GetAllAsync();
+        Task<List<Dto>> GetAllAsync();
 
         /// <summary>
         /// Get an entity by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Dto> GetById(int id);
+        Task<Dto> GetByIdAsync(int id);
 
         /// <summary>
         /// Gets a pagnated list of entities

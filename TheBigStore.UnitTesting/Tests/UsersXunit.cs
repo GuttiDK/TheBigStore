@@ -64,7 +64,7 @@ namespace TheBigStore.UnitTesting.Tests
 
             //Act
 
-            var user = await _service.GetById(actualCustomer.Id);
+            var user = await _service.GetByIdAsync(actualCustomer.Id);
 
             //Assert
 

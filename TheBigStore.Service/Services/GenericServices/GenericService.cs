@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using TheBigStore.Repository.Interfaces.GenericInterfaces;
+﻿using TheBigStore.Repository.Interfaces.GenericInterfaces;
 using TheBigStore.Service.Extensions.Paging;
 using TheBigStore.Service.Interfaces.GenericInterfaces;
 using TheBigStore.Service.Services.MappingServices;
@@ -14,30 +13,32 @@ namespace TheBigStore.Service.Services.GenericServices
 
         public async Task<Dto> CreateAsync(Dto entity)
         {
-            await _genericRepository.CreateAsync(_mappingService._mapper.Map<Entity>(entity));
-            return entity;
+            return _mappingService._mapper.Map<Dto>(await _genericRepository.CreateAsync(_mappingService._mapper.Map<Entity>(entity)));
+        }
+
+        public async Task<List<Dto>> CreateListAsync(List<Dto> entityList)
+        {
+            return _mappingService._mapper.Map<List<Dto>>(await _genericRepository.CreateListAsync(_mappingService._mapper.Map<List<Entity>>(entityList)));
         }
 
         public async Task<Dto> DeleteAsync(Dto entity)
         {
-            await _genericRepository.DeleteAsync(_mappingService._mapper.Map<Entity>(entity));
-            return entity;
+            return _mappingService._mapper.Map<Dto>(await _genericRepository.DeleteAsync(_mappingService._mapper.Map<Entity>(entity)));
         }
 
-        public async Task<ObservableCollection<Dto>> GetAllAsync()
+        public async Task<List<Dto>> GetAllAsync()
         {
-            return _mappingService._mapper.Map<ObservableCollection<Dto>>(await _genericRepository.GetAllAsync());
+            return _mappingService._mapper.Map<List<Dto>>(await _genericRepository.GetAllAsync());
         }
 
         public async Task<Dto> UpdateAsync(Dto entity)
         {
-            await _genericRepository.UpdateAsync(_mappingService._mapper.Map<Entity>(entity));
-            return entity;
+            return _mappingService._mapper.Map<Dto>(await _genericRepository.UpdateAsync(_mappingService._mapper.Map<Entity>(entity)));
         }
 
-        public async Task<Dto> GetById(int id)
+        public async Task<Dto> GetByIdAsync(int id)
         {
-            return _mappingService._mapper.Map<Dto>(await _genericRepository.GetById(id));
+            return _mappingService._mapper.Map<Dto>(await _genericRepository.GetByIdAsync(id));
         }
 
 

@@ -13,6 +13,14 @@ namespace TheBigStore.Repository.Repositories.UserRepositories
         {
             _dbContext = dbContext;
         }
+
+
+        new public async Task<Customer> GetByIdAsync(int id)
+        {
+            Customer entity = await _dbContext.Customers.AsNoTracking().Include(c => c.Address).SingleOrDefaultAsync(c => c.Id == id);
+            return entity;
+        }
+
         // Method to handle adding product to cart with a user if user has not a customerid yet then it will create a new customer
         // if the user has a customerid then it will check if the product is already in the cart
         // and if the product is already in the cart, it will increase the quantity

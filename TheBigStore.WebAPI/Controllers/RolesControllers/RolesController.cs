@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.UserInterfaces;
+using TheBigStore.Service.Services.UserServices;
 
 namespace TheBigStore.WebAPI.Controllers.RolesControllers
 {
@@ -10,18 +10,37 @@ namespace TheBigStore.WebAPI.Controllers.RolesControllers
     [Produces("application/json")]
     public class RolesController : ControllerBase
     {
+        #region
         private readonly IRoleService _roleService;
-        public RolesController(IRoleService roleService)
+        private readonly ILogger<RolesController> _logger;
+        #endregion
+
+        #region Constructor
+        public RolesController(IRoleService roleService, ILogger<RolesController> logger)
         {
             _roleService = roleService;
+            _logger = logger;
+        }
+        #endregion
+
+        // Get GetPagnatedList of users with int for page and int count for page size
+        [HttpGet]
+        [Route("getpagnatedlist")]
+        public async Task<IActionResult> GetPagnatedList(int page, int count)
+        {
+            var temp = await _roleService.GetPagnatedList(page, count);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return BadRequest();
         }
 
-        /// <summary>
-        /// Get a list of all Roles.
-        /// </summary>
-        /// <returns>Roles list</returns>
         [HttpGet]
-        public async Task<ObservableCollection<RoleDto>> GetRoles()
+        [Route("get")]
+        public async Task<IEnumerable<RoleDto>> Get()
         {
             return await _roleService.GetAllAsync();
         }

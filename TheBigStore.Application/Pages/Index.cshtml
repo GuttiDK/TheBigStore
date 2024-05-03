@@ -28,7 +28,7 @@ else if (HttpContext.Session.GetInt32("id").HasValue)
                         <div class="card shadow-sm border-dark ">
                             @if (item.Image != null)
                             {
-                                <img src="@item.Image.ImgPath" class="border-dark" width="300" height="300">
+                                <img src="@item.Image.ImageUrl" class="border-dark" width="300" height="300">
                             }
                             else
                             {

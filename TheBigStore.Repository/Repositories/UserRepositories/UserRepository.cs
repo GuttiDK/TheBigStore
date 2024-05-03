@@ -15,9 +15,21 @@ namespace TheBigStore.Repository.Repositories.UserRepositories
             _dbContext = dbContext;
         }
 
+        new public async Task<User> GetByIdAsync(int id)
+        {
+            User temp = await _dbContext.Users.AsNoTracking()
+                .Include(r => r.Role)
+                .Include(r => r.Customer)
+                .ThenInclude(r => r.Address)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return temp;
+        }
+
         new public async Task<List<User>> GetAllAsync()
         {
-            var temp = await _dbContext.Users.Include(u => u.Role).ToListAsync();
+            List<User> temp = await _dbContext.Users.AsNoTracking().Include(r => r.Role).ToListAsync();
+
             return temp;
         }
 

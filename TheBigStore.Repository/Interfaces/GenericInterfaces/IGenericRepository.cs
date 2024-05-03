@@ -13,6 +13,13 @@ namespace TheBigStore.Repository.Interfaces.GenericInterfaces
         Task<E> CreateAsync(E entity);
 
         /// <summary>
+        /// Adds a list of entities to the database
+        /// </summary>
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        Task<List<E>> CreateListAsync(List<E> entityList);
+
+        /// <summary>
         /// Deletes an entity
         /// </summary>
         /// <param name="entity"></param>
@@ -27,17 +34,24 @@ namespace TheBigStore.Repository.Interfaces.GenericInterfaces
         Task<E> UpdateAsync(E entity);
 
         /// <summary>
-        /// Get all entities
+        /// Updates a list of entities in the database
+        /// </summary>
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        Task<List<E>> UpdateListAsync(List<E> entityList);
+
+        /// <summary>
+        /// Gets an entities from the 
         /// </summary>
         /// <returns>A list of the data</returns>
-        Task<ObservableCollection<E>> GetAllAsync();
+        Task<List<E>> GetAllAsync();
 
         /// <summary>
         /// Find an entity by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Gets a entity of the id send with</returns>
-        Task<E> GetById(int id);
+        Task<E> GetByIdAsync(int id);
 
         /// <summary>
         /// Gets a pagnated list of entities

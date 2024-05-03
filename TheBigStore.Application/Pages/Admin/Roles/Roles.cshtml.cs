@@ -25,7 +25,7 @@ namespace TheBigStore.Application.Pages.Admin.Roles
         public bool IsAdmin { get; set; }
 
         [BindProperty]
-        public ObservableCollection<RoleDto>? Roles { get; set; }
+        public List<RoleDto>? Roles { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -50,13 +50,13 @@ namespace TheBigStore.Application.Pages.Admin.Roles
                 }
             }
 
-            return RedirectToPage("/Roles/Roles");
+            return RedirectToPage("/Admin/Roles/Roles");
         }
 
         public async Task<IActionResult> OnPostDeleteRole(int id)
         {
 
-            var role = await _roleService.GetById(id);
+            var role = await _roleService.GetByIdAsync(id);
             if (role != null)
             {
                 var users = await _userService.GetAllAsync();
@@ -70,7 +70,7 @@ namespace TheBigStore.Application.Pages.Admin.Roles
                 }
                 await _roleService.DeleteAsync(role);
             }
-            return RedirectToPage("/Roles/Roles");
+            return RedirectToPage("/Admin/Roles/Roles");
         }
     }
 }

@@ -78,28 +78,42 @@ namespace TheBigStore.Application.Pages.Customer.Orders
             }
             else if (Handler == "IncreaseQuantity")
             {
-                UpdateCartItemQuantity(Id, 1);
+                IncreaseQuantity(Id);
             }
             else if (Handler == "DecreaseQuantity")
             {
-                UpdateCartItemQuantity(Id, -1);
+                DecreaseQuantity(Id);
             }
             Items = GetCart();
         }
 
         // Handle the increasing of the quantity of a product in the cart
-        public IActionResult OnPostIncreaseQuantity(int id)
+        public IActionResult IncreaseQuantity(int id)
         {
             UpdateCartItemQuantity(id, 1);
             return RedirectToPage();
         }
 
         // Handle the decreasing of the quantity of a product in the cart
-        public IActionResult OnPostDecreaseQuantity(int id)
+        public IActionResult DecreaseQuantity(int id)
         {
-            UpdateCartItemQuantity(id, -1);
+            // If a item is lower then 0 in quantity remove it from the cart
+            var quantity = GetCart().FirstOrDefault(x => x.Id == id);
+            if (quantity != null)
+            {
+                if (quantity.Quantity <= 1)
+                {
+                    RemoveItemFromCart(id);
+                }
+                else
+                {
+                    UpdateCartItemQuantity(id, -1);
+                }
+            }
             return RedirectToPage();
         }
+
+        
 
         // Handle the removal of a product from the cart
         public IActionResult OnGetRemoveFromCart(int id)
@@ -118,40 +132,6 @@ namespace TheBigStore.Application.Pages.Customer.Orders
                 cart.Remove(item);
                 HttpContext.Session.Set("cart", cart);
             }
-        }
-
-        // Handle form submission (purchase)
-        public async Task<IActionResult> OnPost()
-        {
-            // Purchase logic here
-            var id = HttpContext.Session.GetInt32("id");
-            if (id == null)
-            {
-                RedirectToPage("/Login/Login");
-            }
-            var user = await _userService.GetById((int)id);
-            var cart = GetCart();
-            if (cart.Count == 0)
-            {
-                return RedirectToPage("/Index");
-            }
-            CustomerDto customer = new CustomerDto
-            {
-                FirstName = FirstName,
-                LastName = LastName,
-                Phone = Phone,
-                Email = Email,
-            };
-            AddressDto address = new AddressDto
-            {
-                StreetName = StreetName,
-                City = City,
-                ZipCode = ZipCode,
-                Country = Country,
-                StreetNumber = StreetNumber,
-            };
-            await _customerService.AddToCart(cart, (int)id, Customer, address);
-            return RedirectToPage("/Index");
         }
 
         // Helper method to get the cart from session

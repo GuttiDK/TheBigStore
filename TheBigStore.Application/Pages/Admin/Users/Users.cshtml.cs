@@ -36,8 +36,8 @@ namespace TheBigStore.Application.Pages.Admin.Users
 
 
         [BindProperty]
-        public ObservableCollection<UserDto>? Users { get; set; }
-        public ObservableCollection<RoleDto>? Roles { get; set; }
+        public List<UserDto>? Users { get; set; }
+        public List<RoleDto>? Roles { get; set; }
 
 
         public async Task<IActionResult> OnGet()
@@ -48,7 +48,7 @@ namespace TheBigStore.Application.Pages.Admin.Users
             {
                 if (user.RoleId != null)
                 {
-                    user.Role = await _roleService.GetById((int)user.RoleId);
+                    user.Role = await _roleService.GetByIdAsync((int)user.RoleId);
                 }
                 if (user.Role == null)
                 {
@@ -92,7 +92,7 @@ namespace TheBigStore.Application.Pages.Admin.Users
         public async Task<IActionResult> OnPostDeleteRole(int id)
         {
 
-            var user = await _userService.GetById(id);
+            var user = await _userService.GetByIdAsync(id);
             if (user != null)
             {
                 if (user.CustomerId != null)

@@ -1,4 +1,6 @@
-﻿namespace TheBigStore.Service.DataTransferObjects
+﻿using TheBigStore.Repository.Models;
+
+namespace TheBigStore.Service.DataTransferObjects
 {
     public class CategoryDto
     {
@@ -6,6 +8,6 @@
         public string CategoryName { get; set; }
 
         // Navigation properties
-        public List<ItemDto> Items { get; set; }
+        public List<Item> Items { get; set; }
     }
 }

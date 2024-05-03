@@ -48,7 +48,7 @@ namespace TheBigStore.Application.Pages.Login
                         if (founduser.RoleId != null)
                         {
 
-                            RoleDto role = await _roleService.GetById((int)founduser.RoleId);
+                            RoleDto role = await _roleService.GetByIdAsync((int)founduser.RoleId);
                             if (role == null)
                             {
                                 HttpContext.Session.SetInt32("role", 2);

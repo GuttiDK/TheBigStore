@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
-using TheBigStore.Repository.Models;
 using TheBigStore.Service.DataTransferObjects;
 using TheBigStore.Service.Interfaces.OrderInterfaces;
 
@@ -24,9 +22,28 @@ namespace TheBigStore.WebAPI.Controllers.CategoriesControllers
         /// </summary>
         /// <returns>Categories list</returns>
         [HttpGet]
-        public async Task<ObservableCollection<CategoryDto>> GetCategories()
+        [Route("get")]
+        public async Task<IEnumerable<CategoryDto>> Get()
         {
             return await _categoryService.GetAllAsync();
+        }
+
+        /// <summary>
+        /// Get Pagnated List Categories.
+        /// </summary>
+        /// <returns>Categories Pagnated list</returns>
+        [HttpGet]
+        [Route("getpagnatedlist")]
+        public async Task<IActionResult> GetPagnatedList(int page, int count)
+        {
+            var temp = await _categoryService.GetPagnatedList(page, count);
+
+            if (temp != null)
+            {
+                return Ok(temp);
+            }
+
+            return BadRequest();
         }
     }
 }
