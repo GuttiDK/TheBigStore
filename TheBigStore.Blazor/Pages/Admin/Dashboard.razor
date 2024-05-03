@@ -8,23 +8,6 @@
     </div>
 
     <div class="row mt-3 justify-content-evenly">
-
-        <div class="col-2 p-1">
-            <RadzenButton Icon="support_agent" style="width: 180px" Text="Customers" ButtonStyle="ButtonStyle.Primary" />
-        </div>
-
-        <div class="col-2 p-1">
-            <RadzenButton Icon="people" style="width: 180px" Text="Users" ButtonStyle="ButtonStyle.Primary" />
-        </div>
-
-        <div class="col-2 p-1">
-            <RadzenButton Icon="admin_panel_settingse" style="width: 180px" Text="Roles" ButtonStyle="ButtonStyle.Primary" />
-        </div>
-
-        <div class="col-2 p-1">
-            <RadzenButton Icon="receipt_long" style="width: 180px" Text="All Orders" ButtonStyle="ButtonStyle.Primary" />
-        </div>
-
         <div class="col-2 p-1">
             <RadzenButton Icon="add" Text="Add Product" style="width: 180px" ButtonStyle="ButtonStyle.Primary" Click=@CreateItem />
         </div>
@@ -48,37 +31,6 @@
                 </form>
             </RadzenTabsItem>
 
-            <RadzenTabsItem Text="Stock">
-                <EditForm Model="Item" OnValidSubmit="AddStock" FormName="AddStock">
-                    <DataAnnotationsValidator />
-                    <div>
-                        <label class="form-label fw-bold">Item</label>
-                        <select class="form-select" @bind=Item.Id>
-                            <option selected disabled>--- Choose Item ---</option>
-                            @foreach (var category in Categories)
-                            {
-                                <optgroup label="- @category.CategoryName -">
-                                    @foreach (var item in Items.Where(p => p.CategoryId == category.Id))
-                                    {
-                                        <option value="@item.Id">@item.ItemName</option>
-                                    }
-                                </optgroup>
-                            }
-                        </select>
-                        <ValidationMessage For="() => Item.Id" />
-                    </div>
-                    <!-- Amount -->
-                    <div class="mt-2 mb-2">
-                        <label class="form-label fw-bold">Amount</label>
-                        <input type="number" class="form-control" @bind-value=Item.Stock />
-                        <ValidationMessage For="() => Item.Stock" />
-                    </div>
-                    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-                        <RadzenButton Text="Add Stock" ButtonType="ButtonType.Submit" />
-                    </RadzenStack>
-                </EditForm>
-            </RadzenTabsItem>
-
             <RadzenTabsItem Text="Items">
                 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" PageSizeOptions="@PageSizeOptions" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
                                 Data="@Items" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single">
@@ -86,6 +38,7 @@
                         <RadzenDataGridColumn Property="Id" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
                         <RadzenDataGridColumn Property="ItemName" Title="Name" Frozen="true" Width="160px" />
                         <RadzenDataGridColumn Property="Description" Title="Description" />
+                        <RadzenDataGridColumn Property="Stock" Title="Stock" TextAlign="TextAlign.Center" />
                         <RadzenDataGridColumn Property="Price" Title="Price" TextAlign="TextAlign.Center" />
                         <RadzenDataGridColumn Title="Actions" Sortable="false" Filterable="false" TextAlign="TextAlign.Center" Width="100px">
                             <Template>
@@ -113,7 +66,6 @@
 @code {
     private List<Category> Categories { get; set; } = new();
     [SupplyParameterFromForm]
-    private Item Item { get; set; } = new();
     private List<Item> Items { get; set; } = new();
     public int[] PageSizeOptions = new int[] { 3, 6, 9, 12, 15 };
 
@@ -152,16 +104,5 @@
         }
     }
 
-    public async Task AddStock()
-    {
-        var temp = await _itemService.UpdateStock(Item.Id, Item.Stock);
-
-        if (temp == null)
-        {
-            _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = $"Something went wrong. Please try again", Duration = 4000 });
-        }
-
-        _notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{temp.Stock} {temp.ItemName} was added to {temp.ItemName}", Duration = 4000 });
-    }
 
 }

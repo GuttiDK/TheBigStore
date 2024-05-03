@@ -9,9 +9,6 @@
 <script src="https://kit.fontawesome.com/b87b53de45.js" crossorigin="anonymous"></script>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="/Images/GPlo.png" alt="Bootstrap" width="30" height="24">
-        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -26,7 +23,7 @@
             <div class="col-2 justify-content-end">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" style="cursor:pointer;" @onclick='() => _navigationManager.NavigateTo("/Admin/Dashboard")'>Admin Area</a>
+                        <a class="nav-link active" style="cursor:pointer;" @onclick='() => _navigationManager.NavigateTo("/Admin/Dashboard")'>Admin</a>
                     </li>
                     <li>
                         <a @onclick='() => _navigationManager.NavigateTo("/Cart")' class="p-0 pt-2 ps-1 nav-link" style="cursor:pointer">

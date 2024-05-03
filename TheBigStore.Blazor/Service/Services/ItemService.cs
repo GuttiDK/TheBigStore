@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using TheBigStore.Blazor.Extensions;
 using Microsoft.AspNetCore.JsonPatch;
+using System.Net.Http;
 
 namespace TheBigStore.Blazor.Service.Services
 {
@@ -95,9 +96,10 @@ namespace TheBigStore.Blazor.Service.Services
         // Update stock of an item with amount and id and return the item
         public async Task<Item> UpdateStock(int itemId, int amount)
         {
-            var Request = $"/api/item/updatestock/{itemId}/{amount}";
+            var response = await _client.PutAsync($"api/item/updatestock/{itemId}/{amount}", null);
+            response.EnsureSuccessStatusCode();
 
-            return await _client.GetFromJsonAsync<Item>(Request);
+            return await response.Content.ReadFromJsonAsync<Item>();
         }
     }
 }

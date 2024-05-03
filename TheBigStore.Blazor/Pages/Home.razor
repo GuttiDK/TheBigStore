@@ -14,15 +14,6 @@
         <div class="col-8">
             <h1>Catalog</h1>
         </div>
-        <div class="col-4">
-            <form method="post" asp-page-handler="Search">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search for product ID or Name" name="searchQuery">
-                    <button class="btn btn-primary toggleLoader" type="submit"><i class="bi bi-search"></i> Search</button>
-                </div>
-            </form>
-
-        </div>
     </div>
     @if (isLoading)
     {
